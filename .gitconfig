@@ -1,0 +1,10 @@
+[user]
+	name = Simão Neves
+	email = simaocostaneves@gmail.com
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[push]
+	default = simple
+[color]
+	ui = true
