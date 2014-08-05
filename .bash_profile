@@ -22,19 +22,19 @@ prompt_git() {
 			# Ensure the index is up to date.
 			git update-index --really-refresh -q &>/dev/null;
 
+			# Check for untracked files.
+			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+				s+=':new:';
+			fi;
+			
 			# Check for uncommitted changes in the index.
 			if ! $(git diff --quiet --ignore-submodules --cached); then
-				s+='+';
+				s+=':tobecommited:';
 			fi;
 
 			# Check for unstaged changes.
 			if ! $(git diff-files --quiet --ignore-submodules --); then
-				s+='!';
-			fi;
-
-			# Check for untracked files.
-			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-				s+='?';
+				s+=':modified:';
 			fi;
 
 			# Check for stashed files.
@@ -115,6 +115,7 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
 alias gs="git status"
+alias gb="git branch"
 
 # Functions
 sub() {
@@ -123,10 +124,6 @@ sub() {
 
 gc() {
 	git checkout $1
-}
-
-gb() {
-	git branch
 }
 
 # Set the terminal title to the current working directory.
