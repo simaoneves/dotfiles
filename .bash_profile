@@ -114,8 +114,9 @@ alias db="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
+alias ios_sim="open -a 'iPhone Simulator'"
 alias gs="git status"
-alias gb="git branch"
+alias gb="git branch -vav"
 
 # Functions
 sub() {
