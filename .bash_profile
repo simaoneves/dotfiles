@@ -39,7 +39,7 @@ prompt_git() {
 
 			# Check for stashed files.
 			if $(git rev-parse --verify refs/stash &>/dev/null); then
-				s+='$';
+				s+=':stashed:';
 			fi;
 
 		fi;

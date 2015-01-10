@@ -1,0 +1,54 @@
+////////////////////////
+// Installed packages //
+////////////////////////
+
+// Package Control
+// Base16 Color Schemes
+// DocBlockr
+// GitGutter
+// IndentLines
+// Spacegray
+// Flatland
+// Predawn
+// Oracle PL SQL
+
+{
+  "font_size": 12.0,
+  //"font_face": "Source Code Pro",
+  "highlight_line": true,
+  "ignored_packages":
+  [
+    "Vintage"
+  ],
+  "rulers":
+  [
+    80
+  ],
+  "tab_size": 2,
+  "translate_tabs_to_spaces": true,
+  
+  "spacegray_tabs_large": true,
+  "flatland_sidebar_tree_small": true,
+
+  ////////////
+  // THEMES //
+  ////////////
+
+  //"theme": "Spacegray.sublime-theme",
+  //"theme": "Flatland Dark.sublime-theme",
+  //"theme": "predawn.sublime-theme",
+  //"theme": "Spacegray Light.sublime-theme",
+  "theme": "Spacegray Eighties.sublime-theme",
+
+
+  ///////////////////
+  // COLOR SCHEMES //
+  ///////////////////
+
+  "color_scheme": "Packages/Base16 Color Schemes/base16-mocha.dark.tmTheme"
+  //"color_scheme": "Packages/Base16 Color Schemes/base16-default.dark.tmTheme"
+  //"color_scheme": "Packages/Base16 Color Schemes/base16-tomorrow.dark.tmTheme"
+  //"color_scheme": "Packages/Base16 Color Schemes/base16-eighties.dark.tmTheme"
+  //"color_scheme": "Packages/Base16 Color Schemes/base16-ocean.dark.tmTheme"
+  //"color_scheme": "Packages/Predawn/predawn.tmTheme"
+}
