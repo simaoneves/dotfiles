@@ -6,5 +6,6 @@
   { "keys": ["super+g"], "command": "show_overlay", "args": {"overlay": "goto", "text": ":"} },
   { "keys": ["alt+shift+up"], "command": "select_lines", "args": {"forward": false} },
   { "keys": ["alt+shift+down"], "command": "select_lines", "args": {"forward": true} },
-  { "keys": ["super+k"], "command": "toggle_side_bar" }
+  { "keys": ["super+k"], "command": "toggle_side_bar" },
+  { "keys": ["super+0"], "command": "focus_side_bar" }
 ]
