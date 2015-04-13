@@ -27,9 +27,10 @@
   ],
   "tab_size": 2,
   "translate_tabs_to_spaces": true,
-  
+  "word_wrap": true,  
   "spacegray_tabs_large": true,
   "flatland_sidebar_tree_small": true,
+  "itg_small_tabs": true
 
   ////////////
   // THEMES //

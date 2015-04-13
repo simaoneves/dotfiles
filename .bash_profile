@@ -114,9 +114,14 @@ alias db="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
+alias ls="ls -Ga"
 alias ios_sim="open -a 'iPhone Simulator'"
 alias gs="git status"
 alias gb="git branch -vav"
+alias gd="git diff $1"
+alias mamp_start="/Applications/MAMP/bin/start.sh"
+alias mamp_stop="/Applications/MAMP/bin/stop.sh"
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 # Functions
 sub() {
@@ -126,6 +131,13 @@ sub() {
 gc() {
 	git checkout $1
 }
+
+github() {
+	basename "${PWD}"
+	open -a Google\ Chrome http://www.github.com/simaoneves/${path}
+}
+
+source ~/.profile
 
 # Set the terminal title to the current working directory.
 PS1="\[\033]0;\w\007\]";
@@ -142,3 +154,8 @@ export PS1;
 
 PS2="\[${yellow}\]→ \[${reset}\]";
 export PS2;
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
