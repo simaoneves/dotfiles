@@ -12,6 +12,7 @@ fi;
 prompt_git() {
 	local s='';
 	local branchName='';
+	local branchColor=${red};
 
 	# Check if the current directory is in a Git repository.
 	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
@@ -24,22 +25,26 @@ prompt_git() {
 
 			# Check for untracked files.
 			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-				s+=':new:';
+				s+='+';
+				branchColor=${red};
 			fi;
 			
 			# Check for uncommitted changes in the index.
 			if ! $(git diff --quiet --ignore-submodules --cached); then
-				s+=':tobecommited:';
+				s+='!';
+				branchColor=${red};
 			fi;
 
 			# Check for unstaged changes.
 			if ! $(git diff-files --quiet --ignore-submodules --); then
-				s+=':modified:';
+				s+='*';
+				branchColor=${red};
 			fi;
 
 			# Check for stashed files.
 			if $(git rev-parse --verify refs/stash &>/dev/null); then
-				s+=':stashed:';
+				s+='$';
+				branchColor=${yellow};
 			fi;
 
 		fi;
@@ -51,11 +56,11 @@ prompt_git() {
 			git rev-parse --short HEAD 2> /dev/null || \
 			echo '(unknown)')";
 
-		[ -n "${s}" ] && s=" [${s}]";
+		[ -n "${s}" ] && s=": ${s}";
 
-		echo -e "${1}${branchName}${blue}${s}";
+		echo -e "${1}${branchColor}[${branchName}${s}]";
 	else
-		return;
+		echo ""
 	fi;
 }
 
@@ -114,42 +119,120 @@ alias db="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
+
 alias ls="ls -Ga"
-alias ios_sim="open -a 'iPhone Simulator'"
+alias mkdir="mkdir -v"
+alias rm="rm -v"
+
 alias gs="git status"
-alias gb="git branch -vav"
+alias gb="git branch -v"
 alias gd="git diff $1"
+alias gc="git checkout $1"
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
 alias mamp_start="/Applications/MAMP/bin/start.sh"
 alias mamp_stop="/Applications/MAMP/bin/stop.sh"
-alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias pg_start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
+alias pg_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
+alias ios_sim="open -a 'iPhone Simulator'"
+alias pro="sub ~/Dev/dotfiles/.bash_profile"
+alias reload="source ~/.bash_profile && echo Profile reloaded"
+
+alias sd="cd ~/Dropbox/'FCUL DB'/'Sistemas Distribuídos'/Trabalhos"
+alias sabe="cd ~/Dev/sabe/sabe-online-web"
 
 # Functions
 sub() {
 	open $1 -a "Sublime Text 2"
 }
 
-gc() {
-	git checkout $1
-}
-
 github() {
-	basename "${PWD}"
-	open -a Google\ Chrome http://www.github.com/simaoneves/${path}
+	repo_name=`basename "${PWD}"`
+	open -a Google\ Chrome http://www.github.com/simaoneves/$repo_name
 }
 
-source ~/.profile
+function battery_charge() {
+  if [ -e /bin/batcharge.py ]
+  then
+      echo `python ~/Dev/dotfiles/bin/batcharge.py`
+  else
+      echo '';
+  fi
+}
+
+function get_pwd() {
+	result="${PWD/$HOME/~}"
+	echo ${#result}
+}
+
+function get_git() {
+	pepe=`prompt_git`
+	result=0
+	if [ ${#pepe} != 0 ]; then
+		result=$(( ${#pepe} - 11 ))
+	else
+		result=0
+	fi
+	echo $result
+}
+
+function get_bat() {
+	lolo=`battery_charge`
+	result=0
+	if [ ${#lolo} != 0 ]; then
+		result=$(( ${#lolo} - 10 ))
+	else
+		result=0
+	fi
+	echo $result
+}
+
+function put_spacing() {
+
+	get_pwd_number=`get_pwd`
+	get_bat_number=`get_bat`
+	get_git_number=`get_git`
+
+	local termwidth=0
+	(( termwidth = ${COLUMNS} - 3 - ${#LOGNAME} - ${get_pwd_number} - ${get_git_number} - ${get_bat_number} ))
+
+	echo $termwidth
+}
+
+function last_command_color() {
+	if [[ $? = 0 ]]; then
+	# if [[ $? -eq 0 ]]; then
+		status=${white}
+	else
+		status=${red}
+	fi;	
+	echo $status
+}
+
+function save_output() {
+	if [[ $? = 0 ]]; then
+	# if [[ $? -eq 0 ]]; then
+		export LAST=0;
+	else
+		export LAST=1;
+	fi;	
+}
+
 
 # Set the terminal title to the current working directory.
 PS1="\[\033]0;\w\007\]";
+# PS1+="\$(save_output)"; # `$` (and reset color)
 PS1+="\[${bold}\]\n"; # newline
-PS1+="\[${userStyle}\]\u"; # username
-PS1+="\[${white}\] at ";
-PS1+="\[${hostStyle}\]\h"; # host
-PS1+="\[${white}\] in ";
-PS1+="\[${green}\]\w"; # working directory
-PS1+="\$(prompt_git \"${white} on ${violet}\")"; # Git repository details
+PS1+="\[${cyan}\]\u: "; # username
+# PS1+="\[${white}\] at ";
+# PS1+="\[${hostStyle}\]\h"; # host
+# PS1+="\[${white}\] in ";
+PS1+="\[${yellow}\]\w"; # working directory
+PS1+='$(printf %$(put_spacing)s)'; # Add spacings
+PS1+="\$(prompt_git) "; # Git repository details
+PS1+="\$(battery_charge)"; # batery
 PS1+="\n";
-PS1+="\[${white}\]\$ \[${reset}\]"; # `$` (and reset color)
+PS1+="\$(last_command_color)→ \[${reset}\]"; # `$` (and reset color)
 export PS1;
 
 PS2="\[${yellow}\]→ \[${reset}\]";
@@ -157,5 +240,9 @@ export PS2;
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+# Add RVM to PATH for scripting
+export PATH="$PATH:$HOME/.rvm/bin"
+
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

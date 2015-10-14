@@ -11,11 +11,12 @@
 // Flatland
 // Predawn
 // Itg.flat
-// Oracle PL SQL
+// Railscasts Extended Theme
+// Emmet
 
 {
   "font_size": 12.0,
-  //"font_face": "Source Code Pro",
+  // "font_face": "Source Code Pro",
   "highlight_line": true,
   "ignored_packages":
   [
@@ -30,28 +31,30 @@
   "word_wrap": true,  
   "spacegray_tabs_large": true,
   "flatland_sidebar_tree_small": true,
-  "itg_small_tabs": true
+  "itg_small_tabs": true,
 
   ////////////
   // THEMES //
   ////////////
 
-  //"theme": "Spacegray.sublime-theme",
-  //"theme": "Flatland Dark.sublime-theme",
-  //"theme": "predawn.sublime-theme",
-  //"theme": "Spacegray Light.sublime-theme",
-  //"theme": "itg.flat.dark.sublime-theme",
-  "theme": "Spacegray Eighties.sublime-theme",
+  // "theme": "Spacegray.sublime-theme",
+  // "theme": "Flatland Dark.sublime-theme",
+  // "theme": "predawn.sublime-theme",
+  // "theme": "Spacegray Light.sublime-theme",
+  "theme": "itg.flat.light.sublime-theme",
+  // "theme": "itg.flat.dark.sublime-theme",
+  // "theme": "Spacegray Eighties.sublime-theme",
 
 
   ///////////////////
   // COLOR SCHEMES //
   ///////////////////
 
-  "color_scheme": "Packages/Base16 Color Schemes/base16-mocha.dark.tmTheme"
-  //"color_scheme": "Packages/Base16 Color Schemes/base16-default.dark.tmTheme"
-  //"color_scheme": "Packages/Base16 Color Schemes/base16-tomorrow.dark.tmTheme"
-  //"color_scheme": "Packages/Base16 Color Schemes/base16-eighties.dark.tmTheme"
-  //"color_scheme": "Packages/Base16 Color Schemes/base16-ocean.dark.tmTheme"
-  //"color_scheme": "Packages/Predawn/predawn.tmTheme"
+  // "color_scheme": "Packages/Base16 Color Schemes/base16-mocha.dark.tmTheme"
+  // "color_scheme": "Packages/Base16 Color Schemes/base16-default.dark.tmTheme"
+  // "color_scheme": "Packages/Base16 Color Schemes/base16-tomorrow.dark.tmTheme"
+  // "color_scheme": "Packages/Base16 Color Schemes/base16-eighties.dark.tmTheme"
+  // "color_scheme": "Packages/Base16 Color Schemes/base16-ocean.dark.tmTheme"
+  "color_scheme": "Packages/RailsCasts Extended/Railscasts Extended.tmTheme"
+  // "color_scheme": "Packages/Predawn/predawn.tmTheme"
 }
