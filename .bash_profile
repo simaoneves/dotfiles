@@ -152,7 +152,7 @@ github() {
 }
 
 function battery_charge() {
-  if [ -e /bin/batcharge.py ]
+  if [ -e ~/Dev/dotfiles/bin/batcharge.py ]
   then
       echo `python ~/Dev/dotfiles/bin/batcharge.py`
   else
