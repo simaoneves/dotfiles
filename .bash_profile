@@ -138,7 +138,7 @@ alias ios_sim="open -a 'iPhone Simulator'"
 alias pro="sub ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
 
-alias sd="cd ~/Dropbox/'FCUL DB'/'Sistemas Distribuídos'/Trabalhos"
+alias sd="cd ~/Dropbox\ \(Personal\)/'FCUL DB'/'Sistemas Distribuídos'/Projectos"
 alias sabe="cd ~/Dev/sabe/sabe-online-web"
 
 # Functions
