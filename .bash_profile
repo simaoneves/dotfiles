@@ -137,6 +137,7 @@ alias pg_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias ios_sim="open -a 'iPhone Simulator'"
 alias pro="sub ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
+alias rpi="ssh pi@raspberrypi"
 
 alias sd="cd ~/Dropbox\ \(Personal\)/'FCUL DB'/'Sistemas Distribuídos'/Projectos"
 alias sabe="cd ~/Dev/sabe/sabe-online-web"
