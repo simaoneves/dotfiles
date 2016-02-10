@@ -1,16 +1,10 @@
-
-
-
+# Powerline prompt
 function _update_ps1() {
-    PS1="$(~/powerline-shell.py $? 2> /dev/null)"
+    PS1="$(~/Dev/dotfiles/bin/powerline-shell.py --cwd-mode plain $? 2> /dev/null)"
 }
-
 if [ "$TERM" != "linux" ]; then
     PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 fi
-
-
-
 
 
 # Shell prompt based on the Solarized Dark theme.
@@ -151,7 +145,7 @@ alias mamp_stop="/Applications/MAMP/bin/stop.sh"
 alias pg_start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
 alias pg_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias ios_sim="open -a 'iPhone Simulator'"
-alias pro="sub ~/Dev/dotfiles/.bash_profile"
+alias pro="s ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
 alias rpi="ssh simon@raspberrypi"
 alias r="ruby"
@@ -162,10 +156,6 @@ alias sabe="cd ~/Dev/sabe/sabe-online-web"
 alias s="subl"
 
 # Functions
-sub() {
-	open $1 -a "Sublime Text 2"
-}
-
 github() {
 	repo_name=`basename "${PWD}"`
 	open -a Google\ Chrome http://www.github.com/simaoneves/$repo_name
