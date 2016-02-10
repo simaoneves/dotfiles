@@ -1,3 +1,18 @@
+
+
+
+function _update_ps1() {
+    PS1="$(~/powerline-shell.py $? 2> /dev/null)"
+}
+
+if [ "$TERM" != "linux" ]; then
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
+
+
+
+
 # Shell prompt based on the Solarized Dark theme.
 # Screenshot: http://i.imgur.com/EkEtphC.png
 # Heavily inspired by @necolas’s prompt: https://github.com/necolas/dotfiles
@@ -119,6 +134,7 @@ alias db="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
+alias dot="cd ~/Dev/dotfiles"
 
 alias ls="ls -Ga"
 alias mkdir="mkdir -v"
@@ -137,10 +153,13 @@ alias pg_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias ios_sim="open -a 'iPhone Simulator'"
 alias pro="sub ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
-alias rpi="ssh pi@raspberrypi"
+alias rpi="ssh simon@raspberrypi"
+alias r="ruby"
+alias dbm="rake db:migrate"
 
 alias sd="cd ~/Dropbox\ \(Personal\)/'FCUL DB'/'Sistemas Distribuídos'/Projectos"
 alias sabe="cd ~/Dev/sabe/sabe-online-web"
+alias s="subl"
 
 # Functions
 sub() {
@@ -246,11 +265,7 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # Editor setting preference
-export EDITOR="sub"
-
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
-fi
+export EDITOR='subl -w'
 
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash

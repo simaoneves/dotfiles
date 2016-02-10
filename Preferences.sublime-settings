@@ -13,6 +13,8 @@
 // Itg.flat
 // Railscasts Extended Theme
 // Emmet
+// BracketHighlighter
+// SelectedQuote
 
 {
   "font_size": 12.0,
@@ -40,8 +42,8 @@
   // "theme": "Spacegray.sublime-theme",
   // "theme": "Flatland Dark.sublime-theme",
   // "theme": "predawn.sublime-theme",
-  // "theme": "Spacegray Light.sublime-theme",
-  "theme": "itg.flat.light.sublime-theme",
+  "theme": "Spacegray Light.sublime-theme",
+  // "theme": "itg.flat.light.sublime-theme",
   // "theme": "itg.flat.dark.sublime-theme",
   // "theme": "Spacegray Eighties.sublime-theme",
 
@@ -50,11 +52,11 @@
   // COLOR SCHEMES //
   ///////////////////
 
-  // "color_scheme": "Packages/Base16 Color Schemes/base16-mocha.dark.tmTheme"
+  "color_scheme": "Packages/Base16 Color Schemes/base16-mocha.dark.tmTheme"
   // "color_scheme": "Packages/Base16 Color Schemes/base16-default.dark.tmTheme"
   // "color_scheme": "Packages/Base16 Color Schemes/base16-tomorrow.dark.tmTheme"
   // "color_scheme": "Packages/Base16 Color Schemes/base16-eighties.dark.tmTheme"
   // "color_scheme": "Packages/Base16 Color Schemes/base16-ocean.dark.tmTheme"
-  "color_scheme": "Packages/RailsCasts Extended/Railscasts Extended.tmTheme"
+  // "color_scheme": "Packages/RailsCasts Extended/Railscasts Extended.tmTheme"
   // "color_scheme": "Packages/Predawn/predawn.tmTheme"
 }
