@@ -8,3 +8,5 @@
 	default = simple
 [color]
 	ui = true
+[init]
+	templatedir = /Users/simon/.git-templates

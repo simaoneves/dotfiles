@@ -137,6 +137,7 @@ alias rm="rm -v"
 alias gs="git status"
 alias gb="git branch -v"
 alias gd="git diff $1"
+alias gds="git diff --stat"
 alias gc="git checkout $1"
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
@@ -150,15 +151,23 @@ alias reload="source ~/.bash_profile && echo Profile reloaded"
 alias rpi="ssh simon@raspberrypi"
 alias r="ruby"
 alias dbm="rake db:migrate"
+alias htop="sudo htop"
 
 alias sd="cd ~/Dropbox\ \(Personal\)/'FCUL DB'/'Sistemas Distribuídos'/Projectos"
 alias sabe="cd ~/Dev/sabe/sabe-online-web"
 alias s="subl"
+alias jess="java -cp jess.jar jess.Main" 
+alias dco="cd ~/Dev/dco/"
+alias seg="cd ~/Dev/seg/" 
 
 # Functions
-github() {
+function github() {
 	repo_name=`basename "${PWD}"`
 	open -a Google\ Chrome http://www.github.com/simaoneves/$repo_name
+}
+
+function gstat() {
+	git-stats -g && git log --format='%aN' | sort -u | { echo -en "Name\tLines Added\tLines Deleted\tTotal Lines\n"; echo -en "----\t-----------\t-------------\t-----------\n"; while read name; do git log --author="$name" --pretty=tformat: --numstat | awk -v name="$name" '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "%s\t%d\t%d\t%d\n", name, add, subs, loc }' - ; done } | column -ts $'\t' | cowsay -n | lolcat
 }
 
 function battery_charge() {
@@ -255,7 +264,7 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # Editor setting preference
-export EDITOR='subl -w'
+export EDITOR='vim'
 
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash

@@ -277,19 +277,6 @@ class Color(DefaultColor):
     pass
 
 
-def add_time_segment(powerline):
-    if powerline.args.shell == 'bash':
-        time = ' \\t '
-    elif powerline.args.shell == 'zsh':
-        time = ' %* '
-    else:
-        import time
-        time = ' %s ' % time.strftime('%H:%M:%S')
-
-    powerline.append(time, Color.HOSTNAME_FG, Color.HOSTNAME_BG)
-
-
-add_time_segment(powerline)
 import os
 
 def add_virtual_env_segment(powerline):
@@ -493,7 +480,6 @@ def parse_git_stats(status):
     stats['all'] = sum(stats.values())
     return stats
 
-
 def _n_or_empty(_dict, _key):
     return _dict[_key] if int(_dict[_key]) > 1 else u''
 
@@ -503,6 +489,8 @@ def add_git_segment(powerline):
         p = subprocess.Popen(['git', 'status', '--porcelain', '-b'],
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                              env=git_subprocess_env())
+        p2 = subprocess.Popen(['git', 'stash', 'list'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=git_subprocess_env())
+
     except OSError:
         # Popen will throw an OSError if git is not found
         return
@@ -511,7 +499,12 @@ def add_git_segment(powerline):
     if p.returncode != 0:
         return
 
+    pdata2 = p2.communicate()
+    if p2.returncode != 0:
+        return
+
     status = pdata[0].decode("utf-8").splitlines()
+    stashed = pdata2[0].decode("utf-8").splitlines()
 
     branch_info = parse_git_branch_info(status)
     stats = parse_git_stats(status)
@@ -528,7 +521,9 @@ def add_git_segment(powerline):
         bg = Color.REPO_DIRTY_BG
         fg = Color.REPO_DIRTY_FG
 
-    powerline.append(u' \ue0a0 %s ' % branch, fg, bg)
+    staged = ((u'\u25cf' + " ") if len(stashed) > 0 else "")
+    branch = branch + " " + staged
+    powerline.append(u' \ue0a0 %s' % branch, fg, bg)
 
     def _add(_dict, _key, fg, bg):
         if _dict[_key]:
