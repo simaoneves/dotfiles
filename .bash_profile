@@ -162,8 +162,8 @@ alias seg="cd ~/Dev/seg/"
 
 # Functions
 function github() {
-	repo_name=`basename "${PWD}"`
-	open -a Google\ Chrome http://www.github.com/simaoneves/$repo_name
+	repo=`git config --get remote.origin.url | sed -e 's/\.git//'`
+	open -a Google\ Chrome $repo
 }
 
 function gstat() {
