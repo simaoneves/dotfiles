@@ -7,18 +7,30 @@
 // DocBlockr
 // GitGutter
 // IndentLines
-// Spacegray
-// Flatland
-// Predawn
-// Itg.flat
+// Theme Spacegray
+// Theme Flatland
+// Theme Predawn
+// Theme Itg.flat
 // Railscasts Extended Theme
 // Emmet
 // BracketHighlighter
 // SelectedQuote
+// AdvancedNewFile
+// AllAutcomplete
+// DashDoc
+// EasyMotion
+// MarkdownPreview
+// Material Color Scheme
+// Theme Primer
+// Sublime CodeIntel
+// ScrollOffset
+// Schmer
+// RSpec
 
 {
-  "font_size": 12.0,
+  "font_size": 14.0,
   // "font_face": "Source Code Pro",
+  "font_face": "PragmataPro",
   "highlight_line": true,
   "ignored_packages":
   [
@@ -30,10 +42,22 @@
   ],
   "tab_size": 2,
   "translate_tabs_to_spaces": true,
-  "word_wrap": true,  
+  "word_wrap": true,
+  "vintage_start_in_command_mode": true,
+
   "spacegray_tabs_large": true,
   "flatland_sidebar_tree_small": true,
   "itg_small_tabs": true,
+  "theme_primer_sidebar_font_normal": true,
+  "theme_primer_sidebar_tree_normal": true,
+  "theme_primer_tab_active_blue": true,
+  "theme_primer_tabs_font_normal": true,
+
+  "predawn_sidebar_arrows": true,
+  "predawn_sidebar_large": true,
+  "predawn_tabs_active_underline": false,
+  "predawn_tabs_large": true,
+
 
   ////////////
   // THEMES //
@@ -41,8 +65,9 @@
 
   // "theme": "Spacegray.sublime-theme",
   // "theme": "Flatland Dark.sublime-theme",
-  // "theme": "predawn.sublime-theme",
-  "theme": "Spacegray Light.sublime-theme",
+  "theme": "predawn.sublime-theme",
+  // "theme": "Primer.sublime-theme",
+  // "theme": "Spacegray Light.sublime-theme",
   // "theme": "itg.flat.light.sublime-theme",
   // "theme": "itg.flat.dark.sublime-theme",
   // "theme": "Spacegray Eighties.sublime-theme",
@@ -52,7 +77,8 @@
   // COLOR SCHEMES //
   ///////////////////
 
-  "color_scheme": "Packages/Base16 Color Schemes/base16-mocha.dark.tmTheme"
+  "color_scheme": "Packages/Base16 Color Schemes/base16-hybrid-simon.dark.tmTheme"
+  // "color_scheme": "Packages/Base16 Color Schemes/base16-mocha.dark.tmTheme"
   // "color_scheme": "Packages/Base16 Color Schemes/base16-default.dark.tmTheme"
   // "color_scheme": "Packages/Base16 Color Schemes/base16-tomorrow.dark.tmTheme"
   // "color_scheme": "Packages/Base16 Color Schemes/base16-eighties.dark.tmTheme"

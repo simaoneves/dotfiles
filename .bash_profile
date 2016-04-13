@@ -7,6 +7,13 @@ if [ "$TERM" != "linux" ]; then
 fi
 
 
+# sqlplus for psi configurations
+export SQLPATH=/Applications/sqlplus
+export DYLD_LIBRARY_PATH=$SQLPATH
+export TNS_ADMIN=$SQLPATH
+export PATH=$PATH:$SQLPATH
+export NLS_LANG=.AL32UTF8
+
 # Shell prompt based on the Solarized Dark theme.
 # Screenshot: http://i.imgur.com/EkEtphC.png
 # Heavily inspired by @necolas’s prompt: https://github.com/necolas/dotfiles
@@ -130,7 +137,7 @@ alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
 alias dot="cd ~/Dev/dotfiles"
 
-alias ls="ls -Ga"
+alias ls="ls -Gpa"
 alias mkdir="mkdir -v"
 alias rm="rm -v"
 
@@ -139,7 +146,7 @@ alias gb="git branch -v"
 alias gd="git diff $1"
 alias gds="git diff --stat"
 alias gc="git checkout $1"
-alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gl="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 alias mamp_start="/Applications/MAMP/bin/start.sh"
 alias mamp_stop="/Applications/MAMP/bin/stop.sh"
@@ -152,13 +159,17 @@ alias rpi="ssh simon@raspberrypi"
 alias r="ruby"
 alias dbm="rake db:migrate"
 alias htop="sudo htop"
+alias coffee="caffeinate -dim -t 14400"
+alias sql="sqlplus scott/tiger@difcul"
 
 alias sd="cd ~/Dropbox\ \(Personal\)/'FCUL DB'/'Sistemas Distribuídos'/Projectos"
 alias sabe="cd ~/Dev/sabe/sabe-online-web"
 alias s="subl"
 alias jess="java -cp jess.jar jess.Main" 
 alias dco="cd ~/Dev/dco/"
-alias seg="cd ~/Dev/seg/" 
+alias seg="cd ~/Dev/seg/Seguranca_2" 
+alias psi="cd ~/Dev/psi/PSI" 
+alias ec="cd ~/Dev/ec/" 
 
 # Functions
 function github() {
@@ -168,6 +179,26 @@ function github() {
 
 function gstat() {
 	git-stats -g && git log --format='%aN' | sort -u | { echo -en "Name\tLines Added\tLines Deleted\tTotal Lines\n"; echo -en "----\t-----------\t-------------\t-----------\n"; while read name; do git log --author="$name" --pretty=tformat: --numstat | awk -v name="$name" '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "%s\t%d\t%d\t%d\n", name, add, subs, loc }' - ; done } | column -ts $'\t' | cowsay -n | lolcat
+}
+
+function mergefiles() {
+	if [ $# -lt 3 ]
+  	then
+	    echo "Not enough arguments!"
+	    echo "Command should be like:"
+	    echo "mergefiles file1 file2 new_file_name"
+	  else
+			echo "Merging $1 with $2 to $3.."
+			touch empty_temp_file
+			git merge-file -p $1 empty_temp_file $2 > $3
+			echo "Done!"
+			command rm empty_temp_file
+			number_conflicts=`cat $3 | grep "<<<<" | wc -l | xargs`
+			if [ $number_conflicts -gt 1 ]
+				then
+					echo "CONFLICTS! We've got $number_conflicts problems, but a bitch ain't one!"
+			fi
+  fi
 }
 
 function battery_charge() {
@@ -278,6 +309,7 @@ fi
 ##
 
 # MacPorts Installer addition on 2015-10-22_at_13:07:27: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/usr/local/Cellar/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Finished adapting your PATH environment variable for use with MacPorts.
 
