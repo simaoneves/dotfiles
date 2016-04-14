@@ -167,9 +167,9 @@ alias sabe="cd ~/Dev/sabe/sabe-online-web"
 alias s="subl"
 alias jess="java -cp jess.jar jess.Main" 
 alias dco="cd ~/Dev/dco/"
-alias seg="cd ~/Dev/seg/Seguranca_2" 
-alias psi="cd ~/Dev/psi/PSI" 
-alias ec="cd ~/Dev/ec/" 
+alias seg="cd ~/Dev/seg/Seguranca_1"
+alias psi="cd ~/Dev/psi/PSI"
+alias ec="cd ~/Dev/ec/"
 
 # Functions
 function github() {
@@ -297,8 +297,8 @@ export PATH="$PATH:$HOME/.rvm/bin"
 # Editor setting preference
 export EDITOR='vim'
 
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
+if [ -f ~/Dev/dotfiles/bin/.git-completion.bash ]; then
+  . ~/Dev/dotfiles/bin/.git-completion.bash
 fi
 
 
