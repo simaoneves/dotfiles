@@ -6,6 +6,7 @@ if [ "$TERM" != "linux" ]; then
     PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 fi
 
+HISTFILESIZE=10000
 
 # sqlplus for psi configurations
 export SQLPATH=/Applications/sqlplus
@@ -145,6 +146,8 @@ alias ec="cd ~/Dev/ec/"
 alias ls="ls -Gpah"
 alias mkdir="mkdir -v"
 alias rm="rm -v"
+alias rdr="rm -Rfv"
+alias th="history | awk '{CMD[\$2]++;count++;}END { for (a in CMD)print CMD[a] \" \" CMD[a]/count*100 \"% \" a;}' | grep -v \"./\" | column -c3 -s \" \" -t | sort -nr | nl |  head -n20"
 
 alias gs="git status"
 alias gb="git branch -v"
@@ -156,6 +159,7 @@ alias pop="git stash pop"
 alias gpll="git pull"
 alias gaa="git add ."
 alias gcm="git commit -m"
+alias amend="git commit --amend"
 alias gl="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 alias mamp_start="/Applications/MAMP/bin/start.sh"
@@ -163,10 +167,12 @@ alias mamp_stop="/Applications/MAMP/bin/stop.sh"
 alias pg_start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
 alias pg_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias ios_sim="open -a 'iPhone Simulator'"
-alias pro="s ~/Dev/dotfiles/.bash_profile"
+alias pro="vim ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
 alias rpi="ssh simon@raspberrypi"
 alias r="ruby"
+alias v="vim"
+alias sd="sudo"
 alias dbm="rake db:migrate"
 alias htop="sudo htop"
 alias coffee="caffeinate -dim -t 14400"
@@ -180,6 +186,10 @@ alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
 function github() {
 	repo=`git config --get remote.origin.url | sed -e 's/\.git//'`
 	open -a Google\ Chrome $repo
+}
+
+function weather() {
+	curl http://wttr.in/$1
 }
 
 function gstat() {
