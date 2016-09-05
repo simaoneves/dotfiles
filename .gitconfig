@@ -10,3 +10,5 @@
 	ui = true
 [init]
 	templatedir = /Users/simon/.git-templates
+[commit]
+	template = /Users/simon/.git-templates/git_commit_message.txt

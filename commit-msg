@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+# Inspiration from http://chris.beams.io/posts/git-commit/
+# On how to make great commit messages
+
+message_file = ARGV[0]
+lines = File.readlines(message_file)
+
+lines.map! { |line| line.chomp }
+
+# 1 - Separate subject from body with a blank line
+if lines.size > 2 && !lines[1].empty?
+  puts "Separate subject from body with a blank line"
+  exit 1
+end
+
+# 2 - Limit the subject line to 50 characters
+if lines.first.size > 50
+  puts "Limit the subject line to 50 characters"
+  exit 1
+end
+
+# 3 - Capitalize the subject line
+first_word = lines.first.split.first
+if !('A'..'Z').include? first_word[0]
+  puts "Capitalize the subject line"
+  exit 1
+end
+
+# 4 - Do not end the subject line with a period
+last_word = lines.first.split.last
+if last_word.end_with?('.')
+  puts "Do not end the subject line with a period"
+  exit 1
+end
+
+# 5 - Use the imperative mood in the subject line
+if first_word.end_with?('ed') || first_word.end_with?('ing')
+  puts "Use the imperative mood in the subject line"
+  exit 1
+end
+
+# 6 - Wrap the body at 72 characters
+if lines.detect { |line| line.size > 72 }
+  puts "Wrap the body at 72 characters"
+  exit 1
+end
+
+# 7 - Use the body to explain what and why vs. how
+if lines.size > 2 && lines.drop(2).detect { |line| line.empty? }
+  puts "Use the body to explain what and why vs. how"
+  exit 1
+end
