@@ -139,12 +139,15 @@ alias d="cd ~/Dev"
 alias dot="cd ~/Dev/dotfiles"
 alias sabe="cd ~/Dev/sabe/sabe-online-web"
 alias gh="cd ~/Dev/gymhopper"
+alias gha="cd ~/Dev/gymhopper/gymhopper"
+alias ghs="cd ~/Dev/gymhopper/gymhopper-server"
 
 alias ls="ls -Gpah"
 alias mkdir="mkdir -v"
 alias rm="rm -v"
 alias rdr="rm -Rfv"
 alias th="history | awk '{CMD[\$2]++;count++;}END { for (a in CMD)print CMD[a] \" \" CMD[a]/count*100 \"% \" a;}' | grep -v \"./\" | column -c3 -s \" \" -t | sort -nr | nl |  head -n20"
+alias ip="ifconfig | grep 'inet '"
 
 alias gs="git status"
 alias gb="git branch -v"
@@ -163,7 +166,7 @@ alias mamp_start="/Applications/MAMP/bin/start.sh"
 alias mamp_stop="/Applications/MAMP/bin/stop.sh"
 alias pg_start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
 alias pg_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
-alias ios_sim="open -a 'iPhone Simulator'"
+alias ios_sim="open -a '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'"
 alias pro="vim ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
 alias rpi="ssh simon@raspberrypi"
@@ -174,8 +177,15 @@ alias dbm="rake db:migrate"
 alias htop="sudo htop"
 alias coffee="caffeinate -dim -t 14400"
 alias sql="sqlplus psi24@difcul"
+alias ns="npm start"
+alias nt="npm test"
+alias ni="npm install"
+alias na="npm run android"
+alias nios="npm run ios"
+alias nios5="react-native run-ios --simulator 'iPhone 5'"
+alias nios6="react-native run-ios --simulator 'iPhone 6 Plus'"
 
-alias s="subl"
+alias sub="subl"
 alias jess="java -cp jess.jar jess.Main" 
 alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
 
@@ -290,9 +300,9 @@ PS1+="\[${cyan}\]\u: "; # username
 # PS1+="\[${hostStyle}\]\h"; # host
 # PS1+="\[${white}\] in ";
 PS1+="\[${yellow}\]\w"; # working directory
-PS1+='$(printf %$(put_spacing)s)'; # Add spacings
-PS1+="\$(prompt_git) "; # Git repository details
-PS1+="\$(battery_charge)"; # batery
+# PS1+='$(printf %$(put_spacing)s)'; # Add spacings
+# PS1+="\$(prompt_git) "; # Git repository details
+# PS1+="\$(battery_charge)"; # batery
 PS1+="\n";
 PS1+="\$(last_command_color)→ \[${reset}\]"; # `$` (and reset color)
 export PS1;
@@ -325,3 +335,4 @@ export PATH="/usr/local/Cellar/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Finished adapting your PATH environment variable for use with MacPorts.
 
+export ANDROID_HOME=/usr/local/opt/android-sdk
