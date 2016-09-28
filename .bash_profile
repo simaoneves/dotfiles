@@ -1,10 +1,10 @@
 # Powerline prompt
-function _update_ps1() {
-    PS1="$(~/Dev/dotfiles/bin/powerline-shell.py --cwd-mode plain $? 2> /dev/null)"
-}
-if [ "$TERM" != "linux" ]; then
-    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
-fi
+# function _update_ps1() {
+#     PS1="$(~/Dev/dotfiles/bin/powerline-shell.py --cwd-mode plain $? 2> /dev/null)"
+# }
+# if [ "$TERM" != "linux" ]; then
+#     PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+# fi
 
 HISTFILESIZE=10000
 
@@ -29,7 +29,7 @@ fi;
 prompt_git() {
 	local s='';
 	local branchName='';
-	local branchColor=${red};
+	local branchColor=${green};
 
 	# Check if the current directory is in a Git repository.
 	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
@@ -42,26 +42,32 @@ prompt_git() {
 
 			# Check for untracked files.
 			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-				s+='+';
-				branchColor=${red};
+				# s+='+';
+				branchColor=${yellow};
 			fi;
 			
 			# Check for uncommitted changes in the index.
 			if ! $(git diff --quiet --ignore-submodules --cached); then
-				s+='!';
-				branchColor=${red};
+				# s+='!';
+				branchColor=${yellow};
+			fi;
+
+			# Check if there are unpushed commits
+			if ! $(git log origin/master..HEAD); then
+				s+=" ${green}✓${reset}";
+				# branchColor=${yellow};
 			fi;
 
 			# Check for unstaged changes.
 			if ! $(git diff-files --quiet --ignore-submodules --); then
-				s+='*';
-				branchColor=${red};
+				# s+='*';
+				branchColor=${yellow};
 			fi;
 
 			# Check for stashed files.
 			if $(git rev-parse --verify refs/stash &>/dev/null); then
-				s+='$';
-				branchColor=${yellow};
+				s+=" ${blue}●${reset}";
+				# branchColor=${yellow};
 			fi;
 
 		fi;
@@ -73,9 +79,9 @@ prompt_git() {
 			git rev-parse --short HEAD 2> /dev/null || \
 			echo '(unknown)')";
 
-		[ -n "${s}" ] && s=": ${s}";
+		[ -n "${s}" ] && s="${s}";
 
-		echo -e "${1}${branchColor}[${branchName}${s}]";
+		echo -e "${1}${branchColor} ${branchName}${s}${reset}";
 	else
 		echo ""
 	fi;
@@ -87,15 +93,29 @@ if tput setaf 1 &> /dev/null; then
 	reset=$(tput sgr0);
 	# Solarized colors, taken from http://git.io/solarized-colors.
 	black=$(tput setaf 0);
-	blue=$(tput setaf 33);
-	cyan=$(tput setaf 37);
-	green=$(tput setaf 64);
+	blue=$(tput setaf 4);
+	cyan=$(tput setaf 6);
+	green=$(tput setaf 2);
 	orange=$(tput setaf 166);
 	purple=$(tput setaf 125);
-	red=$(tput setaf 124);
-	violet=$(tput setaf 61);
-	white=$(tput setaf 15);
-	yellow=$(tput setaf 136);
+	red=$(tput setaf 1);
+	violet=$(tput setaf 5);
+	white=$(tput setaf 7);
+	yellow=$(tput setaf 3);
+	
+	# bold=$(tput bold);
+	# reset=$(tput sgr0);
+	# # Solarized colors, taken from http://git.io/solarized-colors.
+	# black=$(tput setaf 0);
+	# blue=$(tput setaf 33);
+	# cyan=$(tput setaf 37);
+	# green=$(tput setaf 64);
+	# orange=$(tput setaf 166);
+	# purple=$(tput setaf 125);
+	# red=$(tput setaf 124);
+	# violet=$(tput setaf 61);
+	# white=$(tput setaf 15);
+	# yellow=$(tput setaf 136);
 else
 	bold='';
 	reset="\e[0m";
@@ -252,7 +272,7 @@ function get_bat() {
 	lolo=`battery_charge`
 	result=0
 	if [ ${#lolo} != 0 ]; then
-		result=$(( ${#lolo} - 10 ))
+		result=$(( ${#lolo} - 4 ))
 	else
 		result=0
 	fi
@@ -294,17 +314,18 @@ function save_output() {
 # Set the terminal title to the current working directory.
 PS1="\[\033]0;\w\007\]";
 # PS1+="\$(save_output)"; # `$` (and reset color)
-PS1+="\[${bold}\]\n"; # newline
-PS1+="\[${cyan}\]\u: "; # username
+# PS1+="\[${bold}\]\n"; # newline
+PS1+="\[${blue}\]\u: "; # username
 # PS1+="\[${white}\] at ";
 # PS1+="\[${hostStyle}\]\h"; # host
 # PS1+="\[${white}\] in ";
-PS1+="\[${yellow}\]\w"; # working directory
+PS1+="\[${violet}\]\w "; # working directory
 # PS1+='$(printf %$(put_spacing)s)'; # Add spacings
-# PS1+="\$(prompt_git) "; # Git repository details
+PS1+="\$(prompt_git) "; # Git repository details
 # PS1+="\$(battery_charge)"; # batery
 PS1+="\n";
-PS1+="\$(last_command_color)→ \[${reset}\]"; # `$` (and reset color)
+PS1+="\[${white}\]→ \[${reset}\]"; # `$` (and reset color)
+# PS1+="\$(last_command_color)→ \[${reset}\]"; # `$` (and reset color)
 export PS1;
 
 PS2="\[${yellow}\]→ \[${reset}\]";
