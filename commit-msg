@@ -15,8 +15,9 @@ if lines.size > 2 && !lines[1].empty?
 end
 
 # 2 - Limit the subject line to 50 characters
-if lines.first.size > 50
-  puts "Limit the subject line to 50 characters"
+first_line_size = lines.first.size
+if first_line_size > 50
+  puts "Limit the subject line to 50 characters, you have #{first_line_size}"
   exit 1
 end
 

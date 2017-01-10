@@ -31,6 +31,13 @@ prompt_git() {
 	local branchName='';
 	local branchColor=${green};
 
+	# Get the short symbolic ref.
+	# If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
+	# Otherwise, just give up.
+	branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+		git rev-parse --short HEAD 2> /dev/null || \
+		echo '(unknown)')";
+
 	# Check if the current directory is in a Git repository.
 	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
 
@@ -52,8 +59,8 @@ prompt_git() {
 				branchColor=${yellow};
 			fi;
 
-			# Check if there are unpushed commits
-			if ! $(git log origin/master..HEAD); then
+			# Check if there are unpushed commits on the current branch
+			if [ -n "$(git log origin/$branchName..$branchName --oneline)" ]; then
 				s+=" ${green}✓${reset}";
 				# branchColor=${yellow};
 			fi;
@@ -72,13 +79,6 @@ prompt_git() {
 
 		fi;
 
-		# Get the short symbolic ref.
-		# If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
-		# Otherwise, just give up.
-		branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
-			git rev-parse --short HEAD 2> /dev/null || \
-			echo '(unknown)')";
-
 		[ -n "${s}" ] && s="${s}";
 
 		echo -e "${1}${branchColor} ${branchName}${s}${reset}";
@@ -91,7 +91,6 @@ if tput setaf 1 &> /dev/null; then
 	tput sgr0; # reset colors
 	bold=$(tput bold);
 	reset=$(tput sgr0);
-	# Solarized colors, taken from http://git.io/solarized-colors.
 	black=$(tput setaf 0);
 	blue=$(tput setaf 4);
 	cyan=$(tput setaf 6);
@@ -171,10 +170,10 @@ alias ip="ifconfig | grep 'inet '"
 
 alias gs="git status"
 alias gb="git branch -v"
-alias gd="git diff $1"
+alias gd="git diff --color | diff-so-fancy | less --tabs=4 -RFX"
 alias gds="git diff --stat"
-alias gc="git checkout $1"
-alias stash="git stash"
+alias gco="git checkout"
+alias stash="git stash -u"
 alias pop="git stash pop"
 alias gpll="git pull"
 alias gaa="git add . && echo 'To create a good commit message, complete the following sentence:' && echo 'If applied, this commit will..'"
@@ -204,6 +203,7 @@ alias na="npm run android"
 alias nios="npm run ios"
 alias nios5="react-native run-ios --simulator 'iPhone 5'"
 alias nios6="react-native run-ios --simulator 'iPhone 6 Plus'"
+alias nios7="react-native run-ios --simulator 'iPhone 7'"
 
 alias sub="subl"
 alias jess="java -cp jess.jar jess.Main" 
@@ -342,6 +342,10 @@ export EDITOR='vim'
 
 if [ -f ~/Dev/dotfiles/bin/.git-completion.bash ]; then
   . ~/Dev/dotfiles/bin/.git-completion.bash
+
+  # Add git completion to aliases
+  __git_complete gco _git_checkout
+  __git_complete gpll _git_pull
 fi
 
 
