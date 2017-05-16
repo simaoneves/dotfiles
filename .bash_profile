@@ -60,10 +60,10 @@ prompt_git() {
 			fi;
 
 			# Check if there are unpushed commits on the current branch
-			if [ -n "$(git log origin/$branchName..$branchName --oneline)" ]; then
-				s+=" ${green}✓${reset}";
+			# if [ -n "$(git log origin/$branchName..$branchName --oneline)" ]; then
+				# s+=" ${green}✓${reset}";
 				# branchColor=${yellow};
-			fi;
+			# fi;
 
 			# Check for unstaged changes.
 			if ! $(git diff-files --quiet --ignore-submodules --); then
@@ -160,6 +160,8 @@ alias sabe="cd ~/Dev/sabe/sabe-online-web"
 alias gh="cd ~/Dev/gymhopper"
 alias gha="cd ~/Dev/gymhopper/gymhopper"
 alias ghs="cd ~/Dev/gymhopper/gymhopper-server"
+alias vvs="cd ~/Dev/vvs/"
+alias tc="cd ~/Dev/tc/"
 
 alias ls="ls -Gpah"
 alias mkdir="mkdir -v"
@@ -167,18 +169,23 @@ alias rm="rm -v"
 alias rdr="rm -Rfv"
 alias th="history | awk '{CMD[\$2]++;count++;}END { for (a in CMD)print CMD[a] \" \" CMD[a]/count*100 \"% \" a;}' | grep -v \"./\" | column -c3 -s \" \" -t | sort -nr | nl |  head -n20"
 alias ip="ifconfig | grep 'inet '"
+alias td="tmux detach"
+alias ta="tmux attach"
+alias tn="tmux new-session -s"
 
 alias gs="git status"
 alias gb="git branch -v"
 alias gd="git diff --color | diff-so-fancy | less --tabs=4 -RFX"
+alias gdi="git diff --color --cached | diff-so-fancy | less --tabs=4 -RFX"
 alias gds="git diff --stat"
 alias gco="git checkout"
-alias stash="git stash -u"
+alias stash="git stash save -u"
 alias pop="git stash pop"
 alias gpll="git pull"
 alias gaa="git add . && echo 'To create a good commit message, complete the following sentence:' && echo 'If applied, this commit will..'"
 alias gcm="git commit -m"
 alias amend="git commit --amend"
+alias unstage="git reset HEAD --"
 alias gl="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 alias mamp_start="/Applications/MAMP/bin/start.sh"
@@ -199,6 +206,7 @@ alias sql="sqlplus psi24@difcul"
 alias ns="npm start"
 alias nt="npm test"
 alias ni="npm install"
+alias nr="npm run"
 alias na="npm run android"
 alias nios="npm run ios"
 alias nios5="react-native run-ios --simulator 'iPhone 5'"
@@ -206,8 +214,10 @@ alias nios6="react-native run-ios --simulator 'iPhone 6 Plus'"
 alias nios7="react-native run-ios --simulator 'iPhone 7'"
 
 alias sub="subl"
+alias a.="atom ."
 alias jess="java -cp jess.jar jess.Main" 
 alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
+alias antlr4='java -jar /usr/local/lib/antlr-4.6-complete.jar'
 
 # Functions
 function github() {
@@ -358,6 +368,7 @@ fi
 # MacPorts Installer addition on 2015-10-22_at_13:07:27: adding an appropriate PATH variable for use with MacPorts.
 export PATH="/usr/local/Cellar/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# Finished adapting your PATH environment variable for use with MacPorts.
+export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
+export PATH=".:/usr/local/lib/antlr-4.0-complete.jar:$PATH"
 
 export ANDROID_HOME=/usr/local/opt/android-sdk

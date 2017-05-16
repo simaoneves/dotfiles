@@ -6,14 +6,18 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.Vim'
+Plugin 'chriskempson/base16-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sjl/vitality.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'dracula/vim'
+Plugin 'rhysd/vim-crystal'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -21,7 +25,7 @@ filetype plugin indent on    " required
 syntax enable
 
 " colorscheme hybrid
-colorscheme base16-ocean
+colorscheme dracula
 set background=dark
 set relativenumber
 set number
@@ -31,7 +35,7 @@ set so=6
 set laststatus=2
 let g:airline_powerline_fonts = 1
 set timeoutlen=50
-let g:airline_theme = "base16"
+let g:airline_theme = "dracula"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_right_sep = ''
 let g:airline_left_sep = ''
@@ -55,15 +59,22 @@ set timeout timeoutlen=1500
 " Use system clipboard
 set clipboard=unnamed
 
-nmap <C-w> :bd<CR>
+" Use tab completion in exmode
+set wildmenu
+
+" nmap <C-w> :bd<CR>
 nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
 nmap <C-s> :w<CR>
+" Put cursor on the middle of the screen after moving
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
+" Bubble lines up and down (weird characters are <A-j> and <A-k> in my
+" terminal
+nmap ¯ ddp
+nmap „ ddkP
 nmap ,e :e ~/.vimrc<CR>
 
 set lazyredraw
 set ttyfast " u got a fast terminal
-" set ttyscroll=3
-
+set ttyscroll=3
