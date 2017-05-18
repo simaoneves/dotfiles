@@ -1,10 +1,11 @@
 dotfiles
 ========
 
-Personal preferences for some good development goodness
+Install from Big Bang
+=====================
+Install [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
 Tools of trade:
-- Sublime Text 2
 - Atom
 - Vim
 - iTerm2

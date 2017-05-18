@@ -18,16 +18,15 @@
     colors:
       abaseColor: "#8ce1ff"
       accentColor: "#fefcf6"
-    fonts:
-      fontSize: 15
+    fonts: {}
     tabs:
       compactTabs: true
     treeView:
       compactList: true
     ui:
       animations: false
-  "atom-spotify2":
-    showPlayStatus: false
+      useAnimations: false
+  "atom-spotify2": {}
   "autocomplete-plus":
     useCoreMovementCommands: false
   "base16-syntax":
@@ -85,7 +84,6 @@
       uno: "#da9e54"
   editor:
     fontFamily: "PragmataPro"
-    fontSize: 13
     invisibles: {}
     preferredLineLength: 100
     showIndentGuide: true
@@ -112,7 +110,6 @@
     disableWhenNoEslintConfig: false
     globalNodePath: "/usr/local"
   "linter-ui-default":
-    showPanel: true
     tooltipFollows: "Keyboard"
   "markdown-preview": {}
   "mocha-test-runner":
