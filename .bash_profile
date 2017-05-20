@@ -214,6 +214,7 @@ alias nios6="react-native run-ios --simulator 'iPhone 6 Plus'"
 alias nios7="react-native run-ios --simulator 'iPhone 7'"
 
 alias sub="subl"
+alias gvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias a.="atom ."
 alias jess="java -cp jess.jar jess.Main" 
 alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
@@ -227,6 +228,10 @@ function github() {
 
 function weather() {
 	curl http://wttr.in/$1
+}
+
+function google() {
+	open -a Google\ Chrome http://www.google.com/search?q=`echo "$@" | tr " " "+"`
 }
 
 function gstat() {

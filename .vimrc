@@ -25,7 +25,7 @@ filetype plugin indent on    " required
 
 syntax enable
 set noswapfile
-colorscheme spring-night
+colorscheme base16-eighties
 set background=dark
 set relativenumber
 set number
@@ -35,8 +35,9 @@ set encoding=utf-8
 
 set laststatus=2
 set timeoutlen=50
-let g:airline_theme = "spring_night"
+let g:airline_theme = "base16_eighties"
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
 let g:airline_left_sep = ''
 let g:airline_powerline_fonts = 1
@@ -62,6 +63,8 @@ set clipboard=unnamed
 
 " Use tab completion in exmode
 set wildmenu
+
+set hidden
 
 " nmap <C-w> :bd<CR>
 nmap <C-l> :bn<CR>
