@@ -5,11 +5,14 @@ set guioptions-=r
 set guioptions-=l
 set guioptions-=L
 
+macm File.New\ Tab key=<nop>
+macm File.New\ Tab key=<nop>
+macm File.Close key=<nop>
 nmap <S-Enter> O<Esc>j
 
-nmap <D-t> :CtrlP<CR>
-nmap <D-r> :CtrlPBufTag<CR>
-nmap <D-w> :bd<CR>
+nnoremap <D-t> :CtrlP<CR>
+nnoremap <D-r> :CtrlPBufTag<CR>
+nnoremap <D-w> :bd<CR>
 
 colorscheme spring-night
 let g:airline_theme = "spring_night"
