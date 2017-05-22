@@ -10,8 +10,9 @@ macm File.New\ Tab key=<nop>
 macm File.Close key=<nop>
 nmap <S-Enter> O<Esc>j
 
+nmap <C-y> :FZF<CR>
 nnoremap <D-t> :CtrlP<CR>
-nnoremap <D-r> :CtrlPBufTag<CR>
+nnoremap <D-r> :CtrlPFunky<CR>
 nnoremap <D-w> :bd<CR>
 
 colorscheme spring-night

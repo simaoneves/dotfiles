@@ -84,6 +84,7 @@
       uno: "#da9e54"
   editor:
     fontFamily: "PragmataPro"
+    fontSize: 13
     invisibles: {}
     preferredLineLength: 100
     showIndentGuide: true
@@ -110,6 +111,7 @@
     disableWhenNoEslintConfig: false
     globalNodePath: "/usr/local"
   "linter-ui-default":
+    panelHeight: 81
     tooltipFollows: "Keyboard"
   "markdown-preview": {}
   "mocha-test-runner":
