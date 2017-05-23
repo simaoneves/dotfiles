@@ -1,6 +1,7 @@
 
 # Stuff to install via homebrew
 reattach-to-user-namespace
+the_silver_searcher
 
 
 

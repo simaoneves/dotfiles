@@ -22,6 +22,19 @@ Plugin 'dracula/vim'
 Plugin 'rhysd/vim-crystal'
 Plugin 'rhysd/vim-color-spring-night'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'Raimondi/delimitMate'
+Plugin 'vim-scripts/ReplaceWithRegister'
+Plugin 'kana/vim-textobj-user'
+Plugin 'glts/vim-textobj-comment'
+Plugin 'kana/vim-textobj-entire'
+Plugin 'kana/vim-textobj-indent'
+Plugin 'sgur/vim-textobj-parameter'
+Plugin 'beloglazov/vim-textobj-quotes'
+Plugin 'Julian/vim-textobj-brace'
+Plugin 'tek/vim-textobj-ruby'
+Plugin 'tpope/vim-commentary'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'AndrewRadev/switch.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -45,14 +58,16 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
 let g:airline_left_sep = ''
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
 let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_map = '<c-t>'
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
+let g:switch_mapping = "-"
 
 " Not show original status line
 set noshowmode
@@ -82,19 +97,28 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 
-" Use C-hjkl to change splits
-nmap <C-l> <C-w><C-l>
-nmap <C-k> <C-w><C-k>
-nmap <C-h> <C-w><C-h>
-nmap <C-j> <C-w><C-j>
+" ˇ¯„‘
+" Use M-hjkl to change splits
+nmap ˇ <C-w><C-h>
+nmap ¯ <C-w><C-j>
+nmap „ <C-w><C-k>
+nmap ‘ <C-w><C-l>
 
-" Use L and H to change buffers
-nmap L :bn<CR>
-nmap H :bp<CR>
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> ˇ :TmuxNavigateLeft<cr>
+nnoremap <silent> ¯ :TmuxNavigateDown<cr>
+nnoremap <silent> „ :TmuxNavigateUp<cr>
+nnoremap <silent> ‘ :TmuxNavigateRight<cr>
+
+" Use C-h and l to change buffers
+nmap <C-l> :bn<CR>
+nmap <C-h> :bp<CR>
 
 " 
 nmap <C-s> :w<CR>
-nmap <C-s> :w<CR>
+
+" Change ReplaceWithRegister default mapping
+nmap <C-p> gr
 
 " bind K to grep word under cursor
 nnoremap ? :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
@@ -105,8 +129,8 @@ nmap <C-u> <C-u>zz
 
 " Bubble lines up and down (weird characters are <A-j> and <A-k> in my
 " terminal
-nmap ¯ ddp
-nmap „ ddkP
+" nmap ¯ ddp
+" nmap „ ddkP
 
 nmap openLineAbove O<Esc>j
 nmap <CR> o<Esc>k
@@ -120,3 +144,4 @@ set tags=./tags;/
 set lazyredraw
 set ttyfast " u got a fast terminal
 set ttyscroll=3
+set t_Co=256
