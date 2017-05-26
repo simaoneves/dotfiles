@@ -64,7 +64,7 @@ let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
-let g:ctrlp_map = '<c-t>'
+let g:ctrlp_map = '<Leader>t'
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
 let g:switch_mapping = "-"
@@ -75,8 +75,8 @@ set noshowmode
 " Show highlight current line
 set cursorline
 
-let mapleader=","
-set timeout timeoutlen=1500
+let mapleader=" "
+set timeout
 
 " Use system clipboard
 set clipboard=unnamed
@@ -89,20 +89,16 @@ set hidden
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
-
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
 endif
 
 " ˇ¯„‘
 " Use M-hjkl to change splits
-nmap ˇ <C-w><C-h>
-nmap ¯ <C-w><C-j>
-nmap „ <C-w><C-k>
-nmap ‘ <C-w><C-l>
+" nmap ˇ <C-w><C-h>
+" nmap ¯ <C-w><C-j>
+" nmap „ <C-w><C-k>
+" nmap ‘ <C-w><C-l>
 
 let g:tmux_navigator_no_mappings = 1
 nnoremap <silent> ˇ :TmuxNavigateLeft<cr>
@@ -113,9 +109,6 @@ nnoremap <silent> ‘ :TmuxNavigateRight<cr>
 " Use C-h and l to change buffers
 nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
-
-" 
-nmap <C-s> :w<CR>
 
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
@@ -132,16 +125,30 @@ nmap <C-u> <C-u>zz
 " nmap ¯ ddp
 " nmap „ ddkP
 
+" Mappings made in iTerm2, so i can use Cmd key
 nmap openLineAbove O<Esc>j
+nmap saveBuffer :w<CR>
 nmap <CR> o<Esc>k
 
-nmap ,e :e ~/.vimrc<CR>
+" Close buffer
+nmap <Leader>w :bd<CR>
+" Jump to definition (uses tags)
+nmap <Leader>j <C-]>
+" Edit this file
+nmap <Leader>e :e ~/.vimrc<CR>
+" Toggle NERDTree
 nmap <C-\> :NERDTreeToggle<CR>
+" Open tags in current file
+nmap <Leader>r :CtrlPBufTag<CR>
 
+" Add FZF to the runtimepath
 set rtp+=/usr/local/opt/fzf
 
+" Tag files definition
 set tags=./tags;/
 set lazyredraw
-set ttyfast " u got a fast terminal
+" Indicate fast terminalsaveBuffer:b
+set ttyfast 
 set ttyscroll=3
+" Number of colors in the terminal
 set t_Co=256
