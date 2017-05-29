@@ -35,6 +35,9 @@ Plugin 'tek/vim-textobj-ruby'
 Plugin 'tpope/vim-commentary'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'AndrewRadev/switch.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'junegunn/fzf.vim'
+Plugin 'benmills/vimux'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -52,7 +55,7 @@ set so=6
 set encoding=utf-8
 
 set laststatus=2
-set timeoutlen=50
+set timeoutlen=1500
 let g:airline_theme = "base16_eighties"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
@@ -64,7 +67,7 @@ let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
-let g:ctrlp_map = '<Leader>t'
+let g:ctrlp_map = '<C-ç>'
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
 let g:switch_mapping = "-"
@@ -89,6 +92,8 @@ set hidden
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
+  let g:ackprg = 'ag --vimgrep'
+
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 endif
@@ -120,11 +125,6 @@ nnoremap ? :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
 
-" Bubble lines up and down (weird characters are <A-j> and <A-k> in my
-" terminal
-" nmap ¯ ddp
-" nmap „ ddkP
-
 " Mappings made in iTerm2, so i can use Cmd key
 nmap openLineAbove O<Esc>j
 nmap saveBuffer :w<CR>
@@ -140,6 +140,11 @@ nmap <Leader>e :e ~/.vimrc<CR>
 nmap <C-\> :NERDTreeToggle<CR>
 " Open tags in current file
 nmap <Leader>r :CtrlPBufTag<CR>
+
+nmap <Leader>t :FZF<CR>
+nmap <Leader>rl :VimuxRunLastCommand<CR>
+nmap <Leader>rt :call VimuxRunCommand("clear; nt")<CR>
+nmap <Leader>cr :VimuxCloseRunner<CR>
 
 " Add FZF to the runtimepath
 set rtp+=/usr/local/opt/fzf
