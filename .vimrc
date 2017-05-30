@@ -38,6 +38,7 @@ Plugin 'AndrewRadev/switch.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'junegunn/fzf.vim'
 Plugin 'benmills/vimux'
+Plugin 'Shougo/neocomplete.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -61,7 +62,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
 let g:airline_left_sep = ''
-let g:airline_powerline_fonts = 0
+let g:airline_powerline_fonts = 1
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
 let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
@@ -71,7 +72,8 @@ let g:ctrlp_map = '<C-ç>'
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
 let g:switch_mapping = "-"
-
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
 " Not show original status line
 set noshowmode
 
@@ -110,6 +112,10 @@ nnoremap <silent> ˇ :TmuxNavigateLeft<cr>
 nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
+"
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 " Use C-h and l to change buffers
 nmap <C-l> :bn<CR>
@@ -119,7 +125,7 @@ nmap <C-h> :bp<CR>
 nmap <C-p> gr
 
 " bind K to grep word under cursor
-nnoremap ? :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap ? :Ack "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Put cursor on the middle of the screen after moving
 nmap <C-d> <C-d>zz
@@ -141,10 +147,19 @@ nmap <C-\> :NERDTreeToggle<CR>
 " Open tags in current file
 nmap <Leader>r :CtrlPBufTag<CR>
 
+" Find project wide
+nmap <Leader>f :Ack<Space>
+
+" Fuzzy Finder
 nmap <Leader>t :FZF<CR>
+" Run last command with Vimux
 nmap <Leader>rl :VimuxRunLastCommand<CR>
+" Run (NPM) tests
 nmap <Leader>rt :call VimuxRunCommand("clear; nt")<CR>
+" Close pane used by Vimux
 nmap <Leader>cr :VimuxCloseRunner<CR>
+" Run custom command
+nmap <Leader>dc :VimuxPromptCommand<CR>
 
 " Add FZF to the runtimepath
 set rtp+=/usr/local/opt/fzf
@@ -157,3 +172,9 @@ set ttyfast
 set ttyscroll=3
 " Number of colors in the terminal
 set t_Co=256
+
+" Auto reload vimrc
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END
