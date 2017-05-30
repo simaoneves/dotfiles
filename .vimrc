@@ -113,9 +113,9 @@ nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
 "
-" <TAB>: completion.
+" Tab and shift-Tab completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+inoremap <expr>^[[Z  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 " Use C-h and l to change buffers
 nmap <C-l> :bn<CR>
