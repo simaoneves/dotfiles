@@ -6,24 +6,34 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.Vim'
-Plugin 'chriskempson/base16-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tacahiroy/ctrlp-funky'
-Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
-Plugin 'mxw/vim-jsx'
-Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sjl/vitality.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'dracula/vim'
-Plugin 'rhysd/vim-crystal'
-Plugin 'rhysd/vim-color-spring-night'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'Raimondi/delimitMate'
-Plugin 'vim-scripts/ReplaceWithRegister'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'AndrewRadev/switch.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'junegunn/fzf.vim'
+Plugin 'benmills/vimux'
+Plugin 'Shougo/neocomplete.vim'
+
+" Language specefic
+Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+Plugin 'mxw/vim-jsx'
+Plugin 'rhysd/vim-crystal'
+
+" Themes
+Plugin 'dracula/vim'
+Plugin 'chriskempson/base16-vim'
+Plugin 'rhysd/vim-color-spring-night'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+" Text objects and operators
 Plugin 'kana/vim-textobj-user'
 Plugin 'glts/vim-textobj-comment'
 Plugin 'kana/vim-textobj-entire'
@@ -33,30 +43,15 @@ Plugin 'beloglazov/vim-textobj-quotes'
 Plugin 'Julian/vim-textobj-brace'
 Plugin 'tek/vim-textobj-ruby'
 Plugin 'tpope/vim-commentary'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'AndrewRadev/switch.vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'junegunn/fzf.vim'
-Plugin 'benmills/vimux'
-Plugin 'Shougo/neocomplete.vim'
+Plugin 'vim-scripts/ReplaceWithRegister'
+Plugin 'tpope/vim-surround'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-syntax enable
-set noswapfile
-colorscheme base16-eighties
-set background=dark
-set relativenumber
-set number
-set autoindent
-set expandtab
-set tabstop=4 shiftwidth=4 softtabstop=4
-set so=6
-set encoding=utf-8
-
-set laststatus=2
-set timeoutlen=1500
+"""""""""""""""""""""""
+" Plugin configurations
+"""""""""""""""""""""""
 let g:airline_theme = "base16_eighties"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
@@ -74,23 +69,6 @@ let g:jsx_ext_required = 0
 let g:switch_mapping = "-"
 " Use neocomplete.
 let g:neocomplete#enable_at_startup = 1
-" Not show original status line
-set noshowmode
-
-" Show highlight current line
-set cursorline
-
-let mapleader=" "
-set timeout
-
-" Use system clipboard
-set clipboard=unnamed
-
-" Use tab completion in exmode
-set wildmenu
-
-set hidden
-
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
@@ -100,44 +78,75 @@ if executable('ag')
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 endif
 
-" ˇ¯„‘
-" Use M-hjkl to change splits
-" nmap ˇ <C-w><C-h>
-" nmap ¯ <C-w><C-j>
-" nmap „ <C-w><C-k>
-" nmap ‘ <C-w><C-l>
 
+""""""""""""""""""""
+" Vim configurations
+""""""""""""""""""""
+syntax enable
+" Show highlight current line
+set cursorline
+set timeout
+" Use system clipboard
+set clipboard=unnamed
+" Use correct behaviour for backspace
+set backspace=indent,eol,start
+" Use tab completion in exmode
+set wildmenu
+" Not show original status line
+set noshowmode
+set hidden
+set termguicolors
+set noswapfile
+colorscheme base16-eighties
+set background=dark
+set relativenumber
+set number
+set autoindent
+set expandtab
+set tabstop=4 shiftwidth=4 softtabstop=4
+set so=6
+set encoding=utf-8
+set laststatus=2
+set timeoutlen=1500
+" Add FZF to the runtimepath
+set rtp+=/usr/local/opt/fzf
+" Tag files definition
+set tags=./tags;/
+set lazyredraw
+" Indicate fast terminalsaveBuffer:b
+set ttyfast 
+set ttyscroll=3
+" Number of colors in the terminal
+set t_Co=256
+
+"""""""""""""""""""""""
+" Keymap configurations
+"""""""""""""""""""""""
+let mapleader=" "
 let g:tmux_navigator_no_mappings = 1
 nnoremap <silent> ˇ :TmuxNavigateLeft<cr>
 nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
-"
 " Tab and shift-Tab completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr>^[[Z  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
 " Use C-h and l to change buffers
 nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
-
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
-
 " bind K to grep word under cursor
 nnoremap ? :Ack "\b<C-R><C-W>\b"<CR>:cw<CR>
-
 " Put cursor on the middle of the screen after moving
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
-
 " Mappings made in iTerm2, so i can use Cmd key
 nmap openLineAbove O<Esc>j
 nmap saveBuffer :w<CR>
 nmap <CR> o<Esc>k
-
-" Close buffer
-nmap <Leader>w :bd<CR>
+" Move to last buffer and close the one we were one buffer
+nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
 nmap <Leader>j <C-]>
 " Edit this file
@@ -146,10 +155,8 @@ nmap <Leader>e :e ~/.vimrc<CR>
 nmap <C-\> :NERDTreeToggle<CR>
 " Open tags in current file
 nmap <Leader>r :CtrlPBufTag<CR>
-
 " Find project wide
 nmap <Leader>f :Ack<Space>
-
 " Fuzzy Finder
 nmap <Leader>t :FZF<CR>
 " Run last command with Vimux
@@ -161,17 +168,6 @@ nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command
 nmap <Leader>dc :VimuxPromptCommand<CR>
 
-" Add FZF to the runtimepath
-set rtp+=/usr/local/opt/fzf
-
-" Tag files definition
-set tags=./tags;/
-set lazyredraw
-" Indicate fast terminalsaveBuffer:b
-set ttyfast 
-set ttyscroll=3
-" Number of colors in the terminal
-set t_Co=256
 
 " Auto reload vimrc
 augroup reload_vimrc

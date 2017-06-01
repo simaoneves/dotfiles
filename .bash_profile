@@ -366,10 +366,6 @@ fi
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-##
-# Your previous /Users/simon/.bash_profile file was backed up as /Users/simon/.bash_profile.macports-saved_2015-10-22_at_13:07:27
-##
-
 # MacPorts Installer addition on 2015-10-22_at_13:07:27: adding an appropriate PATH variable for use with MacPorts.
 export PATH="/usr/local/Cellar/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
