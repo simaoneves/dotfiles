@@ -11,6 +11,7 @@ macm File.Close key=<nop>
 nmap <S-Enter> O<Esc>j
 
 nnoremap <D-t> :CtrlP<CR>
+nnoremap <Leader>t :CtrlP<CR>
 nnoremap <D-r> :CtrlPFunky<CR>
 nnoremap <D-w> :bd<CR>
 

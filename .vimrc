@@ -52,7 +52,7 @@ filetype plugin indent on    " required
 """""""""""""""""""""""
 " Plugin configurations
 """""""""""""""""""""""
-let g:airline_theme = "base16_eighties"
+let g:airline_theme = "wombat"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
@@ -97,7 +97,7 @@ set noshowmode
 set hidden
 set termguicolors
 set noswapfile
-colorscheme base16-eighties
+colorscheme hybrid
 set background=dark
 set relativenumber
 set number
@@ -105,9 +105,14 @@ set autoindent
 set expandtab
 set tabstop=4 shiftwidth=4 softtabstop=4
 set so=6
+" Search with case insensive, unless it has a capital letter in it
+set smartcase
 set encoding=utf-8
 set laststatus=2
 set timeoutlen=1500
+" Open splits where they should
+set splitbelow
+set splitright
 " Add FZF to the runtimepath
 set rtp+=/usr/local/opt/fzf
 " Tag files definition
@@ -134,6 +139,9 @@ inoremap <expr>^[[Z  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Use C-h and l to change buffers
 nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
+" Dont use linewise motions
+nmap j gj
+nmap k gk
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
 " bind K to grep word under cursor
