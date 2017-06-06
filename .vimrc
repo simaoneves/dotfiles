@@ -63,6 +63,7 @@ let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
+let NERDTreeShowHidden = 1
 let g:ctrlp_map = '<C-ç>'
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
@@ -72,10 +73,10 @@ let g:neocomplete#enable_at_startup = 1
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ackprg = 'ag --vimgrep'
+  let g:ackprg = 'ag --vimgrep --hidden --ignore "tags"'
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor --ignore "tags" -g ""'
 endif
 
 
@@ -168,14 +169,13 @@ nmap <Leader>f :Ack<Space>
 " Fuzzy Finder
 nmap <Leader>t :FZF<CR>
 " Run last command with Vimux
-nmap <Leader>rl :VimuxRunLastCommand<CR>
+nmap <Leader>rr :VimuxRunLastCommand<CR>
 " Run (NPM) tests
 nmap <Leader>rt :call VimuxRunCommand("clear; nt")<CR>
 " Close pane used by Vimux
 nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command
 nmap <Leader>dc :VimuxPromptCommand<CR>
-
 
 " Auto reload vimrc
 augroup reload_vimrc

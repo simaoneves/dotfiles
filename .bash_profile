@@ -371,6 +371,6 @@ export PATH="/usr/local/Cellar/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
 export PATH=".:/usr/local/lib/antlr-4.0-complete.jar:$PATH"
-export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 export ANDROID_HOME=/usr/local/opt/android-sdk
