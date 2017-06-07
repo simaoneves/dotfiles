@@ -73,7 +73,7 @@ prompt_git() {
 
 			# Check for stashed files.
 			if $(git rev-parse --verify refs/stash &>/dev/null); then
-				s+=" ${blue}●${reset}";
+				s+=" ${branchColor}●${reset}";
 				# branchColor=${yellow};
 			fi;
 
@@ -92,15 +92,15 @@ if tput setaf 1 &> /dev/null; then
 	bold=$(tput bold);
 	reset=$(tput sgr0);
 	black=$(tput setaf 0);
-	blue=$(tput setaf 4);
-	cyan=$(tput setaf 6);
+	red=$(tput setaf 1);
 	green=$(tput setaf 2);
+	yellow=$(tput setaf 3);
+	blue=$(tput setaf 4);
+	magenta=$(tput setaf 5);
+	cyan=$(tput setaf 6);
+	white=$(tput setaf 7);
 	orange=$(tput setaf 166);
 	purple=$(tput setaf 125);
-	red=$(tput setaf 1);
-	violet=$(tput setaf 5);
-	white=$(tput setaf 7);
-	yellow=$(tput setaf 3);
 	
 	# bold=$(tput bold);
 	# reset=$(tput sgr0);
@@ -167,6 +167,7 @@ alias ls="ls -Gpah"
 alias mkdir="mkdir -v"
 alias rm="rm -v"
 alias rdr="rm -Rfv"
+alias rdss="find . -name \".DS_Store\" -delete"
 alias th="history | awk '{CMD[\$2]++;count++;}END { for (a in CMD)print CMD[a] \" \" CMD[a]/count*100 \"% \" a;}' | grep -v \"./\" | column -c3 -s \" \" -t | sort -nr | nl |  head -n20"
 alias ip="ifconfig | grep 'inet '"
 alias td="tmux detach"
@@ -330,11 +331,11 @@ function save_output() {
 PS1="\[\033]0;\w\007\]";
 # PS1+="\$(save_output)"; # `$` (and reset color)
 # PS1+="\[${bold}\]\n"; # newline
-PS1+="\[${blue}\]\u: "; # username
+PS1+="\[${green}\]\u: "; # username
 # PS1+="\[${white}\] at ";
-# PS1+="\[${hostStyle}\]\h"; # host
+# PS1+="\[${holtStyle}\]\h"; # host
 # PS1+="\[${white}\] in ";
-PS1+="\[${violet}\]\w "; # working directory
+PS1+="\[${blue}\]\w "; # working directory
 # PS1+='$(printf %$(put_spacing)s)'; # Add spacings
 PS1+="\$(prompt_git) "; # Git repository details
 # PS1+="\$(battery_charge)"; # batery

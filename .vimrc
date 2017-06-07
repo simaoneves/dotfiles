@@ -32,6 +32,8 @@ Plugin 'chriskempson/base16-vim'
 Plugin 'rhysd/vim-color-spring-night'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'MaxSt/FlatColor'
+Plugin 'rakr/vim-one'
 
 " Text objects and operators
 Plugin 'kana/vim-textobj-user'
@@ -140,9 +142,13 @@ inoremap <expr>^[[Z  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " Use C-h and l to change buffers
 nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
+imap <C-l> <Esc>:bn<CR>
+imap <C-h> <Esc>:bp<CR>
 " Dont use linewise motions
 nmap j gj
 nmap k gk
+" Copy until the end of the line
+nmap Y y$
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
 " bind K to grep word under cursor
