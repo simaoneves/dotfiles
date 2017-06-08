@@ -20,8 +20,10 @@ Plugin 'mileszs/ack.vim'
 Plugin 'junegunn/fzf.vim'
 Plugin 'benmills/vimux'
 Plugin 'Shougo/neocomplete.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 
-" Language specefic
+" Language specific
 Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plugin 'mxw/vim-jsx'
 Plugin 'rhysd/vim-crystal'
@@ -100,7 +102,7 @@ set noshowmode
 set hidden
 set termguicolors
 set noswapfile
-colorscheme hybrid
+colorscheme one
 set background=dark
 set relativenumber
 set number
@@ -136,9 +138,9 @@ nnoremap <silent> ˇ :TmuxNavigateLeft<cr>
 nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
-" Tab and shift-Tab completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr>^[[Z  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+" C-j and C-k for autocompletion.
+inoremap <expr><C-j>  pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr><C-k>  pumvisible() ? "\<C-p>" : "\<C-k>"
 " Use C-h and l to change buffers
 nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
