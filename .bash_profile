@@ -259,6 +259,19 @@ function mergefiles() {
   fi
 }
 
+# gcb - git commit browser, using diff-so-fancy
+# https://gist.github.com/junegunn/f4fca918e937e6bf5bad
+gcb() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | diff-so-fancy | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF"
+}
+
 function battery_charge() {
   if [ -e ~/Dev/dotfiles/bin/batcharge.py ]
   then
@@ -326,12 +339,11 @@ function save_output() {
 	fi;	
 }
 
-
 # Set the terminal title to the current working directory.
 PS1="\[\033]0;\w\007\]";
 # PS1+="\$(save_output)"; # `$` (and reset color)
 # PS1+="\[${bold}\]\n"; # newline
-PS1+="\[${green}\]\u: "; # username
+PS1+="\[${magenta}\]\u: "; # username
 # PS1+="\[${white}\] at ";
 # PS1+="\[${holtStyle}\]\h"; # host
 # PS1+="\[${white}\] in ";
