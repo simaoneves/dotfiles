@@ -138,11 +138,13 @@ set rtp+=/usr/local/opt/fzf
 " Tag files definition
 set tags=./tags;/
 set lazyredraw
-" Indicate fast terminalsaveBuffer:b
+" Indicate fast terminal
 set ttyfast 
 set ttyscroll=3
 " Number of colors in the terminal
 set t_Co=256
+" Dont move the cursor to the beggining of the line every time we do something
+set nostartofline
 
 """""""""""""""""""""""
 " Keymap configurations
