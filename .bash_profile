@@ -217,6 +217,7 @@ alias nios7="react-native run-ios --simulator 'iPhone 7'"
 alias sub="subl"
 alias gvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias a.="atom ."
+alias v.="vim ."
 alias jess="java -cp jess.jar jess.Main" 
 alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
 alias antlr4='java -jar /usr/local/lib/antlr-4.6-complete.jar'

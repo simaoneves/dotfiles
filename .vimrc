@@ -40,6 +40,7 @@ Plugin 'liuchengxu/space-vim-dark'
 
 " Text objects and operators
 Plugin 'kana/vim-textobj-user'
+Plugin 'kana/vim-operator-user'
 Plugin 'glts/vim-textobj-comment'
 Plugin 'kana/vim-textobj-entire'
 Plugin 'kana/vim-textobj-indent'
@@ -50,6 +51,7 @@ Plugin 'tek/vim-textobj-ruby'
 Plugin 'tpope/vim-commentary'
 Plugin 'vim-scripts/ReplaceWithRegister'
 Plugin 'tpope/vim-surround'
+Plugin 'haya14busa/vim-operator-flashy'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -145,6 +147,8 @@ set ttyscroll=3
 set t_Co=256
 " Dont move the cursor to the beggining of the line every time we do something
 set nostartofline
+" Hightlight search for default
+set hlsearch
 
 """""""""""""""""""""""
 " Keymap configurations
@@ -166,8 +170,6 @@ imap <C-h> <Esc>:bp<CR>
 " Dont use linewise motions
 nmap j gj
 nmap k gk
-" Copy until the end of the line
-nmap Y y$
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
 " bind K to grep word under cursor
@@ -201,6 +203,9 @@ nmap <Leader>rt :call VimuxRunCommand("clear; nt")<CR>
 nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command
 nmap <Leader>dc :VimuxPromptCommand<CR>
+" Flash text on yank
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
 
 " Auto reload vimrc
 augroup reload_vimrc
