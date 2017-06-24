@@ -206,6 +206,9 @@ nmap <Leader>dc :VimuxPromptCommand<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
+" Fix autoindent while pasting
+map p ]p
+map P ]P
 
 " Auto reload vimrc
 augroup reload_vimrc
