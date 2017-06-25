@@ -203,6 +203,8 @@ nmap <Leader>rt :call VimuxRunCommand("clear; nt")<CR>
 nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command
 nmap <Leader>dc :VimuxPromptCommand<CR>
+" Zoom in on the tmux pane
+nmap <Leader>zr :VimuxZoomRunner<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
