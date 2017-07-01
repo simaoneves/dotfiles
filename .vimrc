@@ -22,6 +22,7 @@ Plugin 'benmills/vimux'
 Plugin 'Shougo/neocomplete.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'tpope/vim-projectionist'
 
 " Language specific
 Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -37,6 +38,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'MaxSt/FlatColor'
 Plugin 'rakr/vim-one'
 Plugin 'liuchengxu/space-vim-dark'
+Plugin 'morhetz/gruvbox'
 
 " Text objects and operators
 Plugin 'kana/vim-textobj-user'
@@ -59,7 +61,8 @@ filetype plugin indent on    " required
 """""""""""""""""""""""
 " Plugin configurations
 """""""""""""""""""""""
-let g:airline_theme = "wombat"
+let g:spring_night_high_contrast = []
+let g:airline_theme = "spring_night"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
@@ -101,7 +104,14 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-""""""""""""""""""""
+let g:projectionist_heuristics = {
+      \   "app/|package.json": {
+      \       "app/*.js": { "alternate": ["test/{}Spec.js", "spec/{}.spec.js"] },
+      \       "test/*Spec.js": { "alternate": "app/{}.js" },
+      \       "spec/*.spec.js": { "alternate": "app/{}.js" }
+      \   }
+      \ }
+
 " Vim configurations
 """"""""""""""""""""
 syntax enable
@@ -117,10 +127,10 @@ set wildmenu
 " Not show original status line
 set noshowmode
 set hidden
-set termguicolors
 set noswapfile
-colorscheme one
+colorscheme spring-night
 set background=dark
+set termguicolors
 set relativenumber
 set number
 set autoindent
@@ -145,6 +155,7 @@ set ttyfast
 set ttyscroll=3
 " Number of colors in the terminal
 set t_Co=256
+set term=xterm-256color
 " Dont move the cursor to the beggining of the line every time we do something
 set nostartofline
 " Hightlight search for default
@@ -208,9 +219,6 @@ nmap <Leader>zr :VimuxZoomRunner<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
-" Fix autoindent while pasting
-map p ]p
-map P ]P
 
 " Auto reload vimrc
 augroup reload_vimrc

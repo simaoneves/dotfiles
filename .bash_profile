@@ -276,7 +276,7 @@ FZF-EOF"
 # gfcb - git file commits browser, based on 
 # https://gist.github.com/junegunn/f4fca918e937e6bf5bad
 gfcb() {
-  git log --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" -- $1 | \
+  git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" -- $1 | \
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
       --bind "ctrl-m:execute:
                 (grep -o '[a-f0-9]\{7\}' | head -1 |
