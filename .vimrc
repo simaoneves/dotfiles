@@ -104,6 +104,7 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
+" Customize projections for javascript projects
 let g:projectionist_heuristics = {
       \   "app/|package.json": {
       \       "app/*.js": { "alternate": ["test/{}Spec.js", "spec/{}.spec.js"] },
@@ -112,6 +113,7 @@ let g:projectionist_heuristics = {
       \   }
       \ }
 
+""""""""""""""""""""
 " Vim configurations
 """"""""""""""""""""
 syntax enable
@@ -184,7 +186,7 @@ nmap k gk
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
 " bind K to grep word under cursor
-nnoremap ? :Ack "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap ? :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
 " Put cursor on the middle of the screen after moving
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
@@ -197,13 +199,13 @@ nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
 nmap <Leader>j <C-]>
 " Edit this file
-nmap <Leader>e :e ~/.vimrc<CR>
+nmap <Leader>, :e ~/.vimrc<CR>
 " Toggle NERDTree
 nmap <C-\> :NERDTreeToggle<CR>
 " Open tags in current file
 nmap <Leader>r :CtrlPBufTag<CR>
 " Find project wide
-nmap <Leader>f :Ack<Space>
+nmap <Leader>f :Ack!<Space>
 " Fuzzy Finder
 nmap <Leader>t :FZF<CR>
 " Run last command with Vimux
