@@ -23,6 +23,7 @@ Plugin 'Shougo/neocomplete.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-projectionist'
+Plugin 'tpope/vim-dispatch'
 
 " Language specific
 Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -62,7 +63,7 @@ filetype plugin indent on    " required
 " Plugin configurations
 """""""""""""""""""""""
 let g:spring_night_high_contrast = []
-let g:airline_theme = "spring_night"
+let g:airline_theme = "jellybeans"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
@@ -74,6 +75,7 @@ let g:ctrlp_extensions = ['buffertag']
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
 let NERDTreeShowHidden = 1
+let g:ack_use_dispatch = 1
 let g:ctrlp_map = '<C-ç>'
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
@@ -130,7 +132,7 @@ set wildmenu
 set noshowmode
 set hidden
 set noswapfile
-colorscheme spring-night
+colorscheme jellybeans
 set background=dark
 set termguicolors
 set relativenumber
