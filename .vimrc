@@ -63,7 +63,7 @@ filetype plugin indent on    " required
 " Plugin configurations
 """""""""""""""""""""""
 let g:spring_night_high_contrast = []
-let g:airline_theme = "jellybeans"
+let g:airline_theme = "one"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
@@ -85,10 +85,10 @@ let g:neocomplete#enable_at_startup = 1
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ackprg = 'ag --vimgrep --hidden --ignore "tags"'
+  let g:ackprg = 'ag --vimgrep --hidden --ignore "tags" --ignore ".git/"'
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor --ignore "tags" -g ""'
+  let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor --ignore "tags" --ignore ".git/" -g ""'
 endif
 
 " Customize fzf colors to match your color scheme
@@ -132,15 +132,19 @@ set wildmenu
 set noshowmode
 set hidden
 set noswapfile
-colorscheme jellybeans
-set background=dark
 set termguicolors
+colorscheme one
+set background=dark
+" Use both relative and normal line numbers
 set relativenumber
 set number
 set autoindent
+" Expand Tabs to spaces
 set expandtab
 set tabstop=4 shiftwidth=4 softtabstop=4
 set so=6
+" When a file changes outside of vim, reload it automatically
+set autoread
 " Search with case insensive, unless it has a capital letter in it
 set smartcase
 set encoding=utf-8
