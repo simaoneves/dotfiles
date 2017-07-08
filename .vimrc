@@ -24,6 +24,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-projectionist'
 Plugin 'tpope/vim-dispatch'
+Plugin 'teranex/jk-jumps.vim'
 
 " Language specific
 Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
