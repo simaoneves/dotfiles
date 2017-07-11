@@ -232,10 +232,6 @@ function weather() {
 	curl http://wttr.in/$1
 }
 
-function google() {
-	open -a Google\ Chrome http://www.google.com/search?q=`echo "$@" | tr " " "+"`
-}
-
 function gstat() {
 	git-stats -g && git log --format='%aN' | sort -u | { echo -en "Name\tLines Added\tLines Deleted\tTotal Lines\n"; echo -en "----\t-----------\t-------------\t-----------\n"; while read name; do git log --author="$name" --pretty=tformat: --numstat | awk -v name="$name" '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "%s\t%d\t%d\t%d\n", name, add, subs, loc }' - ; done } | column -ts $'\t' | cowsay -n | lolcat
 }

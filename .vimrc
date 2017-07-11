@@ -30,6 +30,7 @@ Plugin 'teranex/jk-jumps.vim'
 Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plugin 'mxw/vim-jsx'
 Plugin 'rhysd/vim-crystal'
+Plugin 'tpope/vim-rails'
 
 " Themes
 Plugin 'dracula/vim'
@@ -207,6 +208,8 @@ nmap <Leader>w :bp<CR>:bd #<CR>
 nmap <Leader>j <C-]>
 " Edit this file
 nmap <Leader>, :e ~/.vimrc<CR>
+" Edit stuff file
+nmap <Leader>D :e ~/Documents/stuff<CR>
 " Toggle NERDTree
 nmap <C-\> :NERDTreeToggle<CR>
 " Open tags in current file
@@ -228,6 +231,13 @@ nmap <Leader>zr :VimuxZoomRunner<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
+
+" Ruby settings
+autocmd FileType ruby,eruby call SetRubySettings()
+function! SetRubySettings()
+    match errormsg '\%>100v.\+'
+    set tabstop=2 shiftwidth=2 softtabstop=2
+endfunction
 
 " Auto reload vimrc
 augroup reload_vimrc
