@@ -201,6 +201,8 @@ nmap <C-u> <C-u>zz
 " Mappings made in iTerm2, so i can use Cmd key
 nmap openLineAbove O<Esc>j
 nmap saveBuffer :w<CR>
+imap saveBuffer <esc>:w<CR>
+vmap saveBuffer <esc>:w<CR>gv
 nmap <CR> o<Esc>k
 " Move to last buffer and close the one we were one buffer
 nmap <Leader>w :bp<CR>:bd #<CR>
