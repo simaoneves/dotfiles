@@ -8,6 +8,12 @@
 	default = simple
 [color]
 	ui = true
+[color "status"]
+    added = green
+    changed = red
+    untracked = yellow
+    branch = red
+    unmerged = blue
 [init]
 	templatedir = /Users/simon/.git-templates
 [commit]

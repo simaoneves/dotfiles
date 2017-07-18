@@ -1,4 +1,4 @@
-set guifont=Fira\ Mono\ Medium\ for\ Powerline:h12
+set guifont=Inconsolata\ for\ Powerline:h14
 set guioptions-=T
 set guioptions-=R
 set guioptions-=r

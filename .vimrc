@@ -51,7 +51,6 @@ Plugin 'kana/vim-textobj-entire'
 Plugin 'kana/vim-textobj-indent'
 Plugin 'sgur/vim-textobj-parameter'
 Plugin 'beloglazov/vim-textobj-quotes'
-Plugin 'Julian/vim-textobj-brace'
 Plugin 'tek/vim-textobj-ruby'
 Plugin 'tpope/vim-commentary'
 Plugin 'vim-scripts/ReplaceWithRegister'
@@ -204,6 +203,9 @@ nmap saveBuffer :w<CR>
 imap saveBuffer <esc>:w<CR>
 vmap saveBuffer <esc>:w<CR>gv
 nmap <CR> o<Esc>k
+" Indent using tab in visual mode
+vmap <Tab> >gv
+vmap <S-Tab> <gv
 " Move to last buffer and close the one we were one buffer
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
