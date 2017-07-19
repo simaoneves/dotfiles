@@ -160,7 +160,7 @@ set rtp+=/usr/local/opt/fzf
 set tags=./tags;/
 set lazyredraw
 " Indicate fast terminal
-set ttyfast 
+set ttyfast
 set ttyscroll=3
 " Number of colors in the terminal
 set t_Co=256
@@ -206,6 +206,9 @@ nmap <CR> o<Esc>k
 " Indent using tab in visual mode
 vmap <Tab> >gv
 vmap <S-Tab> <gv
+" Indent using tab in visual mode
+nmap <Tab> >>
+nmap <S-Tab> <<
 " Move to last buffer and close the one we were one buffer
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
