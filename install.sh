@@ -5,8 +5,6 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 
 brew update
 
-brew install reattach-to-user-namespace
-brew install the_silver_searcher
 brew install cloc
 brew install cowsay
 brew install crystal-lang
@@ -14,6 +12,8 @@ brew install ctags
 brew install elixir
 brew install fzf
 brew install htop-osx
+brew install reattach-to-user-namespace
+brew install the_silver_searcher
 brew install tmux
 brew install vim
 
@@ -23,17 +23,18 @@ brew cask install alfred
 brew cask install atom
 brew cask install coconutbattery
 brew cask install evernote
+brew cask install flux
 brew cask install google-chrome
+brew cask install intellij-idea
 brew cask install iterm2
 brew cask install macvim
-brew cask install skype
-brew cask install spotify
 brew cask install sizeup
+brew cask install skype
+brew cask install slack
+brew cask install spotify
 brew cask install vagrant
 brew cask install virtualbox
 brew cask install vlc
-brew cask install slack
-brew cask install flux
 
 # Create directories needed
 mkdir ~/.git-templates

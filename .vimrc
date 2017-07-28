@@ -206,7 +206,7 @@ nmap <CR> o<Esc>k
 " Indent using tab in visual mode
 vmap <Tab> >gv
 vmap <S-Tab> <gv
-" Indent using tab in visual mode
+" Indent using tab in normal mode
 nmap <Tab> >>
 nmap <S-Tab> <<
 " Move to last buffer and close the one we were one buffer
