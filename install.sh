@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# DONT RUN AS ROOT
+
 # Install Homebrew and apps
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+sudo xcodebuild -license accept
 
 brew update
 
@@ -15,7 +18,9 @@ brew install htop-osx
 brew install reattach-to-user-namespace
 brew install the_silver_searcher
 brew install tmux
-brew install vim
+brew install vim --with-lua --override-system-vim
+brew install watchman
+brew install mongodb
 
 brew tap caskroom/cask
 
@@ -38,9 +43,9 @@ brew cask install vlc
 
 # Create directories needed
 mkdir ~/.git-templates
-mkdir ~/Dev/
-cd ~/Dev/
-git clone https://github.com/simaoneves/dotfiles.git
+# mkdir ~/Dev/
+# cd ~/Dev/
+# git clone https://github.com/simaoneves/dotfiles.git
 
 # Symlink everything needed
 ln -s ~/Dev/dotfiles/.bash_profile ~/.bash_profile
@@ -51,6 +56,12 @@ ln -s ~/Dev/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/Dev/dotfiles/.atom/ ~/.atom
 ln -s ~/Dev/dotfiles/./commit-msg ~/.atom
 ln -s ~/Dev/dotfiles/bin/.git-completion.bash ~/.git-completion.bash
+# Add git-stats file to home
 
 # Install RVM
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
+
+# Install with NPM
+npm install -g diff-so-fancy
+npm install -g git-stats
+

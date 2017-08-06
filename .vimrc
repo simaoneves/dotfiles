@@ -239,9 +239,9 @@ nmap <Leader>zr :VimuxZoomRunner<CR>
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
 
-" Ruby settings
-autocmd FileType ruby,eruby call SetRubySettings()
-function! SetRubySettings()
+" Ruby and Crystal settings
+autocmd FileType ruby,eruby,crystal call SetTwoSpacesSettings()
+function! SetTwoSpacesSettings()
     match errormsg '\%>100v.\+'
     set tabstop=2 shiftwidth=2 softtabstop=2
 endfunction

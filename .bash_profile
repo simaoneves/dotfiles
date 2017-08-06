@@ -198,6 +198,7 @@ alias pro="vim ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
 alias rpi="ssh simon@raspberrypi"
 alias r="ruby"
+alias cr="crystal"
 alias v="vim"
 alias sd="sudo"
 alias dbm="rake db:migrate"
@@ -388,6 +389,7 @@ fi
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # MacPorts Installer addition on 2015-10-22_at_13:07:27: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/usr/local/bin:$PATH
 export PATH="/usr/local/Cellar/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
@@ -395,4 +397,6 @@ export PATH=".:/usr/local/lib/antlr-4.0-complete.jar:$PATH"
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 # export PAGER=most
 
-export ANDROID_HOME=/usr/local/opt/android-sdk
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/platform-tools
