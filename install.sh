@@ -21,6 +21,7 @@ brew install tmux
 brew install vim --with-lua --override-system-vim
 brew install watchman
 brew install mongodb
+brew install lolcat
 
 brew tap caskroom/cask
 
@@ -40,6 +41,7 @@ brew cask install spotify
 brew cask install vagrant
 brew cask install virtualbox
 brew cask install vlc
+brew cask install rescuetime
 
 # Create directories needed
 mkdir ~/.git-templates

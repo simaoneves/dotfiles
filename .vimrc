@@ -169,6 +169,8 @@ set term=xterm-256color
 set nostartofline
 " Hightlight search for default
 set hlsearch
+" Load shell enviroment when running commands
+set shell=bash\ -l
 
 """""""""""""""""""""""
 " Keymap configurations
@@ -217,6 +219,8 @@ nmap <Leader>j <C-]>
 nmap <Leader>, :e ~/.vimrc<CR>
 " Edit stuff file
 nmap <Leader>D :e ~/Documents/stuff<CR>
+" Turn highlight off
+nmap <silent> <Leader>0 :noh<cr>
 " Toggle NERDTree
 nmap <C-\> :NERDTreeToggle<CR>
 " Open tags in current file

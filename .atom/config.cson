@@ -32,7 +32,6 @@
   "base16-syntax":
     scheme: "Materia"
   core:
-    automaticallyUpdate: false
     disabledPackages: [
       "background-tips"
       "bookmarks"
