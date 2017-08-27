@@ -23,7 +23,7 @@ Plugin 'Shougo/neocomplete.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-projectionist'
-Plugin 'tpope/vim-dispatch'
+Plugin 'tpope/vim-repeat'
 Plugin 'teranex/jk-jumps.vim'
 
 " Language specific
@@ -76,8 +76,10 @@ let g:ctrlp_extensions = ['buffertag']
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
 let NERDTreeShowHidden = 1
-let g:ack_use_dispatch = 1
 let g:ctrlp_map = '<C-ç>'
+let g:UltiSnipsExpandTrigger="<NOP>"
+let g:UltiSnipsJumpForwardTrigger="<NOP>"
+let g:UltiSnipsJumpBackwardTrigger="<NOP>"
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
 let g:switch_mapping = "-"
@@ -150,7 +152,8 @@ set autoread
 set smartcase
 set encoding=utf-8
 set laststatus=2
-set timeoutlen=1500
+set timeoutlen=1000
+set ttimeoutlen=0
 " Open splits where they should
 set splitbelow
 set splitright
@@ -182,6 +185,7 @@ nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
 " C-j and C-k for autocompletion.
+inoremap <expr><Tab>  pumvisible() ? "\<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<Tab>"
 inoremap <expr><C-j>  pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr><C-k>  pumvisible() ? "\<C-p>" : "\<C-k>"
 " Use C-h and l to change buffers
@@ -206,7 +210,7 @@ imap saveBuffer <esc>:w<CR>
 vmap saveBuffer <esc>:w<CR>gv
 nmap <CR> o<Esc>k
 " Indent using tab in visual mode
-vmap <Tab> >gv
+vnoremap <Tab> >gv
 vmap <S-Tab> <gv
 " Indent using tab in normal mode
 nmap <Tab> >>
@@ -223,6 +227,8 @@ nmap <Leader>D :e ~/Documents/stuff<CR>
 nmap <silent> <Leader>0 :noh<cr>
 " Toggle NERDTree
 nmap <C-\> :NERDTreeToggle<CR>
+" Close all buffers
+nnoremap <Leader>Qa :bufdo bd<CR>
 " Open tags in current file
 nmap <Leader>r :CtrlPBufTag<CR>
 " Find project wide

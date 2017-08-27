@@ -1,4 +1,3 @@
-" set guifont=Inconsolata\ for\ Powerline:h14
 set guifont=Inconsolata\ for\ Powerline:h14
 set guioptions-=T
 set guioptions-=R
@@ -6,7 +5,6 @@ set guioptions-=r
 set guioptions-=l
 set guioptions-=L
 
-macm File.New\ Tab key=<NOP>
 macm File.New\ Tab key=<NOP>
 macm File.Close key=<NOP>
 nmap <S-Enter> O<Esc>j
