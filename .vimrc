@@ -24,7 +24,12 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-projectionist'
 Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-dispatch'
 Plugin 'teranex/jk-jumps.vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'matze/vim-move'
+Plugin 'rhysd/committia.vim'
+Plugin 'mattn/emmet-vim'
 
 " Language specific
 Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -42,6 +47,8 @@ Plugin 'MaxSt/FlatColor'
 Plugin 'rakr/vim-one'
 Plugin 'liuchengxu/space-vim-dark'
 Plugin 'morhetz/gruvbox'
+Plugin 'junegunn/seoul256.vim'
+Plugin 'trevordmiller/nova-vim'
 
 " Text objects and operators
 Plugin 'kana/vim-textobj-user'
@@ -63,8 +70,10 @@ filetype plugin indent on    " required
 """""""""""""""""""""""
 " Plugin configurations
 """""""""""""""""""""""
+" Buble lines up and down with Ctrl
+let g:move_key_modifier = 'C'
 let g:spring_night_high_contrast = []
-let g:airline_theme = "one"
+let g:airline_theme = "nova"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_right_sep = ''
@@ -75,6 +84,7 @@ let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
+" Show dotfiles in NERDTree
 let NERDTreeShowHidden = 1
 let g:ctrlp_map = '<C-ç>'
 let g:UltiSnipsExpandTrigger="<NOP>"
@@ -94,6 +104,10 @@ if executable('ag')
   let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor --ignore "tags" --ignore ".git/" -g ""'
 endif
 
+" Change color and char of indent lines
+let g:indentLine_setColors = 0
+let g:indentLine_char = '┆'
+
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -112,11 +126,16 @@ let g:fzf_colors =
 " Customize projections for javascript projects
 let g:projectionist_heuristics = {
       \   "app/|package.json": {
-      \       "app/*.js": { "alternate": ["test/{}Spec.js", "spec/{}.spec.js"] },
+      \       "app/components/*.js": { "alternate": "app/styles/{}.js" },
+      \       "app/styles/*.js": { "alternate": "app/components/{}.js" },
+      \       "app/components/screens/*Screen.js": { "alternate": "app/styles/screens/{}.js" },
+      \       "app/styles/screens/*.js": { "alternate": "app/components/screens/{}Screen.js" },
       \       "test/*Spec.js": { "alternate": "app/{}.js" },
       \       "spec/*.spec.js": { "alternate": "app/{}.js" }
       \   }
       \ }
+
+" "app/*.js": { "alternate": ["test/{}Spec.js", "spec/{}.spec.js"] },
 
 """"""""""""""""""""
 " Vim configurations
@@ -135,8 +154,13 @@ set wildmenu
 set noshowmode
 set hidden
 set noswapfile
-set termguicolors
-colorscheme one
+if !has("gui_running")
+    set termguicolors
+    " Number of colors in the terminal
+    set t_Co=256
+    set term=xterm-256color
+endif
+colorscheme nova
 set background=dark
 " Use both relative and normal line numbers
 set relativenumber
@@ -165,9 +189,6 @@ set lazyredraw
 " Indicate fast terminal
 set ttyfast
 set ttyscroll=3
-" Number of colors in the terminal
-set t_Co=256
-set term=xterm-256color
 " Dont move the cursor to the beggining of the line every time we do something
 set nostartofline
 " Hightlight search for default
@@ -198,11 +219,13 @@ nmap j gj
 nmap k gk
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
-" bind K to grep word under cursor
+" bind ? to grep word under cursor
 nnoremap ? :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
 " Put cursor on the middle of the screen after moving
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
+" Select last pasted text
+nmap gV '[v']'
 " Mappings made in iTerm2, so i can use Cmd key
 nmap openLineAbove O<Esc>j
 nmap saveBuffer :w<CR>
@@ -229,6 +252,8 @@ nmap <silent> <Leader>0 :noh<cr>
 nmap <C-\> :NERDTreeToggle<CR>
 " Close all buffers
 nnoremap <Leader>Qa :bufdo bd<CR>
+" Open alternate file
+nmap <Leader>a :A<CR>
 " Open tags in current file
 nmap <Leader>r :CtrlPBufTag<CR>
 " Find project wide
@@ -260,4 +285,7 @@ endfunction
 augroup reload_vimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    if has("gui_running")
+        source ~/.gvimrc
+    endif
 augroup END

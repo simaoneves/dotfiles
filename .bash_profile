@@ -21,9 +21,9 @@ export NLS_LANG=.AL32UTF8
 # iTerm → Profiles → Text → use 13pt Monaco with 1.1 vertical spacing.
 
 if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
-	export TERM='gnome-256color';
+    export TERM='gnome-256color';
 elif infocmp xterm-256color >/dev/null 2>&1; then
-	export TERM='xterm-256color';
+    export TERM='xterm-256color';
 fi;
 
 prompt_git() {
@@ -52,7 +52,7 @@ prompt_git() {
 				# s+='+';
 				branchColor=${yellow};
 			fi;
-			
+
 			# Check for uncommitted changes in the index.
 			if ! $(git diff --quiet --ignore-submodules --cached); then
 				# s+='!';
@@ -88,20 +88,20 @@ prompt_git() {
 }
 
 if tput setaf 1 &> /dev/null; then
-	tput sgr0; # reset colors
-	bold=$(tput bold);
-	reset=$(tput sgr0);
-	black=$(tput setaf 0);
-	red=$(tput setaf 1);
-	green=$(tput setaf 2);
-	yellow=$(tput setaf 3);
-	blue=$(tput setaf 4);
-	magenta=$(tput setaf 5);
-	cyan=$(tput setaf 6);
-	white=$(tput setaf 7);
-	orange=$(tput setaf 166);
-	purple=$(tput setaf 125);
-	
+    tput sgr0; # reset colors
+    bold=$(tput bold);
+    reset=$(tput sgr0);
+    black=$(tput setaf 0);
+    red=$(tput setaf 1);
+    green=$(tput setaf 2);
+    yellow=$(tput setaf 3);
+    blue=$(tput setaf 4);
+    magenta=$(tput setaf 5);
+    cyan=$(tput setaf 6);
+    white=$(tput setaf 7);
+    orange=$(tput setaf 166);
+    purple=$(tput setaf 125);
+
 	# bold=$(tput bold);
 	# reset=$(tput sgr0);
 	# # Solarized colors, taken from http://git.io/solarized-colors.
@@ -224,7 +224,7 @@ alias gvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias a.="atom ."
 alias v.="vim ."
 alias g.="gvim ."
-alias jess="java -cp jess.jar jess.Main" 
+alias jess="java -cp jess.jar jess.Main"
 alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
 alias antlr4='java -jar /usr/local/lib/antlr-4.6-complete.jar'
 
@@ -244,21 +244,21 @@ function gstat() {
 
 function mergefiles() {
 	if [ $# -lt 3 ]
-  	then
-	    echo "Not enough arguments!"
-	    echo "Command should be like:"
-	    echo "mergefiles file1 file2 new_file_name"
-	  else
-			echo "Merging $1 with $2 to $3.."
-			touch empty_temp_file
-			git merge-file -p $1 empty_temp_file $2 > $3
-			echo "Done!"
-			command rm empty_temp_file
-			number_conflicts=`cat $3 | grep "<<<<" | wc -l | xargs`
-			if [ $number_conflicts -gt 1 ]
-				then
-					echo "CONFLICTS! We've got $number_conflicts problems, but a bitch ain't one!"
-			fi
+    then
+        echo "Not enough arguments!"
+        echo "Command should be like:"
+        echo "mergefiles file1 file2 new_file_name"
+    else
+        echo "Merging $1 with $2 to $3.."
+        touch empty_temp_file
+        git merge-file -p $1 empty_temp_file $2 > $3
+        echo "Done!"
+        command rm empty_temp_file
+        number_conflicts=`cat $3 | grep "<<<<" | wc -l | xargs`
+        if [ $number_conflicts -gt 1 ]
+            then
+                echo "CONFLICTS! We've got $number_conflicts problems, but a bitch ain't one!"
+        fi
   fi
 }
 
@@ -275,7 +275,7 @@ gcb() {
 FZF-EOF"
 }
 
-# gfcb - git file commits browser, based on 
+# gfcb - git file commits browser, based on
 # https://gist.github.com/junegunn/f4fca918e937e6bf5bad
 gfcb() {
   git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" -- $1 | \
@@ -296,61 +296,58 @@ function battery_charge() {
 }
 
 function get_pwd() {
-	result="${PWD/$HOME/~}"
-	echo ${#result}
+    result="${PWD/$HOME/~}"
+    echo ${#result}
 }
 
 function get_git() {
-	pepe=`prompt_git`
-	result=0
-	if [ ${#pepe} != 0 ]; then
-		result=$(( ${#pepe} - 11 ))
-	else
-		result=0
-	fi
-	echo $result
+    pepe=`prompt_git`
+    result=0
+    if [ ${#pepe} != 0 ]; then
+        result=$(( ${#pepe} - 11 ))
+    else
+        result=0
+    fi
+    echo $result
 }
 
 function get_bat() {
-	lolo=`battery_charge`
-	result=0
-	if [ ${#lolo} != 0 ]; then
-		result=$(( ${#lolo} - 4 ))
-	else
-		result=0
-	fi
-	echo $result
+    lolo=`battery_charge`
+    result=0
+    if [ ${#lolo} != 0 ]; then
+        result=$(( ${#lolo} - 4 ))
+    else
+        result=0
+    fi
+    echo $result
 }
 
 function put_spacing() {
-
-	get_pwd_number=`get_pwd`
-	get_bat_number=`get_bat`
-	get_git_number=`get_git`
-
-	local termwidth=0
-	(( termwidth = ${COLUMNS} - 3 - ${#LOGNAME} - ${get_pwd_number} - ${get_git_number} - ${get_bat_number} ))
-
-	echo $termwidth
+    get_pwd_number=`get_pwd`
+    get_bat_number=`get_bat`
+    get_git_number=`get_git`
+    local termwidth=0
+    (( termwidth = ${COLUMNS} - 3 - ${#LOGNAME} - ${get_pwd_number} - ${get_git_number} - ${get_bat_number} ))
+    echo $termwidth
 }
 
 function last_command_color() {
-	if [[ $? = 0 ]]; then
-	# if [[ $? -eq 0 ]]; then
-		status=${white}
-	else
-		status=${red}
-	fi;	
-	echo $status
+    if [[ $? = 0 ]]; then
+    # if [[ $? -eq 0 ]]; then
+        status=${white}
+    else
+        status=${red}
+    fi;
+    echo $status
 }
 
 function save_output() {
-	if [[ $? = 0 ]]; then
-	# if [[ $? -eq 0 ]]; then
-		export LAST=0;
-	else
-		export LAST=1;
-	fi;	
+    if [[ $? = 0 ]]; then
+    # if [[ $? -eq 0 ]]; then
+        export LAST=0;
+    else
+        export LAST=1;
+    fi;
 }
 
 # Set the terminal title to the current working directory.
@@ -390,6 +387,8 @@ if [ -f ~/Dev/dotfiles/bin/.git-completion.bash ]; then
   __git_complete gpll _git_pull
 fi
 
+# Source bashrc to get FZF shortcuts
+source ~/.bashrc
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
