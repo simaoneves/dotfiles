@@ -22,6 +22,7 @@ brew install vim --with-lua --override-system-vim
 brew install watchman
 brew install mongodb
 brew install lolcat
+brew install tree
 
 brew tap caskroom/cask
 

@@ -102,6 +102,8 @@
   "highlight-selected":
     hideHighlightOnSelectedWord: true
     highlightInPanes: false
+  "ide-crystal":
+    compilerColorOutput: true
   jumpy:
     highContrast: true
   linter:

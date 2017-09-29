@@ -20,4 +20,3 @@ nnoremap <silent> „ <C-w>k
 nnoremap <silent> ‘ <C-w>l
 
 colorscheme spring-night
-let g:airline_theme = "spring_night"

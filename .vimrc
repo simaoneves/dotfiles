@@ -36,19 +36,19 @@ Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plugin 'mxw/vim-jsx'
 Plugin 'rhysd/vim-crystal'
 Plugin 'tpope/vim-rails'
+Plugin 'suan/vim-instant-markdown'
 
 " Themes
 Plugin 'dracula/vim'
 Plugin 'chriskempson/base16-vim'
 Plugin 'rhysd/vim-color-spring-night'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
 Plugin 'MaxSt/FlatColor'
 Plugin 'rakr/vim-one'
 Plugin 'liuchengxu/space-vim-dark'
 Plugin 'morhetz/gruvbox'
 Plugin 'junegunn/seoul256.vim'
 Plugin 'trevordmiller/nova-vim'
+Plugin 'ap/vim-buftabline'
 
 " Text objects and operators
 Plugin 'kana/vim-textobj-user'
@@ -70,18 +70,18 @@ filetype plugin indent on    " required
 """""""""""""""""""""""
 " Plugin configurations
 """""""""""""""""""""""
+" Update preview only on save
+let g:instant_markdown_slow = 1
+" Dont open preview on enter mardown file
+let g:instant_markdown_autostart = 0
 " Buble lines up and down with Ctrl
 let g:move_key_modifier = 'C'
 let g:spring_night_high_contrast = []
-let g:airline_theme = "nova"
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline_right_sep = ''
-let g:airline_left_sep = ''
-let g:airline_powerline_fonts = 1
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
 let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
+" Show modified indicator in bufline
+let g:buftabline_indicators = 1
 let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_working_path_mode = 'r'
 " Show dotfiles in NERDTree
@@ -105,8 +105,8 @@ if executable('ag')
 endif
 
 " Change color and char of indent lines
-let g:indentLine_setColors = 0
-let g:indentLine_char = '┆'
+let g:indentLine_setColors = 1
+let g:indentLine_char = '¦'
 
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
@@ -135,7 +135,8 @@ let g:projectionist_heuristics = {
       \   }
       \ }
 
-" "app/*.js": { "alternate": ["test/{}Spec.js", "spec/{}.spec.js"] },
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'options': '--preview "pygmentize {}"' }), <bang>0)
 
 """"""""""""""""""""
 " Vim configurations
@@ -151,7 +152,7 @@ set backspace=indent,eol,start
 " Use tab completion in exmode
 set wildmenu
 " Not show original status line
-set noshowmode
+" set noshowmode
 set hidden
 set noswapfile
 if !has("gui_running")
@@ -176,7 +177,7 @@ set autoread
 set smartcase
 set encoding=utf-8
 set laststatus=2
-set timeoutlen=1000
+set timeoutlen=350
 set ttimeoutlen=0
 " Open splits where they should
 set splitbelow
@@ -185,6 +186,7 @@ set splitright
 set rtp+=/usr/local/opt/fzf
 " Tag files definition
 set tags=./tags;/
+" Dont redraw the screen when replaying macros
 set lazyredraw
 " Indicate fast terminal
 set ttyfast
@@ -195,6 +197,23 @@ set nostartofline
 set hlsearch
 " Load shell enviroment when running commands
 set shell=bash\ -l
+
+function! StatuslineGit()
+  let l:branchname = fugitive#head()
+  return strlen(l:branchname) > 0?' '.l:branchname.' ':''
+endfunction
+
+set statusline=
+set statusline+=\ [%{mode()}]
+set statusline+=\ %f
+set statusline+=%m
+set statusline+=%=
+set statusline+=\ %l:%c " Line number and column
+set statusline+=\ %{StatuslineGit()}
+set statusline+=\%y " Filetype
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " File encoding
+set statusline+=\[%{&fileformat}\] " File format
+set statusline+=\ 
 
 """""""""""""""""""""""
 " Keymap configurations
@@ -258,8 +277,8 @@ nmap <Leader>a :A<CR>
 nmap <Leader>r :CtrlPBufTag<CR>
 " Find project wide
 nmap <Leader>f :Ack!<Space>
-" Fuzzy Finder
-nmap <Leader>t :FZF<CR>
+" Fuzzy Finder, with preview
+nmap <Leader>t :Files<CR>
 " Run last command with Vimux
 nmap <Leader>rr :VimuxRunLastCommand<CR>
 " Run (NPM) tests
