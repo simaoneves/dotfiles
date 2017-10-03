@@ -1,70 +1,68 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin('~/.vim/bundle')
 
-Plugin 'VundleVim/Vundle.Vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'tacahiroy/ctrlp-funky'
-Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/nerdtree'
-Plugin 'sjl/vitality.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plugin 'Raimondi/delimitMate'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'AndrewRadev/switch.vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'junegunn/fzf.vim'
-Plugin 'benmills/vimux'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'tpope/vim-projectionist'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-dispatch'
-Plugin 'teranex/jk-jumps.vim'
-Plugin 'Yggdroot/indentLine'
-Plugin 'matze/vim-move'
-Plugin 'rhysd/committia.vim'
-Plugin 'mattn/emmet-vim'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tacahiroy/ctrlp-funky'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/nerdtree'
+Plug 'sjl/vitality.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'Raimondi/delimitMate'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'AndrewRadev/switch.vim'
+Plug 'mileszs/ack.vim'
+Plug 'junegunn/fzf.vim'
+Plug 'benmills/vimux'
+Plug 'Shougo/neocomplete.vim'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-dispatch'
+Plug 'teranex/jk-jumps.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'matze/vim-move'
+Plug 'rhysd/committia.vim'
+Plug 'mattn/emmet-vim'
+Plug 'janko-m/vim-test'
+Plug 'ap/vim-buftabline'
 
 " Language specific
-Plugin 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
-Plugin 'mxw/vim-jsx'
-Plugin 'rhysd/vim-crystal'
-Plugin 'tpope/vim-rails'
-Plugin 'suan/vim-instant-markdown'
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'mxw/vim-jsx'
+Plug 'rhysd/vim-crystal'
+Plug 'tpope/vim-rails'
+Plug 'suan/vim-instant-markdown'
 
 " Themes
-Plugin 'dracula/vim'
-Plugin 'chriskempson/base16-vim'
-Plugin 'rhysd/vim-color-spring-night'
-Plugin 'MaxSt/FlatColor'
-Plugin 'rakr/vim-one'
-Plugin 'liuchengxu/space-vim-dark'
-Plugin 'morhetz/gruvbox'
-Plugin 'junegunn/seoul256.vim'
-Plugin 'trevordmiller/nova-vim'
-Plugin 'ap/vim-buftabline'
+Plug 'dracula/vim'
+Plug 'chriskempson/base16-vim'
+Plug 'rhysd/vim-color-spring-night'
+Plug 'MaxSt/FlatColor'
+Plug 'rakr/vim-one'
+Plug 'liuchengxu/space-vim-dark'
+Plug 'morhetz/gruvbox'
+Plug 'junegunn/seoul256.vim'
+Plug 'trevordmiller/nova-vim'
 
 " Text objects and operators
-Plugin 'kana/vim-textobj-user'
-Plugin 'kana/vim-operator-user'
-Plugin 'glts/vim-textobj-comment'
-Plugin 'kana/vim-textobj-entire'
-Plugin 'kana/vim-textobj-indent'
-Plugin 'sgur/vim-textobj-parameter'
-Plugin 'beloglazov/vim-textobj-quotes'
-Plugin 'tek/vim-textobj-ruby'
-Plugin 'tpope/vim-commentary'
-Plugin 'vim-scripts/ReplaceWithRegister'
-Plugin 'tpope/vim-surround'
-Plugin 'haya14busa/vim-operator-flashy'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-operator-user'
+Plug 'glts/vim-textobj-comment'
+Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-indent'
+Plug 'sgur/vim-textobj-parameter'
+Plug 'beloglazov/vim-textobj-quotes'
+Plug 'tek/vim-textobj-ruby'
+Plug 'tpope/vim-commentary'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'tpope/vim-surround'
+Plug 'haya14busa/vim-operator-flashy'
 
-call vundle#end()            " required
+call plug#end()
 filetype plugin indent on    " required
 
 """""""""""""""""""""""
@@ -103,6 +101,8 @@ if executable('ag')
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor --ignore "tags" --ignore ".git/" -g ""'
 endif
+" Make test commands execute using vimux
+let test#strategy = "vimux"
 
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
@@ -161,7 +161,7 @@ if !has("gui_running")
     set t_Co=256
     set term=xterm-256color
 endif
-colorscheme nova
+colorscheme space-vim-dark
 set background=dark
 " Use both relative and normal line numbers
 set relativenumber
@@ -196,7 +196,7 @@ set nostartofline
 " Hightlight search for default
 set hlsearch
 " Load shell enviroment when running commands
-set shell=bash\ -l
+" set shell=bash\ -l
 
 function! StatuslineGit()
   let l:branchname = fugitive#head()
@@ -204,11 +204,11 @@ function! StatuslineGit()
 endfunction
 
 set statusline=
-set statusline+=\ [%{mode()}]
-set statusline+=\ %f
-set statusline+=%m
+set statusline+=\ [%{mode()}] " Mode
+set statusline+=\ %f " Filename
+set statusline+=%m " Modifiable
 set statusline+=%=
-set statusline+=\ %l:%c " Line number and column
+set statusline+=\ %c:%L " Line number and column
 set statusline+=\ %{StatuslineGit()}
 set statusline+=\%y " Filetype
 set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " File encoding
@@ -257,6 +257,8 @@ vmap <S-Tab> <gv
 " Indent using tab in normal mode
 nmap <Tab> >>
 nmap <S-Tab> <<
+" Close quickfix
+nmap <Leader>cc :cclose<CR>
 " Move to last buffer and close the one we were one buffer
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
@@ -281,8 +283,10 @@ nmap <Leader>f :Ack!<Space>
 nmap <Leader>t :Files<CR>
 " Run last command with Vimux
 nmap <Leader>rr :VimuxRunLastCommand<CR>
-" Run (NPM) tests
-nmap <Leader>rt :call VimuxRunCommand("clear; nt")<CR>
+" Run tests for current file
+nmap <Leader>rt :TestFile<CR>
+" Run all tests
+nmap <Leader>ra :TestSuite<CR>
 " Close pane used by Vimux
 nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command

@@ -20,3 +20,5 @@ nnoremap <silent> „ <C-w>k
 nnoremap <silent> ‘ <C-w>l
 
 colorscheme spring-night
+" Make test commands execute using dispatch.vim
+let test#strategy = "dispatch"
