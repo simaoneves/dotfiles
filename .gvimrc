@@ -9,9 +9,6 @@ macm File.New\ Tab key=<NOP>
 macm File.Close key=<NOP>
 nmap <S-Enter> O<Esc>j
 
-nnoremap <D-t> :CtrlP<CR>
-nnoremap <Leader>t :CtrlP<CR>
-nnoremap <D-r> :CtrlPFunky<CR>
 nnoremap <D-w> :bd<CR>
 
 nnoremap <silent> ˇ <C-w>h
@@ -19,6 +16,6 @@ nnoremap <silent> ¯ <C-w>j
 nnoremap <silent> „ <C-w>k
 nnoremap <silent> ‘ <C-w>l
 
-colorscheme spring-night
+colorscheme space-vim-dark
 " Make test commands execute using dispatch.vim
 let test#strategy = "dispatch"

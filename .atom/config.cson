@@ -142,6 +142,7 @@
   "vim-mode-plus":
     clearHighlightSearchOnResetNormalMode: true
     highlightSearch: true
+    notifiedCoffeeScriptNoLongerSupportedToExtendVMP: true
     smoothScrollOnHalfScrollMotionDuration: 150
     statusBarModeStringStyle: "long"
     stayOnYank: true

@@ -164,7 +164,7 @@ alias vvs="cd ~/Dev/vvs/"
 alias tc="cd ~/Dev/tc/"
 
 alias ls="ls -Gpah"
-alias cat="pygmentize"
+# alias cat="pygmentize"
 alias mkdir="mkdir -v"
 alias rm="rm -v"
 alias rdr="rm -Rfv"

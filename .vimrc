@@ -3,8 +3,6 @@ filetype off                  " required
 
 call plug#begin('~/.vim/bundle')
 
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tacahiroy/ctrlp-funky'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree'
 Plug 'sjl/vitality.vim'
@@ -97,13 +95,9 @@ if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep --hidden --ignore "tags" --ignore ".git/"'
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor --ignore "tags" --ignore ".git/" -g ""'
 endif
 " Make test commands execute using vimux
 let test#strategy = "vimux"
-
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
 let g:indentLine_char = '¦'
@@ -173,6 +167,8 @@ set tabstop=4 shiftwidth=4 softtabstop=4
 set so=6
 " When a file changes outside of vim, reload it automatically
 set autoread
+" Apply substitutions globally by default (no need to use g)
+set gdefault
 " Search with case insensive, unless it has a capital letter in it
 set smartcase
 set encoding=utf-8
@@ -195,12 +191,14 @@ set ttyscroll=3
 set nostartofline
 " Hightlight search for default
 set hlsearch
+" Highlight search while typing
+set incsearch
 " Load shell enviroment when running commands
 " set shell=bash\ -l
 
 function! StatuslineGit()
   let l:branchname = fugitive#head()
-  return strlen(l:branchname) > 0?' '.l:branchname.' ':''
+  return strlen(l:branchname) > 0 ? '  '.l:branchname : ''
 endfunction
 
 set statusline=
@@ -209,8 +207,8 @@ set statusline+=\ %f " Filename
 set statusline+=%m " Modifiable
 set statusline+=%=
 set statusline+=\ %c:%L " Line number and column
-set statusline+=\ %{StatuslineGit()}
-set statusline+=\%y " Filetype
+set statusline+=%{StatuslineGit()}
+set statusline+=\ %y " Filetype
 set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " File encoding
 set statusline+=\[%{&fileformat}\] " File format
 set statusline+=\ 
@@ -276,7 +274,7 @@ nnoremap <Leader>Qa :bufdo bd<CR>
 " Open alternate file
 nmap <Leader>a :A<CR>
 " Open tags in current file
-nmap <Leader>r :CtrlPBufTag<CR>
+nmap <Leader>r :Tags<CR>
 " Find project wide
 nmap <Leader>f :Ack!<Space>
 " Fuzzy Finder, with preview
@@ -296,6 +294,11 @@ nmap <Leader>zr :VimuxZoomRunner<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
+" Resize windows using arrow keys
+noremap <up>    <C-W>+
+noremap <down>  <C-W>-
+noremap <left>  3<C-W><
+noremap <right> 3<C-W>>
 
 " Ruby and Crystal settings
 autocmd FileType ruby,eruby,crystal call SetTwoSpacesSettings()
