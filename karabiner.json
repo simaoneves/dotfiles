@@ -1,0 +1,99 @@
+{
+  "title": "Simon config keys",
+  "rules": [
+    {
+      "description": "Slack and Chrome ctrl-j/k and ctrl-w",
+      "manipulators": [
+          {
+              "conditions": [
+                  {
+                      "bundle_identifiers": [
+                          "^com\\.tinyspeck\\.slackmacgap$",
+                          "com\\.google\\.Chrome"
+                      ],
+                      "type": "frontmost_application_if"
+                  }
+              ],
+              "description": "Ctrl-j for down",
+              "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                      "mandatory": [
+                          "left_control"
+                      ],
+                      "optional": []
+                  }
+              },
+              "to": [
+                  {
+                      "key_code": "down_arrow",
+                      "modifiers": []
+                  }
+              ],
+              "type": "basic"
+          }, {
+              "conditions": [
+                  {
+                      "bundle_identifiers": [
+                          "^com\\.tinyspeck\\.slackmacgap$",
+                          "com\\.google\\.Chrome"
+                      ],
+                      "type": "frontmost_application_if"
+                  }
+              ],
+              "description": "Ctrl-k for down",
+              "from": {
+                  "key_code": "k",
+                  "modifiers": {
+                      "mandatory": [
+                          "left_control"
+                      ],
+                      "optional": []
+                  }
+              },
+              "to": [
+                  {
+                      "key_code": "up_arrow",
+                      "modifiers": []
+                  }
+              ],
+              "type": "basic"
+          }, {
+              "conditions": [
+                  {
+                      "bundle_identifiers": [
+                          "^com\\.tinyspeck\\.slackmacgap$",
+                          "com\\.google\\.Chrome"
+                      ],
+                      "type": "frontmost_application_if"
+                  }
+              ],
+              "description": "Ctrl-w for delete last word",
+              "from": {
+                  "key_code": "w",
+                  "modifiers": {
+                      "mandatory": [
+                          "left_control"
+                      ],
+                      "optional": []
+                  }
+              },
+              "to": [
+                  {
+                      "key_code": "left_arrow",
+                      "modifiers": [
+                          "left_option",
+                          "left_shift"
+                      ]
+                  }, {
+                      "key_code": "delete_forward",
+                      "modifiers": []
+                  }
+
+              ],
+              "type": "basic"
+          }
+      ]
+    }
+  ]
+}

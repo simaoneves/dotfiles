@@ -29,12 +29,14 @@ brew tap caskroom/cask
 brew cask install alfred
 brew cask install atom
 brew cask install coconutbattery
+brew cask install docker
 brew cask install evernote
 brew cask install flux
 brew cask install google-chrome
 brew cask install intellij-idea
 brew cask install iterm2
 brew cask install macvim
+brew cask install rescuetime
 brew cask install sizeup
 brew cask install skype
 brew cask install slack
@@ -42,7 +44,6 @@ brew cask install spotify
 brew cask install vagrant
 brew cask install virtualbox
 brew cask install vlc
-brew cask install rescuetime
 
 # Create directories needed
 mkdir ~/.git-templates
@@ -57,8 +58,8 @@ ln -s ~/Dev/dotfiles/.gvimrc ~/.gvimrc
 ln -s ~/Dev/dotfiles/.vimrc ~/.vimrc
 ln -s ~/Dev/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/Dev/dotfiles/.atom/ ~/.atom
-ln -s ~/Dev/dotfiles/./commit-msg ~/.atom
 ln -s ~/Dev/dotfiles/bin/.git-completion.bash ~/.git-completion.bash
+ln -s ~/Dev/dotfiles/karabiner.json ~/.config/karabiner/assets/complex_modifications/karabiner.json
 # Add git-stats file to home
 
 # Install RVM
