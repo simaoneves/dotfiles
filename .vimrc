@@ -27,6 +27,7 @@ Plug 'rhysd/committia.vim'
 Plug 'mattn/emmet-vim'
 Plug 'janko-m/vim-test'
 Plug 'ap/vim-buftabline'
+Plug 'natebosch/vim-lsc'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -108,6 +109,15 @@ function! DockerTransformation(cmd) abort
 endfunction
 let g:test#custom_transformations = {'docker': function('DockerTransformation')}
 let g:test#transformation = 'docker'
+" Register Language Servers
+let g:lsc_server_commands = {
+    \ 'ruby': 'language_server-ruby',
+    \ 'crystal': 'scry',
+    \ }
+"\ 'javascript.jsx': 'node /usr/local/bin/javascript-typescript-langserver/lib/language-server-stdio'
+
+" Use defaults with language servers
+let g:lsc_auto_map = v:true
 
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
@@ -140,6 +150,7 @@ let g:projectionist_heuristics = {
       \   }
       \ }
 
+" Bugged for now in Macvim
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'options': '--preview "pygmentize {}"' }), <bang>0)
 
@@ -184,7 +195,7 @@ set gdefault
 set smartcase
 set encoding=utf-8
 set laststatus=2
-set timeoutlen=350
+set timeoutlen=450
 set ttimeoutlen=0
 " Open splits where they should
 set splitbelow
@@ -272,6 +283,8 @@ nmap <Leader>cc :cclose<CR>
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
 nmap <Leader>j <C-]>
+" Copy paragraph below
+nmap <Leader>cp yap}p
 " Edit this file
 nmap <Leader>, :e ~/.vimrc<CR>
 " Edit stuff file
@@ -282,14 +295,14 @@ nmap <silent> <Leader>0 :noh<cr>
 nmap <C-\> :NERDTreeToggle<CR>
 " Close all buffers
 nnoremap <Leader>Qa :bufdo bd<CR>
-" Open alternate file
-nmap <Leader>a :A<CR>
+" Open alternate file in a vertical split
+nmap <Leader>a :AV<CR>
 " Open tags in current file
 nmap <Leader>r :Tags<CR>
 " Find project wide
 nmap <Leader>f :Ack!<Space>
 " Fuzzy Finder, with preview
-nmap <Leader>t :Files<CR>
+nmap <Leader>t :FZF<CR>
 " Run last command with Vimux
 nmap <Leader>rr :VimuxRunLastCommand<CR>
 " Run tests for current file
@@ -305,6 +318,16 @@ nmap <Leader>zr :VimuxZoomRunner<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
+" Shortcut to 'tabs'
+nmap <Leader>1 <Plug>BufTabLine.Go(1)
+nmap <Leader>2 <Plug>BufTabLine.Go(2)
+nmap <Leader>3 <Plug>BufTabLine.Go(3)
+nmap <Leader>4 <Plug>BufTabLine.Go(4)
+nmap <Leader>5 <Plug>BufTabLine.Go(5)
+nmap <Leader>6 <Plug>BufTabLine.Go(6)
+nmap <Leader>7 <Plug>BufTabLine.Go(7)
+nmap <Leader>8 <Plug>BufTabLine.Go(8)
+nmap <Leader>9 <Plug>BufTabLine.Go(9)
 " Resize windows using arrow keys
 noremap <up>    <C-W>+
 noremap <down>  <C-W>-
