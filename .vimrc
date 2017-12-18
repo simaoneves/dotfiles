@@ -98,6 +98,17 @@ if executable('ag')
 endif
 " Make test commands execute using vimux
 let test#strategy = "vimux"
+
+" Use docker-compose to tun tests if we are using containers
+function! DockerTransformation(cmd) abort
+    if filereadable('docker-compose.yml')
+        return 'docker-compose run tests '.a:cmd
+    endif
+    return a:cmd
+endfunction
+let g:test#custom_transformations = {'docker': function('DockerTransformation')}
+let g:test#transformation = 'docker'
+
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
 let g:indentLine_char = '¦'

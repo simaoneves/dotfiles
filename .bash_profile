@@ -400,8 +400,13 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
 export PATH=".:/usr/local/lib/antlr-4.0-complete.jar:$PATH"
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-# export PAGER=most
 
+# Load local definitions
+if [ -f ~/bash_profile.local ]; then
+  source ~/bash_profile.local
+fi
+
+# export PAGER=most
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/platform-tools
