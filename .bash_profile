@@ -7,6 +7,7 @@
 # fi
 
 HISTFILESIZE=10000
+HISTSIZE=10000
 
 # sqlplus for psi configurations
 export SQLPATH=/Applications/sqlplus
@@ -180,6 +181,7 @@ alias gb="git branch -v"
 alias gd="git diff --color | diff-so-fancy | less --tabs=4 -RFX"
 alias gdi="git diff --color --cached | diff-so-fancy | less --tabs=4 -RFX"
 alias gds="git diff --stat"
+alias gdis="git diff --stat --cached"
 alias gco="git checkout"
 alias stash="git stash save -u"
 alias pop="git stash pop"
@@ -206,6 +208,13 @@ alias mk="make"
 alias mkt="make test"
 alias mkb="make build"
 alias dbm="rake db:migrate"
+alias bi="bundle install"
+alias dc="docker-compose"
+alias dcr="docker-compose run"
+alias dcb="docker-compose build"
+alias drt="docker-compose run tests"
+alias drw="docker-compose run --service-port dev"
+alias dbrt="docker-compose build tests && docker-compose run tests"
 alias htop="sudo htop"
 alias coffee="caffeinate -dim -t 14400"
 alias sql="sqlplus psi24@difcul"
@@ -224,6 +233,7 @@ alias sub="subl"
 alias gvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias a.="atom ."
 alias v.="vim ."
+alias v,="vim ."
 alias g.="gvim ."
 alias jess="java -cp jess.jar jess.Main"
 alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
@@ -397,6 +407,7 @@ source ~/.bashrc
 export PATH=/usr/local/bin:$PATH
 export PATH="/usr/local/Cellar/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
 export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
 export PATH=".:/usr/local/lib/antlr-4.0-complete.jar:$PATH"
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'

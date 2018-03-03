@@ -28,6 +28,8 @@ Plug 'mattn/emmet-vim'
 Plug 'janko-m/vim-test'
 Plug 'ap/vim-buftabline'
 Plug 'natebosch/vim-lsc'
+Plug 'w0rp/ale'
+Plug 'ngmy/vim-rubocop'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -35,6 +37,7 @@ Plug 'mxw/vim-jsx'
 Plug 'rhysd/vim-crystal'
 Plug 'tpope/vim-rails'
 Plug 'suan/vim-instant-markdown'
+Plug 'ekalinin/Dockerfile.vim'
 
 " Themes
 Plug 'dracula/vim'
@@ -46,6 +49,7 @@ Plug 'liuchengxu/space-vim-dark'
 Plug 'morhetz/gruvbox'
 Plug 'junegunn/seoul256.vim'
 Plug 'trevordmiller/nova-vim'
+Plug 'ayu-theme/ayu-vim'
 
 " Text objects and operators
 Plug 'kana/vim-textobj-user'
@@ -111,10 +115,10 @@ let g:test#custom_transformations = {'docker': function('DockerTransformation')}
 let g:test#transformation = 'docker'
 " Register Language Servers
 let g:lsc_server_commands = {
-    \ 'ruby': 'language_server-ruby',
     \ 'crystal': 'scry',
     \ }
 "\ 'javascript.jsx': 'node /usr/local/bin/javascript-typescript-langserver/lib/language-server-stdio'
+"\ 'ruby': 'language_server-ruby',
 
 " Use defaults with language servers
 let g:lsc_auto_map = v:true
@@ -122,6 +126,20 @@ let g:lsc_auto_map = v:true
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
 let g:indentLine_char = '¦'
+
+" ALE
+let g:ale_sign_warning = '▲'
+let g:ale_sign_error = '✗'
+highlight link ALEWarningSign String
+highlight link ALEErrorSign Title
+" Only run ALE on save
+let g:ale_lint_on_text_changed = 'never'
+" You can disable this option too
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
+let g:ale_linters = {
+\   'ruby': ['rubocop'],
+\}
 
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
@@ -147,7 +165,13 @@ let g:projectionist_heuristics = {
       \       "app/styles/screens/*.js": { "alternate": "app/components/screens/{}Screen.js" },
       \       "test/*Spec.js": { "alternate": "app/{}.js" },
       \       "spec/*.spec.js": { "alternate": "app/{}.js" }
-      \   }
+      \   },
+      \   "lib/|Gemfile": {
+      \       "spec/*_spec.rb": { "alternate": "lib/{}.rb" },
+      \       "lib/*.rb": { "alternate": "spec/{}_spec.rb" },
+      \       "spec/unit/web/*_spec.rb": { "alternate": "web/{}.rb" },
+      \       "web/*.rb": { "alternate": "spec/unit/web/{}_spec.rb" }
+      \   },
       \ }
 
 " Bugged for now in Macvim
@@ -177,8 +201,9 @@ if !has("gui_running")
     set t_Co=256
     set term=xterm-256color
 endif
-colorscheme space-vim-dark
+colorscheme one
 set background=dark
+set re=1
 " Use both relative and normal line numbers
 set relativenumber
 set number
@@ -279,10 +304,12 @@ nmap <Tab> >>
 nmap <S-Tab> <<
 " Close quickfix
 nmap <Leader>cc :cclose<CR>
-" Move to last buffer and close the one we were one buffer
+" Move to last buffer and close the one we were on
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
 nmap <Leader>j <C-]>
+" Find and replace word under cursor in file
+nmap <Leader>fr :%s/<C-R><C-W>//g<Left><Left>
 " Copy paragraph below
 nmap <Leader>cp yap}p
 " Edit this file
@@ -301,6 +328,10 @@ nmap <Leader>a :AV<CR>
 nmap <Leader>r :Tags<CR>
 " Find project wide
 nmap <Leader>f :Ack!<Space>
+" Find project wide with what is in the clipboard
+nmap <Leader>F :Ack! """<CR>
+" Lint current file using Rubocop
+nmap <Leader>l :RuboCop<CR>
 " Fuzzy Finder, with preview
 nmap <Leader>t :FZF<CR>
 " Run last command with Vimux
