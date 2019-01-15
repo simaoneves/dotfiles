@@ -30,6 +30,12 @@ Plug 'ap/vim-buftabline'
 Plug 'natebosch/vim-lsc'
 Plug 'w0rp/ale'
 Plug 'ngmy/vim-rubocop'
+Plug 'tpope/vim-abolish'
+Plug 'scrooloose/vim-slumlord'
+Plug 'dzeban/vim-log-syntax'
+Plug 'RRethy/vim-illuminate'
+Plug 'junegunn/vim-peekaboo'
+Plug 'FooSoft/vim-argwrap'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -38,6 +44,8 @@ Plug 'rhysd/vim-crystal'
 Plug 'tpope/vim-rails'
 Plug 'suan/vim-instant-markdown'
 Plug 'ekalinin/Dockerfile.vim'
+Plug 'aklt/plantuml-syntax'
+Plug 'udalov/kotlin-vim'
 
 " Themes
 Plug 'dracula/vim'
@@ -50,6 +58,7 @@ Plug 'morhetz/gruvbox'
 Plug 'junegunn/seoul256.vim'
 Plug 'trevordmiller/nova-vim'
 Plug 'ayu-theme/ayu-vim'
+Plug 'jnurmine/Zenburn'
 
 " Text objects and operators
 Plug 'kana/vim-textobj-user'
@@ -75,9 +84,9 @@ filetype plugin indent on    " required
 let g:instant_markdown_slow = 1
 " Dont open preview on enter mardown file
 let g:instant_markdown_autostart = 0
-" Buble lines up and down with Ctrl
-let g:move_key_modifier = 'C'
-let g:spring_night_high_contrast = []
+" Disable automatic mappings from vim-move plugin
+let g:move_map_keys = 0
+let g:spring_night_high_contrast = 0
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
 let g:hybrid_custom_term_colors = 1
 let g:ctrlp_extensions = ['buffertag']
@@ -104,7 +113,7 @@ endif
 " Make test commands execute using vimux
 let test#strategy = "vimux"
 
-" Use docker-compose to tun tests if we are using containers
+" Use docker-compose to run tests if we are using containers
 function! DockerTransformation(cmd) abort
     if filereadable('docker-compose.yml')
         return 'docker-compose run tests '.a:cmd
@@ -123,9 +132,22 @@ let g:lsc_server_commands = {
 " Use defaults with language servers
 let g:lsc_auto_map = v:true
 
+" Time in miliseconds before highlight other occurences of word under cursor
+let g:Illuminate_delay = 400
+" Make sure the highlighted occurendes of the word under the cursor are visible
+highlight link illuminatedWord Visual
+
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
 let g:indentLine_char = '¦'
+
+" Set delay so that it doesn't open the window automatically
+let g:peekaboo_delay = 250
+" Adjust the window that opens with the registers
+let g:peekaboo_window = 'vertical botright 100new'
+
+" Add comma when unwrapping arguments
+let g:argwrap_tail_comma = 1
 
 " ALE
 let g:ale_sign_warning = '▲'
@@ -134,14 +156,16 @@ highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
 " Only run ALE on save
 let g:ale_lint_on_text_changed = 'never'
-" You can disable this option too
-" if you don't want linters to run on opening a file
+" Disable linter on enter
 let g:ale_lint_on_enter = 0
+" Let ALE use LSP for auto-completion
+let g:ale_completion_enabled = 0
+" Configured linters
 let g:ale_linters = {
-\   'ruby': ['rubocop'],
+\   'ruby': ['rubocop', 'solargraph'],
 \}
 
-" Customize fzf colors to match your color scheme
+" Customize fzf colors to match color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -156,6 +180,8 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
+" Please show me the f quotes in json, thanks
+let g:vim_json_syntax_conceal = 0
 " Customize projections for javascript projects
 let g:projectionist_heuristics = {
       \   "app/|package.json": {
@@ -167,8 +193,11 @@ let g:projectionist_heuristics = {
       \       "spec/*.spec.js": { "alternate": "app/{}.js" }
       \   },
       \   "lib/|Gemfile": {
-      \       "spec/*_spec.rb": { "alternate": "lib/{}.rb" },
-      \       "lib/*.rb": { "alternate": "spec/{}_spec.rb" },
+      \       "spec/unit/*_spec.rb": { "alternate": "lib/{}.rb" },
+      \       "spec/integration/*_spec.rb": { "alternate": "lib/{}.rb" },
+      \       "spec/acceptance/*_spec.rb": { "alternate": "lib/{}.rb" },
+      \       "lib/*.rb": { "alternate": "spec/unit/{}_spec.rb" },
+      \       "lib/central/*.rb": { "alternate": "spec/unit/{}_spec.rb" },
       \       "spec/unit/web/*_spec.rb": { "alternate": "web/{}.rb" },
       \       "web/*.rb": { "alternate": "spec/unit/web/{}_spec.rb" }
       \   },
@@ -201,7 +230,7 @@ if !has("gui_running")
     set t_Co=256
     set term=xterm-256color
 endif
-colorscheme one
+colorscheme spring-night
 set background=dark
 set re=1
 " Use both relative and normal line numbers
@@ -241,7 +270,7 @@ set hlsearch
 " Highlight search while typing
 set incsearch
 " Load shell enviroment when running commands
-" set shell=bash\ -l
+set shell=bash\ -l
 
 function! StatuslineGit()
   let l:branchname = fugitive#head()
@@ -278,9 +307,18 @@ nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
 imap <C-l> <Esc>:bn<CR>
 imap <C-h> <Esc>:bp<CR>
+
+" Buble selections up and down
+vmap <C-j> <Plug>MoveBlockDown
+vmap <C-k> <Plug>MoveBlockUp
+nmap <C-j> <Plug>MoveLineDown
+nmap <C-k> <Plug>MoveLineUp
+
 " Dont use linewise motions
 nmap j gj
 nmap k gk
+" Argument wrapping
+nnoremap <silent> <Leader>aw :ArgWrap<CR>
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
 " bind ? to grep word under cursor
@@ -290,6 +328,8 @@ nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
 " Select last pasted text
 nmap gV '[v']'
+" No more Ex mode please
+nnoremap Q <Nop>
 " Mappings made in iTerm2, so i can use Cmd key
 nmap openLineAbove O<Esc>j
 nmap saveBuffer :w<CR>
@@ -304,12 +344,19 @@ nmap <Tab> >>
 nmap <S-Tab> <<
 " Close quickfix
 nmap <Leader>cc :cclose<CR>
+" Open bufers, sick mode
+nmap <Leader><Leader> :Buffer<CR>
 " Move to last buffer and close the one we were on
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
 nmap <Leader>j <C-]>
+" Open current word as a tag in a new horizontal split
+nmap <Leader>J :sp <CR>:exec("tag ".expand("<cword>"))<CR>
 " Find and replace word under cursor in file
-nmap <Leader>fr :%s/<C-R><C-W>//g<Left><Left>
+nmap <Leader>fr :%s/<C-R><C-W>//<Left>
+" Find what is in the search register and replace with what is in the
+" clipboard, inside a selection
+vmap <Leader>fr :s/<C-R>//<C-R>*/<Left>
 " Copy paragraph below
 nmap <Leader>cp yap}p
 " Edit this file
@@ -320,10 +367,17 @@ nmap <Leader>D :e ~/Documents/stuff<CR>
 nmap <silent> <Leader>0 :noh<cr>
 " Toggle NERDTree
 nmap <C-\> :NERDTreeToggle<CR>
+" Find the current file in NERDTree
+nmap <Leader>\ :NERDTreeFind<CR>
 " Close all buffers
 nnoremap <Leader>Qa :bufdo bd<CR>
+" Cycle between results
+nmap <Leader>n :cn<CR>
+nmap <Leader>p :cp<CR>
 " Open alternate file in a vertical split
-nmap <Leader>a :AV<CR>
+nmap <Leader>va :AV<CR>
+" Open alternate file
+nmap <Leader>a :A<CR>
 " Open tags in current file
 nmap <Leader>r :Tags<CR>
 " Find project wide
@@ -333,19 +387,23 @@ nmap <Leader>F :Ack! """<CR>
 " Lint current file using Rubocop
 nmap <Leader>l :RuboCop<CR>
 " Fuzzy Finder, with preview
-nmap <Leader>t :FZF<CR>
-" Run last command with Vimux
-nmap <Leader>rr :VimuxRunLastCommand<CR>
+nmap <Leader>t :Files<CR>
 " Run tests for current file
 nmap <Leader>rt :TestFile<CR>
+" Whose fault is this mess?
+nmap <Leader>B :Gblame<CR>
 " Run all tests
 nmap <Leader>ra :TestSuite<CR>
+" Run Test in this line
+nmap <Leader>rn :TestNearest<CR>
 " Close pane used by Vimux
 nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command
 nmap <Leader>dc :VimuxPromptCommand<CR>
 " Zoom in on the tmux pane
 nmap <Leader>zr :VimuxZoomRunner<CR>
+" Run last command with Vimux
+nmap <Leader>rr :VimuxRunLastCommand<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
@@ -368,8 +426,14 @@ noremap <right> 3<C-W>>
 " Ruby and Crystal settings
 autocmd FileType ruby,eruby,crystal call SetTwoSpacesSettings()
 function! SetTwoSpacesSettings()
-    match errormsg '\%>100v.\+'
+    match errormsg '\%>110v.\+'
     set tabstop=2 shiftwidth=2 softtabstop=2
+endfunction
+
+" Add error color for lines greater than 72 chars in gitcommit
+autocmd FileType gitcommit call SetColorColumnAfter72Chars()
+function! SetColorColumnAfter72Chars()
+    match errormsg '\%>72v.\+'
 endfunction
 
 " Auto reload vimrc
