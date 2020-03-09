@@ -1,10 +1,17 @@
-# Powerline prompt
-# function _update_ps1() {
-#     PS1="$(~/Dev/dotfiles/bin/powerline-shell.py --cwd-mode plain $? 2> /dev/null)"
-# }
-# if [ "$TERM" != "linux" ]; then
-#     PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
-# fi
+_fzf_complete_app() {
+  _fzf_complete "--multi --reverse" "$@" < <(
+  heroku apps -A | grep 'td-'
+  )
+}
+
+_fzf_complete_app_post() {
+    sed 's/\([a-z\-]*\).*/\1/'
+}
+
+_fzf_complete_app_notrigger() {
+    FZF_COMPLETION_TRIGGER='' _fzf_complete_app
+}
+[ -n "$BASH" ] && complete -o bashdefault -o default -F _fzf_complete_app_notrigger logs && complete -o bashdefault -o default -F _fzf_complete_app_notrigger deploy_script
 
 HISTFILESIZE=10000
 HISTSIZE=10000
@@ -165,16 +172,16 @@ alias vvs="cd ~/Dev/vvs/"
 alias tc="cd ~/Dev/tc/"
 
 alias ls="ls -Gpah"
-# alias cat="pygmentize"
 alias mkdir="mkdir -v"
 alias rm="rm -v"
 alias rdr="rm -Rfv"
 alias rdss="find . -name \".DS_Store\" -delete"
 alias th="history | awk '{CMD[\$2]++;count++;}END { for (a in CMD)print CMD[a] \" \" CMD[a]/count*100 \"% \" a;}' | grep -v \"./\" | column -c3 -s \" \" -t | sort -nr | nl |  head -n20"
 alias ip="ifconfig | grep 'inet '"
-alias td="tmux detach"
-alias ta="tmux attach"
+alias ta="tmux attach-session"
 alias tn="tmux new-session -s"
+alias td="tmux detach"
+alias grep="grep --color=auto"
 
 alias gs="git status"
 alias gb="git branch -v"
@@ -183,6 +190,7 @@ alias gdi="git diff --color --cached | diff-so-fancy | less --tabs=4 -RFX"
 alias gds="git diff --stat"
 alias gdis="git diff --stat --cached"
 alias gco="git checkout"
+alias gaf='git add $(git ls-files -m | fzf -m --height 40%)'
 alias stash="git stash save -u"
 alias pop="git stash pop"
 alias gpll="git pull"
@@ -190,7 +198,10 @@ alias gaa="git add . && echo 'To create a good commit message, complete the foll
 alias gcm="git commit -m"
 alias amend="git commit --amend"
 alias unstage="git reset HEAD --"
+alias sync_remote_branch='git reset --hard origin/$(git branch | grep \* | cut -d " " -f2)'
 alias gl="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias in_branch="git branch -a --contains"
+alias rebase_master="git rebase origin/master"
 
 alias mamp_start="/Applications/MAMP/bin/start.sh"
 alias mamp_stop="/Applications/MAMP/bin/stop.sh"
@@ -201,6 +212,7 @@ alias pro="vim ~/Dev/dotfiles/.bash_profile"
 alias reload="source ~/.bash_profile && echo Profile reloaded"
 alias rpi="ssh simon@raspberrypi"
 alias r="ruby"
+alias r.="rubocop ."
 alias cr="crystal"
 alias v="vim"
 alias sd="sudo"
@@ -215,6 +227,7 @@ alias dcb="docker-compose build"
 alias drt="docker-compose run tests"
 alias drw="docker-compose run --service-port dev"
 alias dbrt="docker-compose build tests && docker-compose run tests"
+alias dbr="docker-compose build $1 && docker-compose run $1"
 alias htop="sudo htop"
 alias coffee="caffeinate -dim -t 14400"
 alias sql="sqlplus psi24@difcul"
@@ -228,6 +241,7 @@ alias nox="npm run oxc"
 alias nios5="react-native run-ios --simulator 'iPhone 5'"
 alias nios6="react-native run-ios --simulator 'iPhone 6 Plus'"
 alias nios7="react-native run-ios --simulator 'iPhone 7'"
+alias logs="heroku logs -t -a"
 
 alias sub="subl"
 alias gvim="/Applications/MacVim.app/Contents/bin/mvim"
@@ -244,9 +258,8 @@ function github() {
 	repo=`git config --get remote.origin.url | sed -e 's/\.git//'`
 	open -a Google\ Chrome $repo
 }
-
-function weather() {
-	curl http://wttr.in/$1
+function deployed() {
+    in_branch $1 | grep heroku_$2
 }
 
 function gstat() {
@@ -276,7 +289,7 @@ function mergefiles() {
 # gcb - git commit browser, using diff-so-fancy
 # https://gist.github.com/junegunn/f4fca918e937e6bf5bad
 gcb() {
-  git log --graph --color=always \
+  git log --all --graph --color=always \
       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
       --bind "ctrl-m:execute:
@@ -384,9 +397,6 @@ export PS2;
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-# Add RVM to PATH for scripting
-export PATH="$PATH:$HOME/.rvm/bin"
-
 # Editor setting preference
 export EDITOR='vim'
 
@@ -401,11 +411,10 @@ fi
 # Source bashrc to get FZF shortcuts
 source ~/.bashrc
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
 # MacPorts Installer addition on 2015-10-22_at_13:07:27: adding an appropriate PATH variable for use with MacPorts.
 export PATH=/usr/local/bin:$PATH
 export PATH="/usr/local/Cellar/:$PATH"
+export PATH="/Users/simao.neves/Dev/kotlin-language-server/server/build/install/server/bin/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
@@ -421,3 +430,5 @@ fi
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

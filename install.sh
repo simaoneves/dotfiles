@@ -23,8 +23,13 @@ brew install watchman
 brew install mongodb
 brew install lolcat
 brew install tree
+brew install bat
+brew install jq
+brew install kotlin
+brew install yarn
+brew install rabbitmq
 
-brew tap caskroom/cask
+brew tap homebrew/cask
 
 brew cask install alfred
 brew cask install atom

@@ -133,7 +133,7 @@ let g:lsc_server_commands = {
 let g:lsc_auto_map = v:true
 
 " Time in miliseconds before highlight other occurences of word under cursor
-let g:Illuminate_delay = 400
+let g:Illuminate_delay = 300
 " Make sure the highlighted occurendes of the word under the cursor are visible
 highlight link illuminatedWord Visual
 
@@ -150,20 +150,25 @@ let g:peekaboo_window = 'vertical botright 100new'
 let g:argwrap_tail_comma = 1
 
 " ALE
+" Solve bug: ":h ale-completion-completeopt-bug"
+set completeopt=menu,menuone,preview,noselect,noinsert
 let g:ale_sign_warning = '▲'
 let g:ale_sign_error = '✗'
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
+let g:ale_completion_delay = 50
 " Only run ALE on save
 let g:ale_lint_on_text_changed = 'never'
-" Disable linter on enter
-let g:ale_lint_on_enter = 0
+" Enable linter on enter
+let g:ale_lint_on_enter = 1
 " Let ALE use LSP for auto-completion
-let g:ale_completion_enabled = 0
+let g:ale_completion_enabled = 1
 " Configured linters
 let g:ale_linters = {
 \   'ruby': ['rubocop', 'solargraph'],
+\   'kotlin': ['languageserver']
 \}
+set omnifunc=ale#completion#OmniFunc
 
 " Customize fzf colors to match color scheme
 let g:fzf_colors =
@@ -205,7 +210,7 @@ let g:projectionist_heuristics = {
 
 " Bugged for now in Macvim
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'options': '--preview "pygmentize {}"' }), <bang>0)
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'options': '--preview "bat -p --theme=ansi-dark --color=always {}"' }), <bang>0)
 
 """"""""""""""""""""
 " Vim configurations
@@ -230,7 +235,7 @@ if !has("gui_running")
     set t_Co=256
     set term=xterm-256color
 endif
-colorscheme spring-night
+colorscheme one
 set background=dark
 set re=1
 " Use both relative and normal line numbers
@@ -308,6 +313,9 @@ nmap <C-h> :bp<CR>
 imap <C-l> <Esc>:bn<CR>
 imap <C-h> <Esc>:bp<CR>
 
+" Use Space-Space to Hover with ALE
+nnoremap <silent> <Leader><Leader> :ALEHover<CR>
+
 " Buble selections up and down
 vmap <C-j> <Plug>MoveBlockDown
 vmap <C-k> <Plug>MoveBlockUp
@@ -344,8 +352,8 @@ nmap <Tab> >>
 nmap <S-Tab> <<
 " Close quickfix
 nmap <Leader>cc :cclose<CR>
-" Open bufers, sick mode
-nmap <Leader><Leader> :Buffer<CR>
+" Open bufers
+nmap <Leader>b :Buffer<CR>
 " Move to last buffer and close the one we were on
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
@@ -422,6 +430,12 @@ noremap <up>    <C-W>+
 noremap <down>  <C-W>-
 noremap <left>  3<C-W><
 noremap <right> 3<C-W>>
+
+" Kotlin settings
+autocmd FileType kotlin call SetAlternativeColorscheme()
+function! SetAlternativeColorscheme()
+    colorscheme one
+endfunction
 
 " Ruby and Crystal settings
 autocmd FileType ruby,eruby,crystal call SetTwoSpacesSettings()

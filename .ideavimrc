@@ -1,0 +1,35 @@
+let mapleader = " "
+
+set surround
+set gdefault
+set clipboard=unnamedplus,unnamed
+set relativenumber
+set number
+set smartcase
+set scrolloff=6
+set timeoutlen=450
+set incsearch
+set hlsearch
+
+nmap <leader>j :action GotoDeclaration<cr>
+nmap <leader>t :action GotoFile<cr>
+nmap <leader>w :action CloseContent<cr>
+nmap <leader>r :action RunClass<cr>
+nmap <leader>f :action FindInPath<cr>
+nmap <leader>B :action Annotate<cr>
+nmap <leader>R :action RerunTests<cr>
+nmap <leader>a :action GotoTest<cr>
+nmap <leader>o :action QuickJavaDoc<cr>
+
+nnoremap cc :action CommentByLineComment<CR>
+vnoremap cc :action CommentByLineComment<CR>
+
+nmap <C-d> <C-d>zz
+nmap <C-u> <C-u>zz
+nmap <CR> o<Esc>k
+nmap <S-CR> ko<Esc>
+
+vnoremap <Tab> >gv
+vmap <S-Tab> <gv
+nmap <Tab> >>
+nmap <S-Tab> <<
