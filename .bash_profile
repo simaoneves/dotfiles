@@ -180,7 +180,7 @@ alias th="history | awk '{CMD[\$2]++;count++;}END { for (a in CMD)print CMD[a] \
 alias ip="ifconfig | grep 'inet '"
 alias ta="tmux attach-session"
 alias tn="tmux new-session -s"
-alias td="tmux detach"
+alias tdt="tmux detach"
 alias grep="grep --color=auto"
 
 alias gs="git status"
