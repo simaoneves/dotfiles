@@ -115,6 +115,9 @@ let test#strategy = "vimux"
 
 " Use docker-compose to run tests if we are using containers
 function! DockerTransformation(cmd) abort
+    if filereadable('build.gradle')
+        return a:cmd
+    endif
     if filereadable('docker-compose.yml')
         return 'docker-compose run tests '.a:cmd
     endif
@@ -150,7 +153,7 @@ let g:peekaboo_window = 'vertical botright 100new'
 let g:argwrap_tail_comma = 1
 
 " ALE
-" Solve bug: ":h ale-completion-completeopt-bug"
+" Solves bug: ":h ale-completion-completeopt-bug"
 set completeopt=menu,menuone,preview,noselect,noinsert
 let g:ale_sign_warning = '▲'
 let g:ale_sign_error = '✗'
@@ -205,6 +208,10 @@ let g:projectionist_heuristics = {
       \       "lib/central/*.rb": { "alternate": "spec/unit/{}_spec.rb" },
       \       "spec/unit/web/*_spec.rb": { "alternate": "web/{}.rb" },
       \       "web/*.rb": { "alternate": "spec/unit/web/{}_spec.rb" }
+      \   },
+      \   "build.gradle": {
+      \       "src/main/kotlin/*.kt": {"alternate": "src/test/kotlin/{}Test.kt"},
+      \       "src/test/kotlin/*Test.kt": {"alternate": "src/main/kotlin/{}.kt"},
       \   },
       \ }
 
@@ -282,16 +289,24 @@ function! StatuslineGit()
   return strlen(l:branchname) > 0 ? '  '.l:branchname : ''
 endfunction
 
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+
+    return l:counts.total == 0 ? '' : printf('✗ %d error(s) found', all_errors)
+endfunction
+
 set statusline=
 set statusline+=\ [%{mode()}] " Mode
 set statusline+=\ %f " Filename
 set statusline+=%m " Modifiable
 set statusline+=%=
+set statusline+=%#Error# " use Error highlight group
+set statusline+=%{LinterStatus()}
+set statusline+=%* "return to default color
 set statusline+=\ %c:%L " Line number and column
 set statusline+=%{StatuslineGit()}
 set statusline+=\ %y " Filetype
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " File encoding
-set statusline+=\[%{&fileformat}\] " File format
 set statusline+=\ 
 
 """""""""""""""""""""""
