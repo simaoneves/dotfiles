@@ -63,7 +63,8 @@
                   {
                       "bundle_identifiers": [
                           "^com\\.tinyspeck\\.slackmacgap$",
-                          "com\\.google\\.Chrome"
+                          "com\\.google\\.Chrome",
+                          "com\\.todoist\\.mac\\.Todoist"
                       ],
                       "type": "frontmost_application_if"
                   }
