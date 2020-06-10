@@ -18,7 +18,7 @@ brew install htop-osx
 brew install reattach-to-user-namespace
 brew install the_silver_searcher
 brew install tmux
-brew install vim --with-lua --override-system-vim
+brew install vim
 brew install watchman
 brew install mongodb
 brew install lolcat
@@ -26,12 +26,15 @@ brew install tree
 brew install bat
 brew install jq
 brew install kotlin
+brew install python
 brew install yarn
 brew install rabbitmq
+brew install docker-compose
 
 brew tap homebrew/cask
 
 brew cask install alfred
+brew cask install lastpass
 brew cask install atom
 brew cask install coconutbattery
 brew cask install docker
