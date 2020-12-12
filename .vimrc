@@ -14,8 +14,6 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'mileszs/ack.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'benmills/vimux'
-Plug 'Shougo/neocomplete.vim'
-Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-repeat'
@@ -27,18 +25,21 @@ Plug 'rhysd/committia.vim'
 Plug 'mattn/emmet-vim'
 Plug 'janko-m/vim-test'
 Plug 'ap/vim-buftabline'
-Plug 'natebosch/vim-lsc'
 Plug 'w0rp/ale'
-Plug 'ngmy/vim-rubocop'
 Plug 'tpope/vim-abolish'
 Plug 'scrooloose/vim-slumlord'
-Plug 'dzeban/vim-log-syntax'
 Plug 'RRethy/vim-illuminate'
 Plug 'junegunn/vim-peekaboo'
 Plug 'FooSoft/vim-argwrap'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'editorconfig/editorconfig-vim'
+Plug 'brooth/far.vim'
+Plug 'rstacruz/vim-xtract'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'mxw/vim-jsx'
 Plug 'rhysd/vim-crystal'
 Plug 'tpope/vim-rails'
@@ -46,6 +47,7 @@ Plug 'suan/vim-instant-markdown'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'aklt/plantuml-syntax'
 Plug 'udalov/kotlin-vim'
+Plug 'dzeban/vim-log-syntax'
 
 " Themes
 Plug 'dracula/vim'
@@ -59,6 +61,8 @@ Plug 'junegunn/seoul256.vim'
 Plug 'trevordmiller/nova-vim'
 Plug 'ayu-theme/ayu-vim'
 Plug 'jnurmine/Zenburn'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'arcticicestudio/nord-vim'
 
 " Text objects and operators
 Plug 'kana/vim-textobj-user'
@@ -73,6 +77,7 @@ Plug 'tpope/vim-commentary'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tpope/vim-surround'
 Plug 'haya14busa/vim-operator-flashy'
+Plug 'AndrewRadev/dsf.vim'
 
 call plug#end()
 filetype plugin indent on    " required
@@ -103,8 +108,6 @@ let g:UltiSnipsJumpBackwardTrigger="<NOP>"
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
 let g:switch_mapping = "-"
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
@@ -125,24 +128,18 @@ function! DockerTransformation(cmd) abort
 endfunction
 let g:test#custom_transformations = {'docker': function('DockerTransformation')}
 let g:test#transformation = 'docker'
-" Register Language Servers
-let g:lsc_server_commands = {
-    \ 'crystal': 'scry',
-    \ }
-"\ 'javascript.jsx': 'node /usr/local/bin/javascript-typescript-langserver/lib/language-server-stdio'
-"\ 'ruby': 'language_server-ruby',
-
-" Use defaults with language servers
-let g:lsc_auto_map = v:true
 
 " Time in miliseconds before highlight other occurences of word under cursor
 let g:Illuminate_delay = 300
-" Make sure the highlighted occurendes of the word under the cursor are visible
+" Make sure the highlighted occurences of the word under the cursor are visible
 highlight link illuminatedWord Visual
 
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
 let g:indentLine_char = '¦'
+
+" Define Emmet key
+let g:user_emmet_leader_key='<C-g>'
 
 " Set delay so that it doesn't open the window automatically
 let g:peekaboo_delay = 250
@@ -155,10 +152,12 @@ let g:argwrap_tail_comma = 1
 " ALE
 " Solves bug: ":h ale-completion-completeopt-bug"
 set completeopt=menu,menuone,preview,noselect,noinsert
+" Update signs used in gutter, as well as the colors
 let g:ale_sign_warning = '▲'
 let g:ale_sign_error = '✗'
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
+" Delay in miliseconds until ale completion kicks in
 let g:ale_completion_delay = 50
 " Only run ALE on save
 let g:ale_lint_on_text_changed = 'never'
@@ -166,10 +165,16 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 1
 " Let ALE use LSP for auto-completion
 let g:ale_completion_enabled = 1
-" Configured linters
+" Configured linters and fixers
 let g:ale_linters = {
 \   'ruby': ['rubocop', 'solargraph'],
-\   'kotlin': ['languageserver']
+\   'kotlin': ['languageserver'],
+\   'javascript': ['tsserver', 'eslint'],
+\   'typescript': ['tsserver', 'eslint']
+\}
+let g:ale_fixers = {
+\   'javascript': ['prettier'],
+\   'typescript': ['prettier'],
 \}
 set omnifunc=ale#completion#OmniFunc
 
@@ -188,8 +193,6 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-" Please show me the f quotes in json, thanks
-let g:vim_json_syntax_conceal = 0
 " Customize projections for javascript projects
 let g:projectionist_heuristics = {
       \   "app/|package.json": {
@@ -242,7 +245,7 @@ if !has("gui_running")
     set t_Co=256
     set term=xterm-256color
 endif
-colorscheme one
+colorscheme gruvbox
 set background=dark
 set re=1
 " Use both relative and normal line numbers
@@ -292,21 +295,22 @@ endfunction
 function! LinterStatus() abort
     let l:counts = ale#statusline#Count(bufnr(''))
     let l:all_errors = l:counts.error + l:counts.style_error
+    let l:spelling = all_errors == 1 ? '' : 's'
 
-    return l:counts.total == 0 ? '' : printf('✗ %d error(s) found', all_errors)
+    return l:counts.total == 0 ? '' : printf(' ✗ %d error%s found ', all_errors, spelling)
 endfunction
 
 set statusline=
 set statusline+=\ [%{mode()}] " Mode
-set statusline+=\ %f " Filename
+set statusline+=\ %F " Filename
 set statusline+=%m " Modifiable
-set statusline+=%=
-set statusline+=%#Error# " use Error highlight group
-set statusline+=%{LinterStatus()}
-set statusline+=%* "return to default color
+set statusline+=%= " Seperation between left and right side
 set statusline+=\ %c:%L " Line number and column
 set statusline+=%{StatuslineGit()}
 set statusline+=\ %y " Filetype
+set statusline+=\ %#Error# " use Error highlight group
+set statusline+=%{LinterStatus()}
+set statusline+=%* "return to default color
 set statusline+=\ 
 
 """""""""""""""""""""""
@@ -319,7 +323,11 @@ nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
 " C-j and C-k for autocompletion.
-inoremap <expr><Tab>  pumvisible() ? "\<C-R>=UltiSnips#ExpandSnippet()<CR>" : "\<Tab>"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 inoremap <expr><C-j>  pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr><C-k>  pumvisible() ? "\<C-p>" : "\<C-k>"
 " Use C-h and l to change buffers
@@ -365,6 +373,13 @@ vmap <S-Tab> <gv
 " Indent using tab in normal mode
 nmap <Tab> >>
 nmap <S-Tab> <<
+" Testing wrapping things
+vmap <Leader>{ o}megvoO{AI_mmv'e=
+vmap <Leader>} o}megvoO{AI_mmv'e=
+vmap <Leader>( o)megvoO(AI_mmv'e=
+vmap <Leader>) o)megvoO(AI_mmv'e=
+vmap <Leader>[ o]megvoO[AI_mmv'e=
+vmap <Leader>] o]megvoO[AI_mmv'e=
 " Close quickfix
 nmap <Leader>cc :cclose<CR>
 " Open bufers
@@ -394,6 +409,8 @@ nmap <C-\> :NERDTreeToggle<CR>
 nmap <Leader>\ :NERDTreeFind<CR>
 " Close all buffers
 nnoremap <Leader>Qa :bufdo bd<CR>
+" Emmet expand abbr
+nmap <Leader>e <C-g>,
 " Cycle between results
 nmap <Leader>n :cn<CR>
 nmap <Leader>p :cp<CR>
@@ -404,13 +421,15 @@ nmap <Leader>a :A<CR>
 " Open tags in current file
 nmap <Leader>r :Tags<CR>
 " Find project wide
-nmap <Leader>f :Ack!<Space>
+nmap <Leader>f :Ack!<Space>""OD
 " Find project wide with what is in the clipboard
 nmap <Leader>F :Ack! """<CR>
 " Lint current file using Rubocop
 nmap <Leader>l :RuboCop<CR>
 " Fuzzy Finder, with preview
 nmap <Leader>t :Files<CR>
+" Fuzzy Finder for commands
+nmap <Leader>T :Commands<CR>
 " Run tests for current file
 nmap <Leader>rt :TestFile<CR>
 " Whose fault is this mess?
@@ -446,6 +465,9 @@ noremap <down>  <C-W>-
 noremap <left>  3<C-W><
 noremap <right> 3<C-W>>
 
+" This helps if there was any change to buffer, to be used with autoread
+autocmd CursorHold * checktime
+
 " Kotlin settings
 autocmd FileType kotlin call SetAlternativeColorscheme()
 function! SetAlternativeColorscheme()
@@ -458,6 +480,21 @@ function! SetTwoSpacesSettings()
     match errormsg '\%>110v.\+'
     set tabstop=2 shiftwidth=2 softtabstop=2
 endfunction
+
+" Show me the all the quotes in JSON please
+autocmd BufEnter,BufCreate,BufNew,BufNewFile,BufAdd *.json call ShowMeTheQuotesPlease()
+function! ShowMeTheQuotesPlease()
+    set conceallevel=0
+endfunction
+
+" Use ALEGoToDefinition and Next/Previous error
+autocmd FileType typescript.tsx,typescript,javascript call ChangeJumpToDefinition()
+function! ChangeJumpToDefinition()
+    nmap <Leader>j :ALEGoToDefinition<CR>
+    nmap <Leader>n <Plug>(ale_previous_wrap)
+    nmap <Leader>p <Plug>(ale_next_wrap)
+endfunction
+
 
 " Add error color for lines greater than 72 chars in gitcommit
 autocmd FileType gitcommit call SetColorColumnAfter72Chars()
@@ -473,3 +510,30 @@ augroup reload_vimrc
         source ~/.gvimrc
     endif
 augroup END
+
+function! OpenCommandInPopWindow(width, height, border_highlight) abort
+    let width = float2nr(&columns * a:width)
+    let height = float2nr(&lines * a:height)
+    call inputsave()
+    let cmd = input('Enter command: ')
+    call inputrestore()
+    let bufnr = term_start(cmd, {'hidden': 1, 'term_finish': 'close', 'cwd': getcwd()})
+
+    let winid = popup_create(bufnr, {
+            \ 'minwidth': width,
+            \ 'maxwidth': width,
+            \ 'minheight': height,
+            \ 'maxheight': height,
+            \ 'border': [],
+            \ 'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+            \ 'borderhighlight': [a:border_highlight],
+            \ 'padding': [0,1,0,1],
+            \ 'highlight': a:border_highlight
+            \ })
+
+    " Optionally set the 'Normal' color for the terminal buffer
+    call setwinvar(winid, '&wincolor', 'Special')
+
+    return winid
+endfunction
+map <silent> <Leader>gp :call OpenCommandInPopWindow(0.9,0.6,'Todo')<CR>

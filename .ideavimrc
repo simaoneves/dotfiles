@@ -20,8 +20,11 @@ nmap <leader>B :action Annotate<cr>
 nmap <leader>R :action RerunTests<cr>
 nmap <leader>a :action GotoTest<cr>
 nmap <leader>o :action QuickJavaDoc<cr>
+
 nmap <A-l> :action NextSplitter<cr>
 nmap <A-h> :action PrevSplitter<cr>
+nmap <C-l> :action NextTab<cr>
+nmap <C-h> :action PreviousTab<cr>
 
 nnoremap cc :action CommentByLineComment<CR>
 vnoremap cc :action CommentByLineComment<CR>
