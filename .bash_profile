@@ -1,17 +1,15 @@
 _fzf_complete_app() {
-  _fzf_complete "--multi --reverse" "$@" < <(
-  heroku apps -A | grep 'td-'
-  )
+  _fzf_complete "--multi --reverse" "$@" < <(td apps | grep -e 'prd' -e 'qa' -e 'stg')
 }
 
 _fzf_complete_app_post() {
-    sed 's/\([a-z\-]*\).*/\1/'
+    sed 's/\([a-z\-]*\)\w*\([a-z\-]*\)/-r td-us-1 -a \1 -e \2/'
 }
 
 _fzf_complete_app_notrigger() {
     FZF_COMPLETION_TRIGGER='' _fzf_complete_app
 }
-[ -n "$BASH" ] && complete -o bashdefault -o default -F _fzf_complete_app_notrigger logs && complete -o bashdefault -o default -F _fzf_complete_app_notrigger deploy_script
+[ -n "$BASH" ] && complete -o bashdefault -o default -F _fzf_complete_app_notrigger td && complete -o bashdefault -o default -F _fzf_complete_app_notrigger deploy_script
 
 HISTFILESIZE=10000
 HISTSIZE=10000
@@ -195,6 +193,7 @@ alias stash="git stash save -u"
 alias pop="git stash pop"
 alias gpll="git pull"
 alias gaa="git add . && echo 'To create a good commit message, complete the following sentence:' && echo 'If applied, this commit will..'"
+alias gc="git commit"
 alias gcm="git commit -m"
 alias amend="git commit --amend"
 alias unstage="git reset HEAD --"
@@ -231,6 +230,11 @@ alias dbr="docker-compose build $1 && docker-compose run $1"
 alias htop="sudo htop"
 alias coffee="caffeinate -dim -t 14400"
 alias sql="sqlplus psi24@difcul"
+alias ys="yarn start"
+alias yt="yarn test"
+alias yb="yarn build"
+alias yi="yarn install"
+alias yl="yarn lint"
 alias ns="npm start"
 alias nt="npm test"
 alias ni="npm install"
@@ -252,6 +256,7 @@ alias g.="gvim ."
 alias jess="java -cp jess.jar jess.Main"
 alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
 alias antlr4='java -jar /usr/local/lib/antlr-4.6-complete.jar'
+alias saver='pipes.sh -r 5000 -r0 -p6 -K'
 
 # Functions
 function github() {

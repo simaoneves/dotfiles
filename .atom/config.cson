@@ -83,7 +83,7 @@
       uno: "#da9e54"
   editor:
     fontFamily: "PragmataPro"
-    fontSize: 13
+    fontSize: 17
     invisibles: {}
     preferredLineLength: 100
     showIndentGuide: true
