@@ -29,6 +29,7 @@ brew install pipes-sh
 brew install python
 brew install rabbitmq
 brew install reattach-to-user-namespace
+brew install ripgrep
 brew install skhd
 brew install the_silver_searcher
 brew install tmux
