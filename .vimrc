@@ -94,14 +94,10 @@ let g:move_map_keys = 0
 let g:spring_night_high_contrast = 0
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
 let g:hybrid_custom_term_colors = 1
-let g:ctrlp_extensions = ['buffertag']
 " Show modified indicator in bufline
 let g:buftabline_indicators = 1
-let g:ctrlp_funky_syntax_highlight = 1
-let g:ctrlp_working_path_mode = 'r'
 " Show dotfiles in NERDTree
 let NERDTreeShowHidden = 1
-let g:ctrlp_map = '<C-ç>'
 let g:UltiSnipsExpandTrigger="<NOP>"
 let g:UltiSnipsJumpForwardTrigger="<NOP>"
 let g:UltiSnipsJumpBackwardTrigger="<NOP>"
@@ -112,6 +108,7 @@ if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep --hidden --ignore "tags" --ignore ".git/"'
+
 endif
 " Make test commands execute using vimux
 let test#strategy = "vimux"
@@ -119,6 +116,9 @@ let test#strategy = "vimux"
 " Use docker-compose to run tests if we are using containers
 function! DockerTransformation(cmd) abort
     if filereadable('build.gradle')
+        return a:cmd
+    endif
+    if filereadable('package.json')
         return a:cmd
     endif
     if filereadable('docker-compose.yml')
@@ -195,13 +195,15 @@ let g:fzf_colors =
 
 " Customize projections for javascript projects
 let g:projectionist_heuristics = {
-      \   "app/|package.json": {
-      \       "app/components/*.js": { "alternate": "app/styles/{}.js" },
-      \       "app/styles/*.js": { "alternate": "app/components/{}.js" },
-      \       "app/components/screens/*Screen.js": { "alternate": "app/styles/screens/{}.js" },
-      \       "app/styles/screens/*.js": { "alternate": "app/components/screens/{}Screen.js" },
-      \       "test/*Spec.js": { "alternate": "app/{}.js" },
-      \       "spec/*.spec.js": { "alternate": "app/{}.js" }
+      \   "src/|package.json": {
+      \       "src/*.js": { "alternate": "src/{}.spec.js" },
+      \       "src/*.jsx": { "alternate": "src/{}.spec.jsx" },
+      \       "src/*.spec.js": { "alternate": "src/{}.js" },
+      \       "src/*.spec.jsx": { "alternate": "src/{}.jsx" },
+      \       "src/*.ts": { "alternate": "src/{}.test.ts" },
+      \       "src/*.tsx": { "alternate": "src/{}.test.tsx" },
+      \       "src/*.test.ts": { "alternate": "src/{}.ts" },
+      \       "src/*.test.tsx": { "alternate": "src/{}.tsx" },
       \   },
       \   "lib/|Gemfile": {
       \       "spec/unit/*_spec.rb": { "alternate": "lib/{}.rb" },
