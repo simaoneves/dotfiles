@@ -324,15 +324,23 @@ nnoremap <silent> ˇ :TmuxNavigateLeft<cr>
 nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
-" C-j and C-k for autocompletion.
+
+" Use Tab key for trigger completion, selection and snippet expand
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+
+" Trigger keys for next position in snippet
+let g:coc_snippet_next = '<TAB>'
+let g:coc_snippet_prev = '<S-TAB>'
+
+" C-j and C-k for autocompletion.
 inoremap <expr><C-j>  pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr><C-k>  pumvisible() ? "\<C-p>" : "\<C-k>"
-" Use C-h and l to change buffers
+
+" Use C-h and C-l to change buffers
 nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
 imap <C-l> <Esc>:bn<CR>
@@ -341,7 +349,7 @@ imap <C-h> <Esc>:bp<CR>
 " Use Space-Space to Hover with ALE
 nnoremap <silent> <Leader><Leader> :ALEHover<CR>
 
-" Buble selections up and down
+" Bubble selections up and down
 vmap <C-j> <Plug>MoveBlockDown
 vmap <C-k> <Plug>MoveBlockUp
 nmap <C-j> <Plug>MoveLineDown
@@ -350,8 +358,10 @@ nmap <C-k> <Plug>MoveLineUp
 " Dont use linewise motions
 nmap j gj
 nmap k gk
+
 " Argument wrapping
 nnoremap <silent> <Leader>aw :ArgWrap<CR>
+
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
 " bind ? to grep word under cursor
@@ -363,18 +373,22 @@ nmap <C-u> <C-u>zz
 nmap gV '[v']'
 " No more Ex mode please
 nnoremap Q <Nop>
+
 " Mappings made in iTerm2, so i can use Cmd key
 nmap openLineAbove O<Esc>j
 nmap saveBuffer :w<CR>
 imap saveBuffer <esc>:w<CR>
 vmap saveBuffer <esc>:w<CR>gv
 nmap <CR> o<Esc>k
+
 " Indent using tab in visual mode
 vnoremap <Tab> >gv
 vmap <S-Tab> <gv
+
 " Indent using tab in normal mode
 nmap <Tab> >>
 nmap <S-Tab> <<
+
 " Testing wrapping things
 vmap <Leader>{ o}megvoO{AI_mmv'e=
 vmap <Leader>} o}megvoO{AI_mmv'e=
@@ -382,6 +396,7 @@ vmap <Leader>( o)megvoO(AI_mmv'e=
 vmap <Leader>) o)megvoO(AI_mmv'e=
 vmap <Leader>[ o]megvoO[AI_mmv'e=
 vmap <Leader>] o]megvoO[AI_mmv'e=
+
 " Close quickfix
 nmap <Leader>cc :cclose<CR>
 " Open bufers
@@ -513,6 +528,12 @@ augroup reload_vimrc
     endif
 augroup END
 
+" Complement TAB key in insert-mode (comes from coc-snippets)
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 function! OpenCommandInPopWindow(width, height, border_highlight) abort
     let width = float2nr(&columns * a:width)
     let height = float2nr(&lines * a:height)
@@ -538,4 +559,5 @@ function! OpenCommandInPopWindow(width, height, border_highlight) abort
 
     return winid
 endfunction
+
 map <silent> <Leader>gp :call OpenCommandInPopWindow(0.9,0.6,'Todo')<CR>

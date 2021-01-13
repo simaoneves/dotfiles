@@ -73,6 +73,7 @@ ln -s ~/Dev/dotfiles/.bash_profile ~/.bash_profile
 ln -s ~/Dev/dotfiles/.gitconfig ~/.gitconfig
 ln -s ~/Dev/dotfiles/.gvimrc ~/.gvimrc
 ln -s ~/Dev/dotfiles/.vimrc ~/.vimrc
+ln -s ~/Dev/dotfiles/coc-settings.json ~/.vim/coc-settings.json
 ln -s ~/Dev/dotfiles/.ideavimrc ~/.ideavimrc
 ln -s ~/Dev/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/Dev/dotfiles/.skhdrc ~/.skhdrc
