@@ -256,7 +256,6 @@ alias .v="vim ."
 alias ,v="vim ."
 alias g.="gvim ."
 alias jess="java -cp jess.jar jess.Main"
-alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
 alias antlr4='java -jar /usr/local/lib/antlr-4.6-complete.jar'
 alias saver='pipes.sh -r 5000 -r0 -p6 -K'
 
@@ -439,3 +438,15 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+source "$HOME/.cargo/env"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="$HOME/.jenv/bin:$PATH"
