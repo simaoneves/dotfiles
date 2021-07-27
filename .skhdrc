@@ -3,6 +3,9 @@ cmd + shift + alt - c : open -a 'Google Chrome.app'
 cmd + shift + alt - t : open -a 'iTerm.app'
 cmd + shift + alt - s : open -a 'Slack.app'
 cmd + shift + alt - m : open -a 'Spotify.app'
+cmd + shift + alt - p : open -a 'Postman.app'
+cmd + shift + alt - w : open -a 'WhatsApp.app'
+cmd + shift + alt - i : open -a 'IntelliJ IDEA CE.app'
 
 # focus directions
 cmd + shift + alt - h : yabai -m window --focus west
@@ -25,7 +28,6 @@ cmd + shift + alt + ctrl - z : yabai -m window --toggle expose
 
 # balance
 cmd + shift + alt - 0 : yabai -m space --balance
-
 
 # focus workspace
 cmd + shift + alt - 1 : yabai -m space 1 --focus 1
