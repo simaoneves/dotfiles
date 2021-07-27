@@ -1,33 +1,88 @@
 let mapleader = " "
 
 set surround
+set commentary
+set argtextobj
+set NERDTree
+set textobj-entire
+set multiple-cursors
+set ReplaceWithRegister
+set textobj-indent
+
 set gdefault
 set clipboard=unnamedplus,unnamed
 set relativenumber
 set number
 set smartcase
 set scrolloff=6
-set timeoutlen=450
+set timeout=450
+set timeoutlen=350
 set incsearch
 set hlsearch
+set startofline=off
 
+let g:argtextobj_pairs="[:],(:),<:>"
+
+nmap <leader>\ :NERDTreeFind<cr>
+nmap <C-\> :NERDTreeFocus<cr>
 nmap <leader>j :action GotoDeclaration<cr>
 nmap <leader>t :action GotoFile<cr>
 nmap <leader>w :action CloseContent<cr>
 nmap <leader>r :action RunClass<cr>
 nmap <leader>f :action FindInPath<cr>
 nmap <leader>B :action Annotate<cr>
-nmap <leader>R :action RerunTests<cr>
+nmap <leader>r :action RerunTests<cr>
 nmap <leader>a :action GotoTest<cr>
 nmap <leader>o :action QuickJavaDoc<cr>
+nmap <leader>n :action GotoNextError<cr>
+nmap <leader>p :action GotoPreviousError<cr>
 
-nmap <A-l> :action NextSplitter<cr>
-nmap <A-h> :action PrevSplitter<cr>
+" Pane movement
+nmap <A-h> <C-w>h
+nmap <A-l> <C-w>l
+nmap <A-k> <C-w>k
+nmap <A-j> <C-w>j
 nmap <C-l> :action NextTab<cr>
 nmap <C-h> :action PreviousTab<cr>
 
+" Resize panes
+nmap <Left> :action StretchSplitToLeft<cr>
+nmap <Right> :action StretchSplitToRight<cr>
+nmap <Down> :action StretchSplitToBottom<cr>
+nmap <Up> :action StretchSplitToTop<cr>
+
+" ReplaceWithRegister operator
+nmap <C-p> gr
+
+" Surround operator"
+nmap <C-s> ys
+vmap <C-s> S
+
+" argtextobj, text objects dont seem to work as good,
+" we need to redefine each one for each operator we want to use with it
+nmap di, dia
+nmap da, daa
+nmap yi, yia
+nmap ya, yaa
+nmap ci, cia
+nmap ca, caa
+nmap <C-p>i, gria
+nmap <C-p>a, graa
+
+" Open search everywhere, the contents of the word the cursor was on will be copied,
+" paste must be done manually
+nnoremap ? yiw:action FindInPath<CR>
+
+" Change font size"
+nnoremap <leader>+ :action EditorIncreaseFontSize<CR>
+nnoremap <leader>- :action EditorDecreaseFontSize<CR>
+
 nnoremap cc :action CommentByLineComment<CR>
 vnoremap cc :action CommentByLineComment<CR>
+
+" these dont work properly
+nmap <C-o> :action Back<cr>
+nmap <C-i> :action Forward<cr>
 
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
