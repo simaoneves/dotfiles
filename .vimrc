@@ -42,12 +42,12 @@ Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'mxw/vim-jsx'
 Plug 'rhysd/vim-crystal'
-Plug 'tpope/vim-rails'
 Plug 'suan/vim-instant-markdown'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'aklt/plantuml-syntax'
 Plug 'udalov/kotlin-vim'
 Plug 'dzeban/vim-log-syntax'
+Plug 'mustache/vim-mustache-handlebars'
 
 " Themes
 Plug 'dracula/vim'
@@ -63,6 +63,7 @@ Plug 'ayu-theme/ayu-vim'
 Plug 'jnurmine/Zenburn'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'arcticicestudio/nord-vim'
+Plug 'bluz71/vim-moonfly-colors'
 
 " Text objects and operators
 Plug 'kana/vim-textobj-user'
@@ -78,6 +79,7 @@ Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tpope/vim-surround'
 Plug 'haya14busa/vim-operator-flashy'
 Plug 'AndrewRadev/dsf.vim'
+Plug 'Julian/vim-textobj-variable-segment'
 
 call plug#end()
 filetype plugin indent on    " required
@@ -98,9 +100,6 @@ let g:hybrid_custom_term_colors = 1
 let g:buftabline_indicators = 1
 " Show dotfiles in NERDTree
 let NERDTreeShowHidden = 1
-let g:UltiSnipsExpandTrigger="<NOP>"
-let g:UltiSnipsJumpForwardTrigger="<NOP>"
-let g:UltiSnipsJumpBackwardTrigger="<NOP>"
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
 let g:switch_mapping = "-"
@@ -169,13 +168,18 @@ let g:ale_completion_enabled = 1
 let g:ale_linters = {
 \   'ruby': ['rubocop', 'solargraph'],
 \   'kotlin': ['languageserver'],
+\   'crystal': ['crystalline'],
 \   'javascript': ['tsserver', 'eslint'],
-\   'typescript': ['tsserver', 'eslint']
+\   'typescript': ['tsserver', 'eslint'],
+\   'typescriptreact': ['tsserver', 'eslint']
 \}
 let g:ale_fixers = {
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
 \}
+
+" Only run linters named in ale_linters settings.
+let g:ale_linters_explicit = 1
 set omnifunc=ale#completion#OmniFunc
 
 " Customize fzf colors to match color scheme
@@ -192,6 +196,8 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+
+let g:fzf_layout = { 'down': '40%' }
 
 " Customize projections for javascript projects
 let g:projectionist_heuristics = {
@@ -221,8 +227,11 @@ let g:projectionist_heuristics = {
       \ }
 
 " Bugged for now in Macvim
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'options': '--preview "bat -p --theme=ansi-dark --color=always {}"' }), <bang>0)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': '--preview "bat -p --theme=gruvbox-dark --color=always {}"' }, <bang>0)
+
+" Trigger keys for next position in snippet
+let g:coc_snippet_next = '<TAB>'
+let g:coc_snippet_prev = '<S-TAB>'
 
 """"""""""""""""""""
 " Vim configurations
@@ -253,6 +262,8 @@ set re=1
 " Use both relative and normal line numbers
 set relativenumber
 set number
+" Use mouse for selecting panes and scrolling
+set mouse=n
 set autoindent
 " Expand Tabs to spaces
 set expandtab
@@ -286,8 +297,9 @@ set nostartofline
 set hlsearch
 " Highlight search while typing
 set incsearch
-" Load shell enviroment when running commands
-set shell=bash\ -l
+" Dont load shell enviroment when running commands, or else moving to a tmux
+" pane is super slow
+set shell=/bin/bash\ -i
 
 function! StatuslineGit()
   let l:branchname = fugitive#head()
@@ -299,7 +311,7 @@ function! LinterStatus() abort
     let l:all_errors = l:counts.error + l:counts.style_error
     let l:spelling = all_errors == 1 ? '' : 's'
 
-    return l:counts.total == 0 ? '' : printf(' ✗ %d error%s found ', all_errors, spelling)
+    return l:all_errors == 0 ? '' : printf(' ✗ %d error%s found ', all_errors, spelling)
 endfunction
 
 set statusline=
@@ -332,10 +344,6 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 
-" Trigger keys for next position in snippet
-let g:coc_snippet_next = '<TAB>'
-let g:coc_snippet_prev = '<S-TAB>'
-
 " C-j and C-k for autocompletion.
 inoremap <expr><C-j>  pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr><C-k>  pumvisible() ? "\<C-p>" : "\<C-k>"
@@ -359,13 +367,23 @@ nmap <C-k> <Plug>MoveLineUp
 nmap j gj
 nmap k gk
 
+" Move by word in command line mode
+cmap b <S-Left>
+cmap f <S-Right>
+
 " Argument wrapping
 nnoremap <silent> <Leader>aw :ArgWrap<CR>
 
 " Change ReplaceWithRegister default mapping
 nmap <C-p> gr
+
+" Change insert surround shortcut, from vim-surround
+nmap <C-s> ys
+vmap <C-s> S
+
 " bind ? to grep word under cursor
 nnoremap ? :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
 " Put cursor on the middle of the screen after moving
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
@@ -389,14 +407,6 @@ vmap <S-Tab> <gv
 nmap <Tab> >>
 nmap <S-Tab> <<
 
-" Testing wrapping things
-vmap <Leader>{ o}megvoO{AI_mmv'e=
-vmap <Leader>} o}megvoO{AI_mmv'e=
-vmap <Leader>( o)megvoO(AI_mmv'e=
-vmap <Leader>) o)megvoO(AI_mmv'e=
-vmap <Leader>[ o]megvoO[AI_mmv'e=
-vmap <Leader>] o]megvoO[AI_mmv'e=
-
 " Close quickfix
 nmap <Leader>cc :cclose<CR>
 " Open bufers
@@ -405,10 +415,12 @@ nmap <Leader>b :Buffer<CR>
 nmap <Leader>w :bp<CR>:bd #<CR>
 " Jump to definition (uses tags)
 nmap <Leader>j <C-]>
+
 " Open current word as a tag in a new horizontal split
 nmap <Leader>J :sp <CR>:exec("tag ".expand("<cword>"))<CR>
 " Find and replace word under cursor in file
 nmap <Leader>fr :%s/<C-R><C-W>//<Left>
+
 " Find what is in the search register and replace with what is in the
 " clipboard, inside a selection
 vmap <Leader>fr :s/<C-R>//<C-R>*/<Left>
@@ -441,12 +453,10 @@ nmap <Leader>r :Tags<CR>
 nmap <Leader>f :Ack!<Space>""OD
 " Find project wide with what is in the clipboard
 nmap <Leader>F :Ack! """<CR>
-" Lint current file using Rubocop
-nmap <Leader>l :RuboCop<CR>
+" Find references for word under the cursor
+nmap <Leader>l :ALEFindReferences<CR>
 " Fuzzy Finder, with preview
 nmap <Leader>t :Files<CR>
-" Fuzzy Finder for commands
-nmap <Leader>T :Commands<CR>
 " Run tests for current file
 nmap <Leader>rt :TestFile<CR>
 " Whose fault is this mess?
@@ -458,7 +468,7 @@ nmap <Leader>rn :TestNearest<CR>
 " Close pane used by Vimux
 nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command
-nmap <Leader>dc :VimuxPromptCommand<CR>
+nmap <Leader>vp :VimuxPromptCommand<CR>
 " Zoom in on the tmux pane
 nmap <Leader>zr :VimuxZoomRunner<CR>
 " Run last command with Vimux
@@ -481,6 +491,9 @@ noremap <up>    <C-W>+
 noremap <down>  <C-W>-
 noremap <left>  3<C-W><
 noremap <right> 3<C-W>>
+
+" Update GitGutter on save
+autocmd BufWritePost * GitGutter
 
 " This helps if there was any change to buffer, to be used with autoread
 autocmd CursorHold * checktime
@@ -505,28 +518,18 @@ function! ShowMeTheQuotesPlease()
 endfunction
 
 " Use ALEGoToDefinition and Next/Previous error
-autocmd FileType typescript.tsx,typescript,javascript call ChangeJumpToDefinition()
+autocmd FileType typescript.tsx,typescript,javascript,typescriptreact call ChangeJumpToDefinition()
 function! ChangeJumpToDefinition()
     nmap <Leader>j :ALEGoToDefinition<CR>
     nmap <Leader>n <Plug>(ale_previous_wrap)
     nmap <Leader>p <Plug>(ale_next_wrap)
 endfunction
 
-
 " Add error color for lines greater than 72 chars in gitcommit
 autocmd FileType gitcommit call SetColorColumnAfter72Chars()
 function! SetColorColumnAfter72Chars()
     match errormsg '\%>72v.\+'
 endfunction
-
-" Auto reload vimrc
-augroup reload_vimrc
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
-    if has("gui_running")
-        source ~/.gvimrc
-    endif
-augroup END
 
 " Complement TAB key in insert-mode (comes from coc-snippets)
 function! s:check_back_space() abort
@@ -561,3 +564,25 @@ function! OpenCommandInPopWindow(width, height, border_highlight) abort
 endfunction
 
 map <silent> <Leader>gp :call OpenCommandInPopWindow(0.9,0.6,'Todo')<CR>
+
+" autogroup to track last open buffer
+augroup bufclosetrack
+  au!
+  autocmd WinLeave * let g:lastWinName = @%
+augroup END
+function! LastWindow()
+  exe "split " . g:lastWinName
+endfunction
+command -nargs=0 LastWindow call LastWindow()
+map <silent> <Leader>T :call LastWindow()<CR>
+
+" This must be the last thing in vimrc for some weird reason
+" Auto reload vimrc
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    if has("gui_running")
+        source ~/.gvimrc
+    endif
+augroup END
+
