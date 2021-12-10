@@ -18,7 +18,6 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch'
-Plug 'teranex/jk-jumps.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'matze/vim-move'
 Plug 'rhysd/committia.vim'
@@ -27,14 +26,11 @@ Plug 'janko-m/vim-test'
 Plug 'ap/vim-buftabline'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-abolish'
-Plug 'scrooloose/vim-slumlord'
 Plug 'RRethy/vim-illuminate'
 Plug 'junegunn/vim-peekaboo'
 Plug 'FooSoft/vim-argwrap'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'editorconfig/editorconfig-vim'
-Plug 'brooth/far.vim'
-Plug 'rstacruz/vim-xtract'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -46,6 +42,7 @@ Plug 'suan/vim-instant-markdown'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'aklt/plantuml-syntax'
 Plug 'udalov/kotlin-vim'
+" Plug 'simaoneves/kotlin-vim', { 'branch': 'add-highlight' }
 Plug 'dzeban/vim-log-syntax'
 Plug 'mustache/vim-mustache-handlebars'
 
@@ -57,9 +54,6 @@ Plug 'MaxSt/FlatColor'
 Plug 'rakr/vim-one'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'morhetz/gruvbox'
-Plug 'junegunn/seoul256.vim'
-Plug 'trevordmiller/nova-vim'
-Plug 'ayu-theme/ayu-vim'
 Plug 'jnurmine/Zenburn'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'arcticicestudio/nord-vim'
@@ -71,7 +65,7 @@ Plug 'kana/vim-operator-user'
 Plug 'glts/vim-textobj-comment'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
-Plug 'sgur/vim-textobj-parameter'
+Plug 'machakann/vim-swap'
 Plug 'beloglazov/vim-textobj-quotes'
 Plug 'tek/vim-textobj-ruby'
 Plug 'tpope/vim-commentary'
@@ -94,27 +88,23 @@ let g:instant_markdown_autostart = 0
 " Disable automatic mappings from vim-move plugin
 let g:move_map_keys = 0
 let g:spring_night_high_contrast = 0
-let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
-let g:hybrid_custom_term_colors = 1
 " Show modified indicator in bufline
 let g:buftabline_indicators = 1
 " Show dotfiles in NERDTree
 let NERDTreeShowHidden = 1
 " JSX indenting and syntax doesnt require .jsx extensions
 let g:jsx_ext_required = 0
-let g:switch_mapping = "-"
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep --hidden --ignore "tags" --ignore ".git/"'
-
 endif
 " Make test commands execute using vimux
 let test#strategy = "vimux"
 
 " Use docker-compose to run tests if we are using containers
 function! DockerTransformation(cmd) abort
-    if filereadable('build.gradle')
+    if filereadable('build.gradle') || filereadable('build.gradle.kts')
         return a:cmd
     endif
     if filereadable('package.json')
@@ -129,9 +119,7 @@ let g:test#custom_transformations = {'docker': function('DockerTransformation')}
 let g:test#transformation = 'docker'
 
 " Time in miliseconds before highlight other occurences of word under cursor
-let g:Illuminate_delay = 300
-" Make sure the highlighted occurences of the word under the cursor are visible
-highlight link illuminatedWord Visual
+let g:Illuminate_delay = 200
 
 " Change color and char of indent lines
 let g:indentLine_setColors = 1
@@ -148,6 +136,32 @@ let g:peekaboo_window = 'vertical botright 100new'
 " Add comma when unwrapping arguments
 let g:argwrap_tail_comma = 1
 
+" Custom Switch definitions
+let g:switch_mapping = "-"
+let g:switch_custom_definitions =
+    \ [
+    \   ['off', 'on'],
+    \   ['all', 'none'],
+    \   ['width', 'height'],
+    \   ['margin', 'padding'],
+    \   ['bottom', 'top'],
+    \   ['left', 'right'],
+    \   ['less', 'more'],
+    \   ['min', 'max'],
+    \   ['start', 'end'],
+    \   ['first', 'last'],
+    \   ['next', 'previous'],
+    \   ['vertical', 'horizontal'],
+    \   ['row', 'column'],
+    \   ['debug', 'info'],
+    \   ['warning', 'error'],
+    \   ['size', 'length'],
+    \   ['upper', 'lower'],
+    \   ['if', 'unless'],
+    \   ['<', '>'],
+    \   ['<=', '>=']
+    \ ]
+
 " ALE
 " Solves bug: ":h ale-completion-completeopt-bug"
 set completeopt=menu,menuone,preview,noselect,noinsert
@@ -156,6 +170,8 @@ let g:ale_sign_warning = '▲'
 let g:ale_sign_error = '✗'
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
+" Don't Hover all the time, some language servers are slow and this is a blocking operation
+let g:ale_hover_cursor = 0
 " Delay in miliseconds until ale completion kicks in
 let g:ale_completion_delay = 50
 " Only run ALE on save
@@ -166,16 +182,19 @@ let g:ale_lint_on_enter = 1
 let g:ale_completion_enabled = 1
 " Configured linters and fixers
 let g:ale_linters = {
-\   'ruby': ['rubocop', 'solargraph'],
+\   'ruby': [],
 \   'kotlin': ['languageserver'],
 \   'crystal': ['crystalline'],
 \   'javascript': ['tsserver', 'eslint'],
 \   'typescript': ['tsserver', 'eslint'],
-\   'typescriptreact': ['tsserver', 'eslint']
+\   'typescriptreact': ['tsserver', 'eslint'],
+\   'sh': ['language_server'],
 \}
 let g:ale_fixers = {
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
+\   'typescriptreact': ['prettier'],
+\   'kotlin': ['ktlint'],
 \}
 
 " Only run linters named in ale_linters settings.
@@ -215,7 +234,9 @@ let g:projectionist_heuristics = {
       \       "spec/unit/*_spec.rb": { "alternate": "lib/{}.rb" },
       \       "spec/integration/*_spec.rb": { "alternate": "lib/{}.rb" },
       \       "spec/acceptance/*_spec.rb": { "alternate": "lib/{}.rb" },
+      \       "spec/controllers/*_spec.rb": { "alternate": "app/controllers/{}.rb" },
       \       "lib/*.rb": { "alternate": "spec/unit/{}_spec.rb" },
+      \       "app/controllers/*.rb": { "alternate": "spec/controllers/{}_spec.rb" },
       \       "lib/central/*.rb": { "alternate": "spec/unit/{}_spec.rb" },
       \       "spec/unit/web/*_spec.rb": { "alternate": "web/{}.rb" },
       \       "web/*.rb": { "alternate": "spec/unit/web/{}_spec.rb" }
@@ -232,6 +253,12 @@ command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'optio
 " Trigger keys for next position in snippet
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'
+
+" Make sure we have text-objects for arguments, from vim-swap
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
 
 """"""""""""""""""""
 " Vim configurations
@@ -354,6 +381,9 @@ nmap <C-h> :bp<CR>
 imap <C-l> <Esc>:bn<CR>
 imap <C-h> <Esc>:bp<CR>
 
+" == for format file
+nmap == mz=ae`z
+
 " Use Space-Space to Hover with ALE
 nnoremap <silent> <Leader><Leader> :ALEHover<CR>
 
@@ -364,8 +394,9 @@ nmap <C-j> <Plug>MoveLineDown
 nmap <C-k> <Plug>MoveLineUp
 
 " Dont use linewise motions
-nmap j gj
-nmap k gk
+" and make sure that we update the jump-list
+nnoremap <expr> j (v:count > 5 ? "m'" . v:count : "") . 'gj'
+nnoremap <expr> k (v:count > 5 ? "m'" . v:count : "") . 'gk'
 
 " Move by word in command line mode
 cmap b <S-Left>
@@ -380,6 +411,10 @@ nmap <C-p> gr
 " Change insert surround shortcut, from vim-surround
 nmap <C-s> ys
 vmap <C-s> S
+
+" Change insert surround shortcut, from vim-surround
+nmap gl g>
+nmap gh g<
 
 " bind ? to grep word under cursor
 nnoremap ? :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
@@ -397,6 +432,8 @@ nmap openLineAbove O<Esc>j
 nmap saveBuffer :w<CR>
 imap saveBuffer <esc>:w<CR>
 vmap saveBuffer <esc>:w<CR>gv
+
+" Open new line without going into insert mode
 nmap <CR> o<Esc>k
 
 " Indent using tab in visual mode
@@ -460,7 +497,7 @@ nmap <Leader>t :Files<CR>
 " Run tests for current file
 nmap <Leader>rt :TestFile<CR>
 " Whose fault is this mess?
-nmap <Leader>B :Gblame<CR>
+nmap <Leader>B :Git blame<CR>
 " Run all tests
 nmap <Leader>ra :TestSuite<CR>
 " Run Test in this line
@@ -501,7 +538,7 @@ autocmd CursorHold * checktime
 " Kotlin settings
 autocmd FileType kotlin call SetAlternativeColorscheme()
 function! SetAlternativeColorscheme()
-    colorscheme one
+    colorscheme spring-night
 endfunction
 
 " Ruby and Crystal settings
@@ -518,11 +555,11 @@ function! ShowMeTheQuotesPlease()
 endfunction
 
 " Use ALEGoToDefinition and Next/Previous error
-autocmd FileType typescript.tsx,typescript,javascript,typescriptreact call ChangeJumpToDefinition()
+autocmd FileType typescript.tsx,typescript,javascript,typescriptreact,kotlin,crystal call ChangeJumpToDefinition()
 function! ChangeJumpToDefinition()
     nmap <Leader>j :ALEGoToDefinition<CR>
-    nmap <Leader>n <Plug>(ale_previous_wrap)
-    nmap <Leader>p <Plug>(ale_next_wrap)
+    nmap <Leader>n <Plug>(ale_next_wrap)
+    nmap <Leader>p <Plug>(ale_previous_wrap)
 endfunction
 
 " Add error color for lines greater than 72 chars in gitcommit
@@ -537,6 +574,19 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" Save last closed buffer, in case we want to open it again
+autocmd BufUnload * call SaveLastClosedBuffer()
+function! OpenLastClosedBuffer()
+  exe "e " . g:lastWinName
+endfunction
+function! SaveLastClosedBuffer()
+  let filename = expand('<afile>')
+  if filename != "!sh" && filename != ""
+      let g:lastWinName = filename
+  end
+endfunction
+map <silent> <Leader>T :call OpenLastClosedBuffer()<CR>
+
 function! OpenCommandInPopWindow(width, height, border_highlight) abort
     let width = float2nr(&columns * a:width)
     let height = float2nr(&lines * a:height)
@@ -546,35 +596,24 @@ function! OpenCommandInPopWindow(width, height, border_highlight) abort
     let bufnr = term_start(cmd, {'hidden': 1, 'term_finish': 'close', 'cwd': getcwd()})
 
     let winid = popup_create(bufnr, {
-            \ 'minwidth': width,
-            \ 'maxwidth': width,
-            \ 'minheight': height,
-            \ 'maxheight': height,
-            \ 'border': [],
-            \ 'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
-            \ 'borderhighlight': [a:border_highlight],
-            \ 'padding': [0,1,0,1],
-            \ 'highlight': a:border_highlight
-            \ })
+                \ 'minwidth': width,
+                \ 'maxwidth': width,
+                \ 'minheight': height,
+                \ 'maxheight': height,
+                \ 'border': [],
+                \ 'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+                \ 'borderhighlight': [a:border_highlight],
+                \ 'padding': [0,1,0,1],
+                \ 'highlight': a:border_highlight
+                \ })
 
     " Optionally set the 'Normal' color for the terminal buffer
     call setwinvar(winid, '&wincolor', 'Special')
 
     return winid
 endfunction
-
 map <silent> <Leader>gp :call OpenCommandInPopWindow(0.9,0.6,'Todo')<CR>
 
-" autogroup to track last open buffer
-augroup bufclosetrack
-  au!
-  autocmd WinLeave * let g:lastWinName = @%
-augroup END
-function! LastWindow()
-  exe "split " . g:lastWinName
-endfunction
-command -nargs=0 LastWindow call LastWindow()
-map <silent> <Leader>T :call LastWindow()<CR>
 
 " This must be the last thing in vimrc for some weird reason
 " Auto reload vimrc
@@ -585,4 +624,3 @@ augroup reload_vimrc
         source ~/.gvimrc
     endif
 augroup END
-
