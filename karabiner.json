@@ -9,7 +9,8 @@
                         {
                             "bundle_identifiers": [
                                 "^com\\.tinyspeck\\.slackmacgap$",
-                                "com\\.google\\.Chrome"
+                                "com\\.google\\.Chrome",
+                                "com\\.evernote\\.Evernote"
                             ],
                             "type": "frontmost_application_if"
                         }
@@ -36,7 +37,8 @@
                     {
                         "bundle_identifiers": [
                             "^com\\.tinyspeck\\.slackmacgap$",
-                            "com\\.google\\.Chrome"
+                            "com\\.google\\.Chrome",
+                            "com\\.evernote\\.Evernote"
                         ],
                         "type": "frontmost_application_if"
                     }
@@ -64,7 +66,8 @@
                         "bundle_identifiers": [
                             "^com\\.tinyspeck\\.slackmacgap$",
                             "com\\.google\\.Chrome",
-                            "com\\.todoist\\.mac\\.Todoist"
+                            "com\\.todoist\\.mac\\.Todoist",
+                            "com\\.evernote\\.Evernote"
                         ],
                         "type": "frontmost_application_if"
                     }

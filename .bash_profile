@@ -161,7 +161,7 @@ alias db="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
-alias dot="cd ~/Dev/dotfiles"
+alias dotfiles="cd ~/Dev/dotfiles"
 alias sabe="cd ~/Dev/sabe/sabe-online-web"
 alias gh="cd ~/Dev/gymhopper"
 alias gha="cd ~/Dev/gymhopper/gymhopper"
@@ -256,6 +256,7 @@ alias .v="vim ."
 alias ,v="vim ."
 alias g.="gvim ."
 alias jess="java -cp jess.jar jess.Main"
+# alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
 alias antlr4='java -jar /usr/local/lib/antlr-4.6-complete.jar'
 alias saver='pipes.sh -r 5000 -r0 -p6 -K'
 
