@@ -30,7 +30,7 @@ brew install python
 brew install rabbitmq
 brew install reattach-to-user-namespace
 brew install ripgrep
-brew install skhd
+brew install koekeishiya/formulae/skhd
 brew install the_silver_searcher
 brew install tmux
 brew install tree

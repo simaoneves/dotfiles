@@ -2,6 +2,32 @@
     "title": "Simon config keys",
     "rules": [
         {
+            "description": "Post escape if caps is pressed alone, left_ctrl otherwise",
+            "manipulators": [
+                {
+                    "from": {
+                        "key_code": "caps_lock",
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "left_control"
+                        }
+                    ],
+                    "to_if_alone": [
+                        {
+                            "key_code": "escape"
+                        }
+                    ],
+                    "type": "basic"
+                }
+            ]
+        },
+        {
             "description": "Slack and Chrome ctrl-j/k and ctrl-w",
             "manipulators": [
                 {
@@ -94,10 +120,10 @@
                     "modifiers": []
                     }
 
-              ],
-              "type": "basic"
-          }
-      ]
-    }
-  ]
+                ],
+                "type": "basic"
+                }
+            ]
+        }
+    ]
 }
