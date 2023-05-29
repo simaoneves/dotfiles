@@ -1,3 +1,5 @@
+[core]
+    excludesfile = ~/.global.gitignore
 [user]
 	name = Simão Neves
 	email = simaocostaneves@gmail.com
@@ -15,6 +17,6 @@
     branch = red
     unmerged = blue
 [init]
-	templatedir = /Users/simon/.git-templates
+	templatedir = ~/.git-templates
 [commit]
-	template = /Users/simon/.git-templates/git_commit_message.txt
+	template = ~/.git-templates/git_commit_message.txt
