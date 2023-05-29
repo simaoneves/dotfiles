@@ -31,6 +31,10 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'FooSoft/vim-argwrap'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'editorconfig/editorconfig-vim'
+Plug 'romainl/vim-qf' " quickfix list improvement
+Plug 'markonm/traces.vim'
+Plug 'ryanoasis/vim-devicons'
+Plug 'junegunn/vim-easy-align'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -45,12 +49,14 @@ Plug 'udalov/kotlin-vim'
 " Plug 'simaoneves/kotlin-vim', { 'branch': 'add-highlight' }
 Plug 'dzeban/vim-log-syntax'
 Plug 'mustache/vim-mustache-handlebars'
+Plug 'tpope/vim-rails'
 
 " Themes
 Plug 'dracula/vim'
+Plug 'Soares/base16.nvim' " has Gooey
 Plug 'chriskempson/base16-vim'
 Plug 'rhysd/vim-color-spring-night'
-Plug 'MaxSt/FlatColor'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'rakr/vim-one'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'morhetz/gruvbox'
@@ -58,6 +64,7 @@ Plug 'jnurmine/Zenburn'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'arcticicestudio/nord-vim'
 Plug 'bluz71/vim-moonfly-colors'
+Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
 
 " Text objects and operators
 Plug 'kana/vim-textobj-user'
@@ -102,6 +109,15 @@ endif
 " Make test commands execute using vimux
 let test#strategy = "vimux"
 
+" Vimux prompt
+let g:VimuxPromptString = '❯ '
+let g:VimuxOrientation = 'h'
+
+" Change gitgutter signs
+let g:gitgutter_sign_added = '▍'
+let g:gitgutter_sign_modified = '▍'
+let g:gitgutter_sign_removed = '▁'
+
 " Use docker-compose to run tests if we are using containers
 function! DockerTransformation(cmd) abort
     if filereadable('build.gradle') || filereadable('build.gradle.kts')
@@ -133,47 +149,80 @@ let g:peekaboo_delay = 250
 " Adjust the window that opens with the registers
 let g:peekaboo_window = 'vertical botright 100new'
 
-" Add comma when unwrapping arguments
+" Add/remove comma when unwrapping arguments
 let g:argwrap_tail_comma = 1
-
+" Add/remove padding space on {}
+let g:argwrap_padded_braces = '{'
 " Custom Switch definitions
 let g:switch_mapping = "-"
+let g:switch_find_smallest_match = 1
+
+" Trying to change between multiline and single line blocks
+" { |.*| .* }
+" into
+" do |.*|
+"   .*
+" end
+" autocmd FileType ruby let b:switch_custom_definitions =
+"     \ [
+"     \   {
+"     \     '{\s+\|\(\k\+\)\|\s+\(.*\)\s+}': 'do \|\1\|\n\2\nend',
+"     \   },
+"     \ ]
+
 let g:switch_custom_definitions =
     \ [
-    \   ['off', 'on'],
-    \   ['all', 'none'],
+    \   ['foreground', 'background'],
+    \   ['vertical', 'horizontal'],
+    \   ['standard', 'express'],
+    \   ['before', 'after'],
+    \   ['next', 'previous'],
+    \   ['warning', 'error'],
+    \   ['once', 'twice'],
     \   ['width', 'height'],
     \   ['margin', 'padding'],
     \   ['bottom', 'top'],
     \   ['left', 'right'],
-    \   ['less', 'more'],
-    \   ['min', 'max'],
     \   ['start', 'end'],
     \   ['first', 'last'],
-    \   ['next', 'previous'],
-    \   ['vertical', 'horizontal'],
-    \   ['row', 'column'],
-    \   ['debug', 'info'],
-    \   ['warning', 'error'],
+    \   ['even', 'odd'],
     \   ['size', 'length'],
+    \   ['enable', 'disable'],
+    \   ['debug', 'info'],
+    \   ['row', 'column'],
+    \   ['less', 'more'],
     \   ['upper', 'lower'],
+    \   ['get', 'post'],
+    \   ['min', 'max'],
+    \   ['all', 'none'],
     \   ['if', 'unless'],
+    \   ['to', 'not_to'],
+    \   ['off', 'on'],
+    \   ['up', 'down'],
+    \   ['<=', '>='],
     \   ['<', '>'],
-    \   ['<=', '>=']
     \ ]
 
 " ALE
 " Solves bug: ":h ale-completion-completeopt-bug"
-set completeopt=menu,menuone,preview,noselect,noinsert
+set completeopt=menu,menuone,popup,noselect,noinsert
+let g:ale_floating_preview = 1
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
 " Update signs used in gutter, as well as the colors
 let g:ale_sign_warning = '▲'
 let g:ale_sign_error = '✗'
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
+" Don't show virtual text with problems all the time
+let g:ale_virtualtext_cursor = 0
 " Don't Hover all the time, some language servers are slow and this is a blocking operation
 let g:ale_hover_cursor = 0
+let g:ale_hover_to_floating_preview = 1
+let g:ale_floating_preview = 1
 " Delay in miliseconds until ale completion kicks in
-let g:ale_completion_delay = 50
+" Some LSP are slower or faster and the results might be influenced if the
+" normal popup opens first
+let g:ale_completion_delay = 100
 " Only run ALE on save
 let g:ale_lint_on_text_changed = 'never'
 " Enable linter on enter
@@ -182,7 +231,7 @@ let g:ale_lint_on_enter = 1
 let g:ale_completion_enabled = 1
 " Configured linters and fixers
 let g:ale_linters = {
-\   'ruby': [],
+\   'ruby': ['sorbet', 'rubocop'],
 \   'kotlin': ['languageserver'],
 \   'crystal': ['crystalline'],
 \   'javascript': ['tsserver', 'eslint'],
@@ -195,6 +244,7 @@ let g:ale_fixers = {
 \   'typescript': ['prettier'],
 \   'typescriptreact': ['prettier'],
 \   'kotlin': ['ktlint'],
+\   'ruby': ['sorbet', 'rubocop'],
 \}
 
 " Only run linters named in ale_linters settings.
@@ -210,13 +260,21 @@ let g:fzf_colors =
   \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
   \ 'hl+':     ['fg', 'Statement'],
   \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
   \ 'prompt':  ['fg', 'Conditional'],
   \ 'pointer': ['fg', 'Exception'],
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
+" Customize FZF layout
 let g:fzf_layout = { 'down': '40%' }
+
+" Jump to existing window if possible
+let g:fzf_buffers_jump = 1
+
+" Enable commands history with Ctrl-n and Ctrl-p in FZF
+let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 " Customize projections for javascript projects
 let g:projectionist_heuristics = {
@@ -225,21 +283,18 @@ let g:projectionist_heuristics = {
       \       "src/*.jsx": { "alternate": "src/{}.spec.jsx" },
       \       "src/*.spec.js": { "alternate": "src/{}.js" },
       \       "src/*.spec.jsx": { "alternate": "src/{}.jsx" },
-      \       "src/*.ts": { "alternate": "src/{}.test.ts" },
-      \       "src/*.tsx": { "alternate": "src/{}.test.tsx" },
-      \       "src/*.test.ts": { "alternate": "src/{}.ts" },
-      \       "src/*.test.tsx": { "alternate": "src/{}.tsx" },
+      \       "*.ts": { "alternate": "{}.test.ts" },
+      \       "*.tsx": { "alternate": "{}.test.tsx" },
+      \       "*.test.ts": { "alternate": "{}.ts" },
+      \       "*.test.tsx": { "alternate": "{}.tsx" },
       \   },
       \   "lib/|Gemfile": {
-      \       "spec/unit/*_spec.rb": { "alternate": "lib/{}.rb" },
-      \       "spec/integration/*_spec.rb": { "alternate": "lib/{}.rb" },
-      \       "spec/acceptance/*_spec.rb": { "alternate": "lib/{}.rb" },
-      \       "spec/controllers/*_spec.rb": { "alternate": "app/controllers/{}.rb" },
-      \       "lib/*.rb": { "alternate": "spec/unit/{}_spec.rb" },
-      \       "app/controllers/*.rb": { "alternate": "spec/controllers/{}_spec.rb" },
-      \       "lib/central/*.rb": { "alternate": "spec/unit/{}_spec.rb" },
-      \       "spec/unit/web/*_spec.rb": { "alternate": "web/{}.rb" },
-      \       "web/*.rb": { "alternate": "spec/unit/web/{}_spec.rb" }
+      \       "spec/*_spec.rb": { "alternate": "app/{}.rb" },
+      \       "app/*.rb": { "alternate": "spec/{}_spec.rb" },
+      \   },
+      \   "src/|shard.yml": {
+      \       "spec/*_spec.cr": { "alternate": "src/{}.cr" },
+      \       "src/*.cr": { "alternate": "spec/{}_spec.cr" },
       \   },
       \   "build.gradle": {
       \       "src/main/kotlin/*.kt": {"alternate": "src/test/kotlin/{}Test.kt"},
@@ -283,9 +338,8 @@ if !has("gui_running")
     set t_Co=256
     set term=xterm-256color
 endif
-colorscheme gruvbox
+colorscheme moonfly
 set background=dark
-set re=1
 " Use both relative and normal line numbers
 set relativenumber
 set number
@@ -295,7 +349,8 @@ set autoindent
 " Expand Tabs to spaces
 set expandtab
 set tabstop=4 shiftwidth=4 softtabstop=4
-set so=6
+set scrolloff=6
+set sidescrolloff=6
 " When a file changes outside of vim, reload it automatically
 set autoread
 " Apply substitutions globally by default (no need to use g)
@@ -329,8 +384,16 @@ set incsearch
 set shell=/bin/bash\ -i
 
 function! StatuslineGit()
-  let l:branchname = fugitive#head()
-  return strlen(l:branchname) > 0 ? '  '.l:branchname : ''
+  let l:branchname = FugitiveHead()
+  " truncate on more than 50 chars
+  if strlen(l:branchname) > 50
+      return '  '. l:branchname[0 : 50] . '..'
+  elseif strlen(l:branchname) > 0
+      return '  '. l:branchname
+  else
+      return''
+  endif
+
 endfunction
 
 function! LinterStatus() abort
@@ -338,21 +401,52 @@ function! LinterStatus() abort
     let l:all_errors = l:counts.error + l:counts.style_error
     let l:spelling = all_errors == 1 ? '' : 's'
 
-    return l:all_errors == 0 ? '' : printf(' ✗ %d error%s found ', all_errors, spelling)
+    return l:all_errors == 0 ? '' : printf('✗ %d error%s ', all_errors, spelling)
 endfunction
+
+function! FileModified() abort
+    if &modified
+        return "⏺ "
+    else
+        return ""
+    endif
+endfunction
+
+function! CombineHighlightGroup(new_highlight, foreground_highlight, background_highlight) abort
+    exec 'hi ' . a:new_highlight .
+                \' guifg=' . synIDattr(synIDtrans(hlID(a:foreground_highlight)), 'fg', 'gui') .
+                \' guibg=' . synIDattr(synIDtrans(hlID(a:background_highlight)), 'bg', 'gui')
+endfunction
+
+eval CombineHighlightGroup('CustomStatusLineFile', 'Function', 'StatusLine')
+eval CombineHighlightGroup('CustomStatusLineError', 'Error', 'StatusLine')
+eval CombineHighlightGroup('CustomStatusLineBranch', 'CursorLineSign', 'StatusLine')
+eval CombineHighlightGroup('CustomStatusLineFileType', 'Keyword', 'StatusLine')
 
 set statusline=
 set statusline+=\ [%{mode()}] " Mode
-set statusline+=\ %F " Filename
-set statusline+=%m " Modifiable
+set statusline+=\%#CustomStatusLineFile# " Use Error highlight group
+set statusline+=\ %{WebDevIconsGetFileTypeSymbol()}\ %f " Filename
+set statusline+=\  " Give some spacing to filename if it gets truncated
+set statusline+=%{FileModified()} " If file is modified
+set statusline+=%* " Return to default color
+set statusline+=%< " Force truncation to accommodate narrow windows
 set statusline+=%= " Seperation between left and right side
 set statusline+=\ %c:%L " Line number and column
+set statusline+=%#CustomStatusLineBranch# " Use Error highlight group
 set statusline+=%{StatuslineGit()}
-set statusline+=\ %y " Filetype
-set statusline+=\ %#Error# " use Error highlight group
+set statusline+=\ %* " Return to default color
+set statusline+=%#CustomStatusLineError# " Use Error highlight group
 set statusline+=%{LinterStatus()}
-set statusline+=%* "return to default color
+set statusline+=%* " Return to default color
+set statusline+=%#CustomStatusLineFileType# " Use Error highlight group
+set statusline+=%y " Filetype
+set statusline+=%* " Return to default color
 set statusline+=\ 
+
+" common typos of my fingers
+iabbrev udpate update
+iabbrev  seperate  separate
 
 """""""""""""""""""""""
 " Keymap configurations
@@ -364,16 +458,30 @@ nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
 
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
 " Use Tab key for trigger completion, selection and snippet expand
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#pum#visible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 
 " C-j and C-k for autocompletion.
-inoremap <expr><C-j>  pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr><C-k>  pumvisible() ? "\<C-p>" : "\<C-k>"
+inoremap <expr><C-j>  coc#pum#visible() ? coc#pum#next(1) : pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr><C-k>  coc#pum#visible() ? coc#pum#prev(1) : pumvisible() ? "\<C-p>" : "\<C-k>"
+
+" evaluating since coc now has a propriatary popup for completion
+hi CocSearch ctermfg=12 guifg=#18A3FF
+hi CocMenuSel ctermbg=109 guibg=#13354A
+" auto update the CocMenuSel when changing colorscheme
+autocmd ColorScheme * hi CocSearch ctermfg=12 guifg=#18A3FF
+autocmd ColorScheme * hi CocMenuSel ctermbg=109 guibg=#13354A
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " Use C-h and C-l to change buffers
 nmap <C-l> :bn<CR>
@@ -446,6 +554,9 @@ nmap <S-Tab> <<
 
 " Close quickfix
 nmap <Leader>cc :cclose<CR>
+" Cycle through results in quickfix
+nmap <Leader>N :cnext<CR>
+nmap <Leader>P :cprev<CR>
 " Open bufers
 nmap <Leader>b :Buffer<CR>
 " Move to last buffer and close the one we were on
@@ -480,8 +591,9 @@ nmap <Leader>e <C-g>,
 " Cycle between results
 nmap <Leader>n :cn<CR>
 nmap <Leader>p :cp<CR>
-" Open alternate file in a vertical split
+" Open alternate file in a vertical or horizontal split
 nmap <Leader>va :AV<CR>
+nmap <Leader>sa :AS<CR>
 " Open alternate file
 nmap <Leader>a :A<CR>
 " Open tags in current file
@@ -490,7 +602,7 @@ nmap <Leader>r :Tags<CR>
 nmap <Leader>f :Ack!<Space>""OD
 " Find project wide with what is in the clipboard
 nmap <Leader>F :Ack! """<CR>
-" Find references for word under the cursor
+" Find references for word under the cursor and populate the quickfix list
 nmap <Leader>l :ALEFindReferences<CR>
 " Fuzzy Finder, with preview
 nmap <Leader>t :Files<CR>
@@ -506,6 +618,8 @@ nmap <Leader>rn :TestNearest<CR>
 nmap <Leader>cr :VimuxCloseRunner<CR>
 " Run custom command
 nmap <Leader>vp :VimuxPromptCommand<CR>
+" Vimux Runner
+nmap <Leader>vz :VimuxInspectRunner<CR>:VimuxZoomRunner<CR>
 " Zoom in on the tmux pane
 nmap <Leader>zr :VimuxZoomRunner<CR>
 " Run last command with Vimux
@@ -513,6 +627,9 @@ nmap <Leader>rr :VimuxRunLastCommand<CR>
 " Flash text on yank
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
+" Vimux Runner
+nmap <Leader>v <Plug>BufTabLine.Go(1)
+
 " Shortcut to 'tabs'
 nmap <Leader>1 <Plug>BufTabLine.Go(1)
 nmap <Leader>2 <Plug>BufTabLine.Go(2)
@@ -524,13 +641,21 @@ nmap <Leader>7 <Plug>BufTabLine.Go(7)
 nmap <Leader>8 <Plug>BufTabLine.Go(8)
 nmap <Leader>9 <Plug>BufTabLine.Go(9)
 " Resize windows using arrow keys
-noremap <up>    <C-W>+
-noremap <down>  <C-W>-
-noremap <left>  3<C-W><
-noremap <right> 3<C-W>>
+noremap <Up>    <C-W>+
+noremap <Down>  <C-W>-
+noremap <Left>  3<C-W><
+noremap <Right> 3<C-W>>
+
+" Enable command-mouseclick to go to definition (<LeftMouse> is needed to put
+" the cursor in the correct spot)
+map <M-LeftMouse> <LeftMouse>:ALEGoToDefinition<CR>
+map <MiddleMouse> <LeftMouse>
 
 " Update GitGutter on save
 autocmd BufWritePost * GitGutter
+" Remap the jump to next/previous hunks
+nmap ]] <Plug>(GitGutterNextHunk)
+nmap [[ <Plug>(GitGutterPrevHunk)
 
 " This helps if there was any change to buffer, to be used with autoread
 autocmd CursorHold * checktime
@@ -544,22 +669,43 @@ endfunction
 " Ruby and Crystal settings
 autocmd FileType ruby,eruby,crystal call SetTwoSpacesSettings()
 function! SetTwoSpacesSettings()
-    match errormsg '\%>110v.\+'
+    match errormsg '\%>115v.\+'
     set tabstop=2 shiftwidth=2 softtabstop=2
+    " Make sure ruby syntax highlighting is not incredible
+    " slow by changing the regex engine
+    set re=1
 endfunction
 
 " Show me the all the quotes in JSON please
-autocmd BufEnter,BufCreate,BufNew,BufNewFile,BufAdd *.json call ShowMeTheQuotesPlease()
-function! ShowMeTheQuotesPlease()
-    set conceallevel=0
-endfunction
+autocmd BufEnter *.json set conceallevel=0
 
 " Use ALEGoToDefinition and Next/Previous error
-autocmd FileType typescript.tsx,typescript,javascript,typescriptreact,kotlin,crystal call ChangeJumpToDefinition()
+autocmd FileType typescript.tsx,typescript,javascript,typescriptreact,kotlin,crystal,ruby call ChangeJumpToDefinition()
 function! ChangeJumpToDefinition()
-    nmap <Leader>j :ALEGoToDefinition<CR>
-    nmap <Leader>n <Plug>(ale_next_wrap)
-    nmap <Leader>p <Plug>(ale_previous_wrap)
+    nmap <buffer> <Leader>j :ALEGoToDefinition<CR>
+    nmap <buffer> <Leader>J :ALEGoToDefinition -vsplit<CR>
+    nmap <buffer> <Leader>n <Plug>(ale_next_wrap)
+    nmap <buffer> <Leader>p <Plug>(ale_previous_wrap)
+endfunction
+
+" Change some ruby definitions because of sorbet
+autocmd FileType ruby call ChangeRubyDefinitions()
+function! ChangeRubyDefinitions()
+    " syntax highlight Sorbet signatures as a comment
+    syn match rubySorbetTypeStricness "\%(true\|false\|ignore\|strong\|strict\)"
+    hi def link rubySorbetTypeStricness Boolean
+    syn match rubyMagicComment "\c\%<10l#\s*\zs\%(typed\):" contained nextgroup=rubySorbetTypeStricness skipwhite
+    syn match rubyDocumentation "^\s*sig .*" contains=rubySpaceError,rubyTodo,@Spell fold
+    syn region rubyDocumentation start="^\s*sig do$" end="end\%(\s.*\)\=$" contains=rubySpaceError,rubyTodo,@Spell fold
+
+    " Ignore Sorbet results while searching
+    let g:ackprg = 'ag --vimgrep --hidden --ignore "tags" --ignore ".git/" --ignore "sorbet/"'
+endfunction
+
+" Highlight rbi files as if they were Ruby (they are!)
+autocmd BufEnter *.rbi call HighlightRBIFiles()
+function! HighlightRBIFiles()
+    set syntax=ruby
 endfunction
 
 " Add error color for lines greater than 72 chars in gitcommit
@@ -586,6 +732,18 @@ function! SaveLastClosedBuffer()
   end
 endfunction
 map <silent> <Leader>T :call OpenLastClosedBuffer()<CR>
+
+" Copy filename to system clipboard
+command CopyFilenameToClipboard execute "let @+ = @%" | execute "echo 'Copied " .  getreg('+') . " to the clipboard'"
+map <leader>uc :CopyFilenameToClipboard<CR>
+"
+map <leader>up :call PrefixAndRepeat()<CR>:silent! call repeat#set("yiwPa: <Esc>", v:count)<CR>
+
+nnoremap <silent> <Plug>PrefixAndRepeat  :<C-U>call PrefixAndRepeat()<CR>
+function! PrefixAndRepeat() abort
+    normal yiwPa: 
+    silent! call repeat#set("\<Plug>PrefixAndRepeat", 1)
+endfunction
 
 function! OpenCommandInPopWindow(width, height, border_highlight) abort
     let width = float2nr(&columns * a:width)
@@ -614,6 +772,12 @@ function! OpenCommandInPopWindow(width, height, border_highlight) abort
 endfunction
 map <silent> <Leader>gp :call OpenCommandInPopWindow(0.9,0.6,'Todo')<CR>
 
+" Define 2 spaces for javascript files
+autocmd FileType typescript.tsx,typescript,javascript,typescriptreact setlocal shiftwidth=2 tabstop=2
+
+" Make sure we are not off by one when jumping to a result
+" because of nmap mapping of <CR>
+autocmd BufWinEnter quickfix nmap <CR> <CR>
 
 " This must be the last thing in vimrc for some weird reason
 " Auto reload vimrc

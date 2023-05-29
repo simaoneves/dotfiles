@@ -1,4 +1,4 @@
-set guifont=Inconsolata\ for\ Powerline:h14
+set guifont=PragmataPro\ Nerd\ Font:h13
 set guioptions-=T
 set guioptions-=R
 set guioptions-=r

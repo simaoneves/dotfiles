@@ -73,6 +73,7 @@ ctrl + shift + alt + cmd - l : yabai -m window --warp east
 cmd - f [
     "evernote": skhd -k "cmd + alt - f"
     "todoist": skhd -k "f"
+    "spotify": skhd -k "cmd + l"
 ]
 
 # balance size of windows
