@@ -14,18 +14,6 @@ _fzf_complete_app_notrigger() {
 HISTFILESIZE=10000
 HISTSIZE=10000
 
-# sqlplus for psi configurations
-export SQLPATH=/Applications/sqlplus
-export DYLD_LIBRARY_PATH=$SQLPATH
-export TNS_ADMIN=$SQLPATH
-export PATH=$PATH:$SQLPATH
-export NLS_LANG=.AL32UTF8
-
-# Shell prompt based on the Solarized Dark theme.
-# Screenshot: http://i.imgur.com/EkEtphC.png
-# Heavily inspired by @necolas’s prompt: https://github.com/necolas/dotfiles
-# iTerm → Profiles → Text → use 13pt Monaco with 1.1 vertical spacing.
-
 if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
     export TERM='gnome-256color';
 elif infocmp xterm-256color >/dev/null 2>&1; then
@@ -107,20 +95,6 @@ if tput setaf 1 &> /dev/null; then
     white=$(tput setaf 7);
     orange=$(tput setaf 166);
     purple=$(tput setaf 125);
-
-	# bold=$(tput bold);
-	# reset=$(tput sgr0);
-	# # Solarized colors, taken from http://git.io/solarized-colors.
-	# black=$(tput setaf 0);
-	# blue=$(tput setaf 33);
-	# cyan=$(tput setaf 37);
-	# green=$(tput setaf 64);
-	# orange=$(tput setaf 166);
-	# purple=$(tput setaf 125);
-	# red=$(tput setaf 124);
-	# violet=$(tput setaf 61);
-	# white=$(tput setaf 15);
-	# yellow=$(tput setaf 136);
 else
 	bold='';
 	reset="\e[0m";
@@ -136,20 +110,6 @@ else
 	yellow="\e[1;33m";
 fi;
 
-# Highlight the user name when logged in as root.
-if [[ "${USER}" == "root" ]]; then
-	userStyle="${red}";
-else
-	userStyle="${orange}";
-fi;
-
-# Highlight the hostname when connected via SSH.
-if [[ "${SSH_TTY}" ]]; then
-	hostStyle="${bold}${red}";
-else
-	hostStyle="${yellow}";
-fi;
-
 # Easier navigation: .., ..., ...., ....., ~ and -
 alias ..="cd .."
 alias ...="cd ../.."
@@ -162,12 +122,6 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias d="cd ~/Dev"
 alias dotfiles="cd ~/Dev/dotfiles"
-alias sabe="cd ~/Dev/sabe/sabe-online-web"
-alias gh="cd ~/Dev/gymhopper"
-alias gha="cd ~/Dev/gymhopper/gymhopper"
-alias ghs="cd ~/Dev/gymhopper/gymhopper-server"
-alias vvs="cd ~/Dev/vvs/"
-alias tc="cd ~/Dev/tc/"
 
 alias ls="ls -Gpah"
 alias mkdir="mkdir -v"
@@ -188,19 +142,34 @@ alias gdi="git diff --color --cached | diff-so-fancy | less --tabs=4 -RFX"
 alias gds="git diff --stat"
 alias gdis="git diff --stat --cached"
 alias gco="git checkout"
-alias gaf='git add $(git ls-files -m | fzf -m --height 40%)'
+alias gaf='git add $(git ls-files -m | _fzf_git_fzf --ansi -m --height 40% --header="Git add modified files" --preview="git diff --color=always {}")'
+alias gcf='git checkout $(git ls-files -m | _fzf_git_fzf -m --height 40% --header="Git checkout modified files")'
 alias stash="git stash save -u"
 alias pop="git stash pop"
 alias gpll="git pull"
 alias gaa="git add . && echo 'To create a good commit message, complete the following sentence:' && echo 'If applied, this commit will..'"
 alias gc="git commit"
 alias gcm="git commit -m"
+function gwa() {
+    # maybe get root of git directory to prepend to .wt/new_name
+    git worktree add .wt/$1 $1
+    cd .wt/$1
+}
+function gwr() {
+    git worktree remove .wt/$1
+}
+function gws() {
+    tree=$(git worktree list | fzf | cut -d " " -f1)
+    [[ ! -z "$tree" ]] && cd "$tree"
+}
+alias gwl="git worktree list"
+alias gl="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias glb="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias amend="git commit --amend"
 alias unstage="git reset HEAD --"
+alias undo_last_commit="git reset --soft HEAD~1"
 alias sync_remote_branch='git reset --hard origin/$(git branch | grep \* | cut -d " " -f2)'
-alias gl="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias in_branch="git branch -a --contains"
-alias rebase_master="git rebase origin/master"
 
 alias mamp_start="/Applications/MAMP/bin/start.sh"
 alias mamp_stop="/Applications/MAMP/bin/stop.sh"
@@ -220,6 +189,9 @@ alias mkt="make test"
 alias mkb="make build"
 alias dbm="rake db:migrate"
 alias bi="bundle install"
+alias be="bundle exec"
+alias bers="bundle exec rails server"
+alias rc="rails console"
 alias dc="docker-compose"
 alias dcr="docker-compose run"
 alias dcb="docker-compose build"
@@ -229,7 +201,6 @@ alias dbrt="docker-compose build tests && docker-compose run tests"
 alias dbr="docker-compose build $1 && docker-compose run $1"
 alias htop="sudo htop"
 alias coffee="caffeinate -dim -t 14400"
-alias sql="sqlplus psi24@difcul"
 alias ys="yarn start"
 alias yt="yarn test"
 alias yb="yarn build"
@@ -246,6 +217,7 @@ alias nios5="react-native run-ios --simulator 'iPhone 5'"
 alias nios6="react-native run-ios --simulator 'iPhone 6 Plus'"
 alias nios7="react-native run-ios --simulator 'iPhone 7'"
 alias logs="heroku logs -t -a"
+alias saver='pipes.sh -r 5000 -r0 -p6 -K'
 
 alias sub="subl"
 alias gvim="/Applications/MacVim.app/Contents/bin/mvim"
@@ -255,10 +227,6 @@ alias v,="vim ."
 alias .v="vim ."
 alias ,v="vim ."
 alias g.="gvim ."
-alias jess="java -cp jess.jar jess.Main"
-# alias gcc="ssh fc45681@gcc.alunos.di.fc.ul.pt"
-alias antlr4='java -jar /usr/local/lib/antlr-4.6-complete.jar'
-alias saver='pipes.sh -r 5000 -r0 -p6 -K'
 
 # Functions
 function github() {
@@ -269,8 +237,12 @@ function deployed() {
     in_branch $1 | grep heroku_$2
 }
 
-function gstat() {
-	git-stats -g && git log --format='%aN' | sort -u | { echo -en "Name\tLines Added\tLines Deleted\tTotal Lines\n"; echo -en "----\t-----------\t-------------\t-----------\n"; while read name; do git log --author="$name" --pretty=tformat: --numstat | awk -v name="$name" '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "%s\t%d\t%d\t%d\n", name, add, subs, loc }' - ; done } | column -ts $'\t' | cowsay -n | lolcat
+_fzf_git_fzf() {
+  fzf-tmux -p80%,60% -- \
+    --layout=reverse --multi --height=50% --min-height=20 --border \
+    --color='header:italic:underline' \
+    --preview-window='right,50%,border-left' \
+    --bind='ctrl-/:change-preview-window(down,50%,border-top|hidden|)' "$@"
 }
 
 function mergefiles() {
@@ -317,85 +289,19 @@ gfcb() {
                 {}
 FZF-EOF"
 }
-function battery_charge() {
-  if [ -e ~/Dev/dotfiles/bin/batcharge.py ]
-  then
-      echo `python ~/Dev/dotfiles/bin/batcharge.py`
-  else
-      echo '';
-  fi
-}
 
-function get_pwd() {
-    result="${PWD/$HOME/~}"
-    echo ${#result}
-}
-
-function get_git() {
-    pepe=`prompt_git`
-    result=0
-    if [ ${#pepe} != 0 ]; then
-        result=$(( ${#pepe} - 11 ))
-    else
-        result=0
-    fi
-    echo $result
-}
-
-function get_bat() {
-    lolo=`battery_charge`
-    result=0
-    if [ ${#lolo} != 0 ]; then
-        result=$(( ${#lolo} - 4 ))
-    else
-        result=0
-    fi
-    echo $result
-}
-
-function put_spacing() {
-    get_pwd_number=`get_pwd`
-    get_bat_number=`get_bat`
-    get_git_number=`get_git`
-    local termwidth=0
-    (( termwidth = ${COLUMNS} - 3 - ${#LOGNAME} - ${get_pwd_number} - ${get_git_number} - ${get_bat_number} ))
-    echo $termwidth
-}
-
-function last_command_color() {
-    if [[ $? = 0 ]]; then
-    # if [[ $? -eq 0 ]]; then
-        status=${white}
-    else
-        status=${red}
-    fi;
-    echo $status
-}
-
-function save_output() {
-    if [[ $? = 0 ]]; then
-    # if [[ $? -eq 0 ]]; then
-        export LAST=0;
-    else
-        export LAST=1;
-    fi;
+function conflict_files() {
+    git diff --name-only --diff-filter=U --relative
 }
 
 # Set the terminal title to the current working directory.
 PS1="\[\033]0;\w\007\]";
-# PS1+="\$(save_output)"; # `$` (and reset color)
 # PS1+="\[${bold}\]\n"; # newline
 PS1+="\[${magenta}\]\u: "; # username
-# PS1+="\[${white}\] at ";
-# PS1+="\[${holtStyle}\]\h"; # host
-# PS1+="\[${white}\] in ";
 PS1+="\[${blue}\]\w "; # working directory
-# PS1+='$(printf %$(put_spacing)s)'; # Add spacings
 PS1+="\$(prompt_git) "; # Git repository details
-# PS1+="\$(battery_charge)"; # batery
 PS1+="\n";
 PS1+="\[${white}\]→ \[${reset}\]"; # `$` (and reset color)
-# PS1+="\$(last_command_color)→ \[${reset}\]"; # `$` (and reset color)
 export PS1;
 
 PS2="\[${yellow}\]→ \[${reset}\]";
@@ -413,38 +319,44 @@ if [ -f ~/Dev/dotfiles/bin/.git-completion.bash ]; then
   # Add git completion to aliases
   __git_complete gco _git_checkout
   __git_complete gpll _git_pull
+  __git_complete gwa _git_checkout
+  __git_complete gwr _git_checkout
+  __git_complete treemux_create_worktree _git_checkout
 fi
 
-# Source bashrc to get FZF shortcuts
-source ~/.bashrc
+# Get FZF shortcuts
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# Load treemux
+[ -f ~/Dev/dotfiles/bin/testing.sh ] && source ~/Dev/dotfiles/bin/testing.sh
 
 # MacPorts Installer addition on 2015-10-22_at_13:07:27: adding an appropriate PATH variable for use with MacPorts.
 export PATH=/usr/local/bin:$PATH
 export PATH="/usr/local/Cellar/:$PATH"
-export PATH="/Users/simao.neves/Dev/kotlin-language-server/server/build/install/server/bin/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
-export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
-export PATH=".:/usr/local/lib/antlr-4.0-complete.jar:$PATH"
+
+# Use AG in FZF
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+# Make it so that FZF is case insensitive by default
+export FZF_DEFAULT_OPTS="-i --pointer=→ --marker='● ' --prompt='→ '"
 
 # Load local definitions
 if [ -f ~/bash_profile.local ]; then
   source ~/bash_profile.local
 fi
+if [ -f ~/.profile ]; then
+  source ~/.profile
+fi
 
-# export PAGER=most
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-source "$HOME/.cargo/env"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

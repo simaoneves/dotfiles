@@ -41,7 +41,6 @@ brew install yarn
 brew tap homebrew/cask
 
 brew cask install alfred
-brew cask install atom
 brew cask install coconutbattery
 brew cask install discord
 brew cask install docker
@@ -52,9 +51,7 @@ brew cask install intellij-idea
 brew cask install iterm2
 brew cask install lastpass
 brew cask install macvim
-brew cask install rescuetime
 brew cask install sizeup
-brew cask install skype
 brew cask install slack
 brew cask install spotify
 brew cask install vagrant
@@ -76,6 +73,7 @@ ln -s ~/Dev/dotfiles/.vimrc ~/.vimrc
 ln -s ~/Dev/dotfiles/coc-settings.json ~/.vim/coc-settings.json
 ln -s ~/Dev/dotfiles/.ideavimrc ~/.ideavimrc
 ln -s ~/Dev/dotfiles/.tmux.conf ~/.tmux.conf
+ln -s ~/Dev/dotfiles/.global.gitignore ~/.global.gitignore
 ln -s ~/Dev/dotfiles/.skhdrc ~/.skhdrc
 ln -s ~/Dev/dotfiles/.yabairc ~/.yabairc
 ln -s ~/Dev/dotfiles/.spacebarrc ~/.spacebarrc
