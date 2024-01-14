@@ -271,6 +271,7 @@ gcb() {
   git log --all --graph --color=always \
       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-y:execute-silent(echo {} | grep -o '[a-f0-9]\{7\}' | head -1 | pbcopy)+abort" \
       --bind "ctrl-m:execute:
                 (grep -o '[a-f0-9]\{7\}' | head -1 |
                 xargs -I % sh -c 'git show --color=always % | diff-so-fancy | less -R') << 'FZF-EOF'
@@ -328,7 +329,7 @@ fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # Load treemux
-[ -f ~/Dev/dotfiles/bin/testing.sh ] && source ~/Dev/dotfiles/bin/testing.sh
+[ -f ~/Dev/dotfiles/bin/treemux.sh ] && source ~/Dev/dotfiles/bin/treemux.sh
 
 # MacPorts Installer addition on 2015-10-22_at_13:07:27: adding an appropriate PATH variable for use with MacPorts.
 export PATH=/usr/local/bin:$PATH
@@ -341,7 +342,7 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 # Make it so that FZF is case insensitive by default
 export FZF_DEFAULT_OPTS="-i --pointer=→ --marker='● ' --prompt='→ '"
 
-# Load local definitions
+# Load local definitions if they exist
 if [ -f ~/bash_profile.local ]; then
   source ~/bash_profile.local
 fi
@@ -363,3 +364,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export PATH="$HOME/.jenv/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+. "$HOME/.cargo/env"

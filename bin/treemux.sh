@@ -98,9 +98,24 @@ function __treemux_new_session_from_existing_worktree() {
     echo "New tmux session created from existing branch $branch_name in directory $current_directory!"
     return 0
 }
-# test this when not inside tmux
+
+function check_if_inside_tmux() {
+    [[ -z "$(echo "$TMUX")" ]] && echo "Treemux error: Not inside Tmux." >&2
+}
+
+function check_if_executable_exists() {
+    ! [ -x "$(command -v $1)" ] && echo "Treemux error: $1 is not installed." >&2
+}
+
+function check_if_git_repo_exists() {
+    ! [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ] && echo "Treemux error: Not a git repository." >&2
+}
+
 treemux() {
-    # add guard for non git repositories
+    check_if_inside_tmux && return 1
+    check_if_executable_exists "git" && return 1
+    check_if_git_repo_exists && return 1
+    check_if_executable_exists "dmux" && return 1
 
 	cmd=$1
 	shift
@@ -115,5 +130,15 @@ treemux() {
         $@
 	else
         echo "Unknown parameters passed to treemux: $cmd $@"
+        echo ""
+        echo "Usage:"
+        echo "  treemux <cmd> [parameters]"
+        echo ""
+        echo "Examples:"
+        echo "  treemux create [branch_name]     # create a new worktree and open it in a new tmux session"
+        echo "  treemux delete                   # delete a worktree and its correspondent tmux session"
+        echo "  treemux re-session               # create a new tmux session from an existing worktree"
+        echo "  treemux run                      # run a command in the current tmux session"
+        return 1
 	fi
 }
