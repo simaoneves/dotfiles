@@ -1,14 +1,21 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" Auto install Vim-Plug if it doesn't exist
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/bundle')
 
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree'
 Plug 'sjl/vitality.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'Raimondi/delimitMate'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'AndrewRadev/switch.vim'
 Plug 'mileszs/ack.vim'
@@ -35,6 +42,7 @@ Plug 'romainl/vim-qf' " quickfix list improvement
 Plug 'markonm/traces.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/vim-easy-align'
+Plug 'github/copilot.vim'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -50,6 +58,7 @@ Plug 'udalov/kotlin-vim'
 Plug 'dzeban/vim-log-syntax'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'tpope/vim-rails'
+Plug 'rust-lang/rust.vim'
 
 " Themes
 Plug 'dracula/vim'
@@ -105,13 +114,24 @@ if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ackprg = 'ag --vimgrep --hidden --ignore "tags" --ignore ".git/"'
+  let g:ackhighlight = 1
+  let g:ack_use_dispatch = 1
 endif
 " Make test commands execute using vimux
 let test#strategy = "vimux"
 
+let g:delimitMate_expand_cr = 1
+let g:delimitMate_expand_space = 1
+
 " Vimux prompt
 let g:VimuxPromptString = '❯ '
 let g:VimuxOrientation = 'h'
+function! ChangeVimuxRunnerPane(index) abort
+    let pane = system('tmux list-panes -F "#P #{pane_id}"')
+    let pane_id = split(pane, '\n')[a:index]
+    let g:VimuxRunnerIndex = split(pane_id, ' ')[1]
+endfunction
+command -nargs=1 VimuxChangeRunnerPane :call ChangeVimuxRunnerPane(<args>)
 
 " Change gitgutter signs
 let g:gitgutter_sign_added = '▍'
@@ -181,6 +201,7 @@ let g:switch_custom_definitions =
     \   ['once', 'twice'],
     \   ['width', 'height'],
     \   ['margin', 'padding'],
+    \   ['String', '&str'],
     \   ['bottom', 'top'],
     \   ['left', 'right'],
     \   ['start', 'end'],
@@ -231,15 +252,17 @@ let g:ale_lint_on_enter = 1
 let g:ale_completion_enabled = 1
 " Configured linters and fixers
 let g:ale_linters = {
+\   'rust': ['analyzer'],
 \   'ruby': ['sorbet', 'rubocop'],
 \   'kotlin': ['languageserver'],
-\   'crystal': ['crystalline'],
+\   'crystal': [],
 \   'javascript': ['tsserver', 'eslint'],
 \   'typescript': ['tsserver', 'eslint'],
 \   'typescriptreact': ['tsserver', 'eslint'],
 \   'sh': ['language_server'],
 \}
 let g:ale_fixers = {
+\   'rust': ['rustfmt'],
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
 \   'typescriptreact': ['prettier'],
@@ -303,7 +326,7 @@ let g:projectionist_heuristics = {
       \ }
 
 " Bugged for now in Macvim
-command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': '--preview "bat -p --theme=gruvbox-dark --color=always {}"' }, <bang>0)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': '--preview "bat -p --theme=base16 --color=always {}"' }, <bang>0)
 
 " Trigger keys for next position in snippet
 let g:coc_snippet_next = '<TAB>'
@@ -344,7 +367,7 @@ set background=dark
 set relativenumber
 set number
 " Use mouse for selecting panes and scrolling
-set mouse=n
+set mouse=nv
 set autoindent
 " Expand Tabs to spaces
 set expandtab
@@ -458,7 +481,7 @@ nnoremap <silent> ¯ :TmuxNavigateDown<cr>
 nnoremap <silent> „ :TmuxNavigateUp<cr>
 nnoremap <silent> ‘ :TmuxNavigateRight<cr>
 
-inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+inoremap <expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "<Plug>delimitMateCR"
 
 " Use Tab key for trigger completion, selection and snippet expand
 inoremap <silent><expr> <TAB>
@@ -488,6 +511,10 @@ nmap <C-l> :bn<CR>
 nmap <C-h> :bp<CR>
 imap <C-l> <Esc>:bn<CR>
 imap <C-h> <Esc>:bp<CR>
+
+" Paste without overriding register so that i can continue pasting
+" not working for some reason
+" vmap p "_dP
 
 " == for format file
 nmap == mz=ae`z
@@ -602,8 +629,6 @@ nmap <Leader>r :Tags<CR>
 nmap <Leader>f :Ack!<Space>""OD
 " Find project wide with what is in the clipboard
 nmap <Leader>F :Ack! """<CR>
-" Find references for word under the cursor and populate the quickfix list
-nmap <Leader>l :ALEFindReferences<CR>
 " Fuzzy Finder, with preview
 nmap <Leader>t :Files<CR>
 " Run tests for current file
@@ -646,6 +671,21 @@ noremap <Down>  <C-W>-
 noremap <Left>  3<C-W><
 noremap <Right> 3<C-W>>
 
+" Copilot things
+nmap <C-t> <Plug>(copilot-suggest)
+imap <C-t> <Plug>(copilot-suggest)
+imap <C-n> <Plug>(copilot-next)
+imap <C-p> <Plug>(copilot-previous)
+imap <silent><script><expr> <Space> copilot#Accept("<Space>")
+let g:copilot_no_tab_map = v:true
+eval CombineHighlightGroup('CopilotSuggestion', 'Function', 'StatusLine')
+" (Line-wrapped for legibility) Dont use Copilot on files larger than 100kb
+autocmd BufReadPre *
+    \ let f=getfsize(expand("<afile>"))
+    \ | if f > 100000 || f == -2
+    \ | let b:copilot_enabled = v:false
+    \ | endif
+
 " Enable command-mouseclick to go to definition (<LeftMouse> is needed to put
 " the cursor in the correct spot)
 map <M-LeftMouse> <LeftMouse>:ALEGoToDefinition<CR>
@@ -679,13 +719,26 @@ endfunction
 " Show me the all the quotes in JSON please
 autocmd BufEnter *.json set conceallevel=0
 
+" Use CocGoToDefinition and Next/Previous error
+autocmd FileType crystal call ChangeJumpToDefinitionCrystal()
+function! ChangeJumpToDefinitionCrystal()
+    nmap <buffer> <silent> <Leader>j <Plug>(coc-definition)
+    nmap <buffer> <silent> <Leader>H <Plug>(coc-type-definition)
+    nmap <buffer> <silent> <Leader>J <Plug>(coc-implementation)
+    nmap <buffer> <silent> <Leader>l <Plug>(coc-references)
+    nmap <buffer> <silent> <Leader>n <Plug>(coc-diagnostic-next)
+    nmap <buffer> <silent> <Leader>p <Plug>(coc-diagnostic-prev)
+    nmap <buffer> <silent> <Leader><Leader> :call CocActionAsync('doHover')<CR>
+endfunction
+
 " Use ALEGoToDefinition and Next/Previous error
-autocmd FileType typescript.tsx,typescript,javascript,typescriptreact,kotlin,crystal,ruby call ChangeJumpToDefinition()
+autocmd FileType typescript.tsx,typescript,javascript,typescriptreact,kotlin,ruby,rust call ChangeJumpToDefinition()
 function! ChangeJumpToDefinition()
     nmap <buffer> <Leader>j :ALEGoToDefinition<CR>
     nmap <buffer> <Leader>J :ALEGoToDefinition -vsplit<CR>
     nmap <buffer> <Leader>n <Plug>(ale_next_wrap)
     nmap <buffer> <Leader>p <Plug>(ale_previous_wrap)
+    nmap <buffer> <Leader>l :ALEFindReferences<CR>
 endfunction
 
 " Change some ruby definitions because of sorbet
@@ -735,9 +788,9 @@ map <silent> <Leader>T :call OpenLastClosedBuffer()<CR>
 
 " Copy filename to system clipboard
 command CopyFilenameToClipboard execute "let @+ = @%" | execute "echo 'Copied " .  getreg('+') . " to the clipboard'"
-map <leader>uc :CopyFilenameToClipboard<CR>
+map <Leader>uc :CopyFilenameToClipboard<CR>
 "
-map <leader>up :call PrefixAndRepeat()<CR>:silent! call repeat#set("yiwPa: <Esc>", v:count)<CR>
+map <Leader>up :call PrefixAndRepeat()<CR>:silent! call repeat#set("yiwPa: <Esc>", v:count)<CR>
 
 nnoremap <silent> <Plug>PrefixAndRepeat  :<C-U>call PrefixAndRepeat()<CR>
 function! PrefixAndRepeat() abort
@@ -777,7 +830,7 @@ autocmd FileType typescript.tsx,typescript,javascript,typescriptreact setlocal s
 
 " Make sure we are not off by one when jumping to a result
 " because of nmap mapping of <CR>
-autocmd BufWinEnter quickfix nmap <CR> <CR>
+autocmd BufWinEnter quickfix nmap <buffer> <CR> <CR>
 
 " This must be the last thing in vimrc for some weird reason
 " Auto reload vimrc
