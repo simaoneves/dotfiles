@@ -1,12 +1,15 @@
 dotfiles
 ========
+Personal configurations for development
 
 Install from Big Bang
 =====================
-Install [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
+One click install:
+```bash
+curl -o ./install.sh https://raw.githubusercontent.com/simaoneves/dotfiles/master/install.sh && source ./install.sh
+```
 
-Tools of trade:
-- Atom
-- Vim
-- iTerm2
-- Tmux
+Other steps:
+============
+- Install Vimium options manually
+
