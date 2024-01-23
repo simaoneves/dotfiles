@@ -11,5 +11,5 @@ curl -o ./install.sh https://raw.githubusercontent.com/simaoneves/dotfiles/maste
 
 Other steps:
 ============
-- Install Vimium options manually
+- Install Vimium options manually in browser
 

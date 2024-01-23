@@ -16,9 +16,6 @@ fi
 # (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/simon/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-
-# install Xcode automatically
-
 echo "Installing Xcode... Might prompt for password"
 sudo xcodebuild -license accept
 
@@ -44,13 +41,12 @@ brew install jq
 brew install koekeishiya/formulae/skhd
 brew install kotlin
 brew install lolcat
-brew install mongodb
 brew install pipes-sh
 brew install python
 brew install rabbitmq
 brew install reattach-to-user-namespace
 brew install ripgrep
-brew install spacebar
+brew install cmacrae/formulae/spacebar
 brew install the_silver_searcher
 brew install tmux
 brew install tree
@@ -61,6 +57,7 @@ brew install yarn
 
 # make a list and install everything in one command
 brew install --cask alfred
+brew install --cask android-file-transfer
 brew install --cask coconutbattery
 brew install --cask discord
 brew install --cask docker
@@ -69,24 +66,23 @@ brew install --cask flux
 brew install --cask google-chrome
 brew install --cask intellij-idea
 brew install --cask iterm2
+brew install --cask karabiner-elements
 brew install --cask lastpass
+brew install --cask logi-options-plus
 brew install --cask macvim
 brew install --cask sizeup
 brew install --cask slack
 brew install --cask spotify
+brew install --cask todoist
 brew install --cask vagrant
 brew install --cask virtualbox
 brew install --cask vlc
 brew install --cask whatsapp
-brew install --cask logi-options-plus
-brew install --cask android-file-transfer
-brew install --cask todoist
 
 # Create directories needed
 echo "Creating necessary directories..."
 mkdir ~/.git-templates
 mkdir -p ~/.config/nvim/
-mkdir -p ~/.config/karabiner/assets/complex_modifications
 mkdir -p ~/Dev/
 cd ~/Dev/
 
@@ -108,9 +104,8 @@ ln -sF ~/Dev/dotfiles/.skhdrc ~/.skhdrc
 ln -sF ~/Dev/dotfiles/.yabairc ~/.yabairc
 ln -sF ~/Dev/dotfiles/.spacebarrc ~/.spacebarrc
 ln -sF ~/Dev/dotfiles/.limelightrc ~/.limelightrc
-ln -sF ~/Dev/dotfiles/.atom/ ~/.atom
+ln -sF ~/Dev/dotfiles/karabiner ~/.config
 ln -sF ~/Dev/dotfiles/bin/.git-completion.bash ~/.git-completion.bash
-ln -sF ~/Dev/dotfiles/karabiner.json ~/.config/karabiner/assets/complex_modifications/karabiner.json
 ln -s ~/Dev/dotfiles/git_commit_message.txt ~/.git-templates/git_commit_message.txt
 
 echo "Installing vim plugins..."
