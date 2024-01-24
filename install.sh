@@ -39,6 +39,7 @@ brew install graphviz
 brew install htop-osx
 brew install jq
 brew install koekeishiya/formulae/skhd
+brew install node
 brew install kotlin
 brew install lolcat
 brew install pipes-sh

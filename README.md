@@ -14,4 +14,5 @@ Manual steps:
 - Install Vimium options in browser
 - Install Tmux plugins with <tmux_prefix-I>
 - Install iTerm2 profile and config in preferences
+- Restore mouse settings in Logi Options+ app
 
