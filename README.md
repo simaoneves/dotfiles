@@ -9,7 +9,9 @@ One click install:
 curl -o ./install.sh https://raw.githubusercontent.com/simaoneves/dotfiles/master/install.sh && source ./install.sh
 ```
 
-Other steps:
+Manual steps:
 ============
-- Install Vimium options manually in browser
+- Install Vimium options in browser
+- Install Tmux plugins with <tmux_prefix-I>
+- Install iTerm2 profile and config in preferences
 
