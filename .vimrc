@@ -42,7 +42,7 @@ Plug 'romainl/vim-qf' " quickfix list improvement
 Plug 'markonm/traces.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/vim-easy-align'
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 
 " Language specific
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -190,36 +190,42 @@ let g:switch_find_smallest_match = 1
 "     \   },
 "     \ ]
 
+" NormalizedCase(['true', 'false']) matches on true/false, True/False or TRUE/FALSE
 let g:switch_custom_definitions =
     \ [
-    \   ['foreground', 'background'],
-    \   ['vertical', 'horizontal'],
-    \   ['standard', 'express'],
-    \   ['before', 'after'],
-    \   ['next', 'previous'],
-    \   ['warning', 'error'],
-    \   ['once', 'twice'],
-    \   ['width', 'height'],
-    \   ['margin', 'padding'],
-    \   ['String', '&str'],
-    \   ['bottom', 'top'],
-    \   ['left', 'right'],
-    \   ['start', 'end'],
-    \   ['first', 'last'],
-    \   ['even', 'odd'],
-    \   ['size', 'length'],
-    \   ['enable', 'disable'],
-    \   ['debug', 'info'],
-    \   ['row', 'column'],
-    \   ['less', 'more'],
-    \   ['upper', 'lower'],
-    \   ['get', 'post'],
-    \   ['min', 'max'],
-    \   ['all', 'none'],
-    \   ['if', 'unless'],
-    \   ['to', 'not_to'],
-    \   ['off', 'on'],
-    \   ['up', 'down'],
+    \   switch#NormalizedCase(['foreground', 'background']),
+    \   switch#NormalizedCase(['vertical', 'horizontal']),
+    \   switch#NormalizedCase(['standard', 'express']),
+    \   switch#NormalizedCase(['before', 'after']),
+    \   switch#NormalizedCase(['private', 'protected']),
+    \   switch#NormalizedCase(['next', 'previous']),
+    \   switch#NormalizedCase(['vertical', 'horizontal']),
+    \   switch#NormalizedCase(['forward', 'backward']),
+    \   switch#NormalizedCase(['warning', 'error']),
+    \   switch#NormalizedCase(['once', 'twice']),
+    \   switch#NormalizedCase(['width', 'height']),
+    \   switch#NormalizedCase(['margin', 'padding']),
+    \   switch#NormalizedCase(['String', '&str']),
+    \   switch#NormalizedCase(['bottom', 'top']),
+    \   switch#NormalizedCase(['open', 'close']),
+    \   switch#NormalizedCase(['left', 'right']),
+    \   switch#NormalizedCase(['start', 'end']),
+    \   switch#NormalizedCase(['first', 'last']),
+    \   switch#NormalizedCase(['even', 'odd']),
+    \   switch#NormalizedCase(['size', 'length']),
+    \   switch#NormalizedCase(['enable', 'disable']),
+    \   switch#NormalizedCase(['debug', 'info']),
+    \   switch#NormalizedCase(['row', 'column']),
+    \   switch#NormalizedCase(['less', 'more']),
+    \   switch#NormalizedCase(['upper', 'lower']),
+    \   switch#NormalizedCase(['get', 'post']),
+    \   switch#NormalizedCase(['min', 'max']),
+    \   switch#NormalizedCase(['all', 'none']),
+    \   switch#NormalizedCase(['new', 'old']),
+    \   switch#NormalizedCase(['if', 'unless']),
+    \   switch#NormalizedCase(['to', 'not_to']),
+    \   switch#NormalizedCase(['off', 'on']),
+    \   switch#NormalizedCase(['up', 'down']),
     \   ['<=', '>='],
     \   ['<', '>'],
     \ ]
@@ -254,7 +260,7 @@ let g:ale_completion_enabled = 1
 let g:ale_linters = {
 \   'rust': ['analyzer'],
 \   'ruby': ['sorbet', 'rubocop'],
-\   'kotlin': ['languageserver'],
+\   'kotlin': ['kotlinc', 'languageserver'],
 \   'crystal': [],
 \   'javascript': ['tsserver', 'eslint'],
 \   'typescript': ['tsserver', 'eslint'],
@@ -469,7 +475,9 @@ set statusline+=\
 
 " common typos of my fingers
 iabbrev udpate update
-iabbrev  seperate  separate
+iabbrev seperate separate
+iabbrev statemetns statements
+iabbrev statemetn statement
 
 """""""""""""""""""""""
 " Keymap configurations
@@ -671,20 +679,20 @@ noremap <Down>  <C-W>-
 noremap <Left>  3<C-W><
 noremap <Right> 3<C-W>>
 
-" Copilot things
-nmap <C-t> <Plug>(copilot-suggest)
-imap <C-t> <Plug>(copilot-suggest)
-imap <C-n> <Plug>(copilot-next)
-imap <C-p> <Plug>(copilot-previous)
-imap <silent><script><expr> <Space> copilot#Accept("<Space>")
-let g:copilot_no_tab_map = v:true
-eval CombineHighlightGroup('CopilotSuggestion', 'Function', 'StatusLine')
+" Copilot things (S-F1 is defined in iterm)
+" nmap <C-t> <Plug>(copilot-suggest)
+" imap <C-t> <Plug>(copilot-suggest)
+" imap <C-n> <Plug>(copilot-next)
+" imap <C-p> <Plug>(copilot-previous)
+" imap <silent><script><expr> <S-F1> copilot#Accept("<Space>")
+" let g:copilot_no_tab_map = v:true
+" eval CombineHighlightGroup('CopilotSuggestion', 'Function', 'StatusLine')
 " (Line-wrapped for legibility) Dont use Copilot on files larger than 100kb
-autocmd BufReadPre *
-    \ let f=getfsize(expand("<afile>"))
-    \ | if f > 100000 || f == -2
-    \ | let b:copilot_enabled = v:false
-    \ | endif
+" autocmd BufReadPre *
+"     \ let f=getfsize(expand("<afile>"))
+"     \ | if f  100000 || f == -2
+"     \ | let b:copilot_enabled = v:false
+"     \ | endif
 
 " Enable command-mouseclick to go to definition (<LeftMouse> is needed to put
 " the cursor in the correct spot)
@@ -703,7 +711,7 @@ autocmd CursorHold * checktime
 " Kotlin settings
 autocmd FileType kotlin call SetAlternativeColorscheme()
 function! SetAlternativeColorscheme()
-    colorscheme spring-night
+    " colorscheme spring-night
 endfunction
 
 " Ruby and Crystal settings

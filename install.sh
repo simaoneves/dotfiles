@@ -58,14 +58,13 @@ brew install yarn
 
 # make a list and install everything in one command
 brew install --cask alfred
-brew install --cask android-file-transfer
 brew install --cask coconutbattery
 brew install --cask discord
 brew install --cask docker
 brew install --cask evernote
 brew install --cask flux
 brew install --cask google-chrome
-brew install --cask intellij-idea
+brew install --cask intellij-idea-ce
 brew install --cask iterm2
 brew install --cask karabiner-elements
 brew install --cask lastpass
@@ -79,6 +78,7 @@ brew install --cask vagrant
 brew install --cask virtualbox
 brew install --cask vlc
 brew install --cask whatsapp
+brew install --cask dbeaver-community
 
 # Create directories needed
 echo "Creating necessary directories..."

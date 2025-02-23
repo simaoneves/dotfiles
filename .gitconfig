@@ -8,6 +8,7 @@
 	smudge = git-media-smudge %f
 [push]
 	default = simple
+	autoSetupRemote = true
 [color]
 	ui = true
 [color "status"]
@@ -18,5 +19,19 @@
     unmerged = blue
 [init]
 	templatedir = ~/.git-templates
+	defaultBranch = master
 [commit]
 	template = ~/.git-templates/git_commit_message.txt
+[tag]
+	sort = version:refname
+[diff]
+	algorithm = histogram
+	mnemonicPrefix = true
+	renames = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	updateRefs = true
+[merge]
+	conflictstyle = zdiff3

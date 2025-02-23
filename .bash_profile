@@ -124,7 +124,7 @@ alias d="cd ~/Dev"
 alias dotfiles="cd ~/Dev/dotfiles"
 
 alias ls="ls -Gpah"
-alias mkdir="mkdir -v"
+alias mkdir="mkdir -vp"
 alias rm="rm -v"
 alias rdr="rm -Rfv"
 alias rdss="find . -name \".DS_Store\" -delete"
